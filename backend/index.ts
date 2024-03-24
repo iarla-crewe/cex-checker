@@ -2,7 +2,6 @@
 // Import necessary modules
 const express = require('express');
 import { Request, Response } from 'express';
-const WebSocket = require('ws');
 
 // Create an Express application
 const app = express();
@@ -21,52 +20,15 @@ app.post('/send-data', (req: Request, res: Response) => {
     res.send('Data received successfully'); // Send a response back to the client
 });
 
-// // Start the server
-// app.listen(port, () => {
-//     console.log(`Server running at http://localhost:${port}`);
-// });
-
-
-
-//get price data (websocket)
-const binanceWebSocketUrl = 'wss://stream.binance.com:9443';
-
-const webSocket = new WebSocket(binanceWebSocketUrl);
-
-webSocket.on('open', () => {
-    console.log('WebSocket connection established');
-
-    // Subscribe to a particular stream, for example, the BTC/USDT price ticker
-    const subscribeMsg = JSON.stringify({
-        "method": "SUBSCRIBE",
-        "params":
-        [
-        "btcusdt@aggTrade",
-        "btcusdt@depth"
-        ],
-        "id": 1
-        }
-        
-        );
-
-    webSocket.send(subscribeMsg);
+// Start the server
+app.listen(port, () => {
+    console.log(`Server running at http://localhost:${port}`);
 });
 
-webSocket.on('message', (data: any) => {
-    console.log('Received message:', data.toString());
-});
 
-webSocket.on('close', (code: number, reason: string) => {
-    console.log(`WebSocket connection closed, code: ${code}, reason: ${reason}`);
-});
+// //get fee data (database)
 
-webSocket.on('error', (error: Error) => {
-    console.error('WebSocket error:', error.message);
-});
+// //calculate estimated output
 
-//get fee data (database)
-
-//calculate estimated output
-
-//Send output to client continously via (websocket)
+// //Send output to client continously via (websocket)
 
