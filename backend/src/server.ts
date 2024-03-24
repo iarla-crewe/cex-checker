@@ -1,7 +1,7 @@
 //Receive input and output tokens and exchange list from user (http endpoint)
 // Import necessary modules
-const express = require('express');
-import { Request, Response } from 'express';
+// const express = require('express');
+import express, { Request, Response } from 'express';
 
 // Create an Express application
 const app = express();
@@ -11,7 +11,7 @@ const port = 3000;
 app.use(express.json());
 
 // Define a POST endpoint to receive data from the client
-app.post('/send-data', (req: Request, res: Response) => {
+app.post('/get-best-price', (req: Request, res: Response) => {
     const data = req.body; // Access the data sent by the client
 
     // Process the received data here
