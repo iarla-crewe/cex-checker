@@ -1,6 +1,7 @@
 //Receive input and output tokens and exchange list from user (http endpoint)
 // Import necessary modules
-import express, { Request, Response } from 'express';
+const express = require('express');
+import { Request, Response } from 'express';
 
 // Create an Express application
 const app = express();
