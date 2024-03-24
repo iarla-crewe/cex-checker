@@ -7,6 +7,9 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
   title: "CEX Checker | Quartz",
   description: "Compare CEXs for the best price",
+  icons: {
+    icon: '/favicon.ico'
+  }
 };
 
 export default function RootLayout({
