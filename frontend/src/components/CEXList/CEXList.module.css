@@ -12,6 +12,36 @@
     min-height: 80px;
 
     border-radius: var(--card-border-radius);
-    padding: 15px 50px;
+    padding: 20px 50px;
     margin-bottom: 20px;
+}
+
+.price-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-weight: 400;
+}
+
+.price-heading {
+    font-size: 22px;
+    opacity: var(--light-text-opacity);
+    margin: 0px;
+}
+
+.price-subheading {
+    font-size: 12px;
+    opacity: var(--light-text-opacity);
+    margin: 0px 0px 10px 0px;
+}
+
+.price {
+    font-size: 38px;
+    margin: 0px 0px 10px 0px;
+}
+
+.price-currency {
+    font-size: 18px;
+    opacity: var(--light-text-opacity);
+    margin: 0px;
 }

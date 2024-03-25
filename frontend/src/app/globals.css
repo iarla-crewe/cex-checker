@@ -11,6 +11,7 @@
   --secondary-hover: #16516B;
   --background-hover: #102637;
 
+  --light-text-opacity: 0.9;
   --card-border: 2px solid var(--primary);
   --button-border-radius: 16px;
   --card-border-radius: 30px;

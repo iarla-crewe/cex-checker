@@ -17,7 +17,15 @@ export default function CEXList() {
                         height={0}
                         style={{ width: "250px", height: "auto"}}
                     />
-                    <OpenLink isDark={cex.darkText}/>
+
+                    <div className={styles["price-info"]} style={{color: cex.textColor}}>
+                        <p className={styles["price-heading"]}>Expected</p>
+                        <p className={styles["price-subheading"]}>(after fees)</p>
+                        <p className={styles["price"]}>0.00</p>
+                        <p className={styles["price-currency"]}>USDC</p>
+                    </div>
+
+                    <OpenLink textColor={cex.textColor}/>
                 </li>
             ))}
         </ul>
