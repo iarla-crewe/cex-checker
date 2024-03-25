@@ -1,0 +1,17 @@
+.cex-list {
+    list-style-type: none;
+    margin: 0px;
+    padding: 0px;
+}
+
+.cex-list li {
+    text-decoration: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    min-height: 80px;
+
+    border-radius: var(--card-border-radius);
+    padding: 15px 50px;
+    margin-bottom: 20px;
+}
