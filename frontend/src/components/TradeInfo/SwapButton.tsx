@@ -1,15 +1,14 @@
-import styles from "./SwapButton.module.css";
 import Image from "next/image";
 
 export default function SwapButton() {
     return (
-        <button className={styles["swap-button"]}>
+        <button>
             <p>Buy</p>
             <Image 
                 src="/swap_icon.svg"
                 alt="Swap"
-                width={12}
-                height={15}
+                width={17}
+                height={17}
             />
         </button>
     );

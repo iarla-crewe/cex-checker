@@ -16,6 +16,7 @@ export default function InputAmount() {
     };
 
     // TODO - Fix placeholder solution (this one doesn't work on Firefox, and allows for either , or .)
+    // If changing type, change css in globals.css
 
     return (
         <input type="number" value={inputValue} onChange={handleChange} onKeyDown={handleKeyDown} placeholder="0.00"/>
