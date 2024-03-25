@@ -5,7 +5,8 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Quartz",
+  title: "CEX Checker | Quartz",
+  description: "Compare CEXs for the best price and fees",
   icons: {
     icon: "/favicon.ico"
   }
