@@ -1,5 +1,5 @@
 :root {
-  --max-width: 1040px;
+  --max-width: 940px;
   --font-mono: ui-monospace, Menlo, Monaco, "Cascadia Mono", "Segoe UI Mono",
     "Roboto Mono", "Oxygen Mono", "Ubuntu Monospace", "Source Code Pro",
     "Fira Mono", "Droid Sans Mono", "Courier New", monospace;
@@ -8,10 +8,12 @@
   --background: #0B111D;
   --primary: #2780A6;
   --secondary: #1E6584;
+  --secondary-hover: #16516B;
   --background-hover: #102637;
 
   --card-border: 2px solid var(--primary);
   --button-border-radius: 16px;
+  --card-border-radius: 30px;
 }
 
 html,
@@ -36,6 +38,25 @@ input::-webkit-inner-spin-button {
 input[type=number] {
     -moz-appearance: textfield;
     appearance: textfield;
+}
+
+input {
+  background-color: var(--background);
+  border: 0px solid;
+  color: var(--white);
+  font-size: 45px;
+  text-align: right;
+  width: 100%;
+}
+
+@media screen and (max-width: 1040px) {
+  input {
+    font-size: 35px;
+  }
+}
+
+input:focus {
+  outline: none !important;
 }
 
 button {

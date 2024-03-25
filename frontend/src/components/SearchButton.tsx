@@ -1,11 +1,11 @@
-
+import styles from "./SearchButton.module.css"
 
 export default function SearchButton() {
 
 
     return (
-        <div>
-
-        </div>
+        <button className={styles["search-button"]}>
+            <p>Search</p>
+        </button>
     );
 }
