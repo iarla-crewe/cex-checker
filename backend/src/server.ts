@@ -2,6 +2,8 @@
 // Import necessary modules
 // const express = require('express');
 import express, { Request, Response } from 'express';
+import http from 'http'
+import { Server } from "socket.io";
 
 // Create an Express application
 const app = express();
@@ -27,11 +29,11 @@ app.listen(port, () => {
 
 
 
-//get price data (websocket)
+//get price data (websocket) done
 
-//get fee data (database)
+//get fee data (database) done
 
-//calculate estimated output
+//calculate estimated output done
 
-//Send output to client continously via (websocket)
+//Send output to client continously via (socket.io)
 

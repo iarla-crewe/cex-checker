@@ -1,6 +1,8 @@
 import { binancePrice, getBinancePrice } from "./binance.js";
 import { getKrakenPrice, krakenPrice } from "./kraken.js";
 
+export let sortedPrices: any;
+
 export const sortPrices = (binancePrice: string, krakenPrice: string) => { 
     //sort prices into an object
     let priceOrder = {
@@ -18,7 +20,7 @@ export const sortPrices = (binancePrice: string, krakenPrice: string) => {
     // Convert the sorted array back into an object
     let sortedPriceOrder = Object.fromEntries(priceOrderArray);
 
-    console.log(sortedPriceOrder);
+    sortedPrices = sortedPriceOrder
 }
 
 export const minusFees = (inputAmount: string, takerFee: number): string => {

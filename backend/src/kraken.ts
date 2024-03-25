@@ -15,6 +15,8 @@ let krakenWithdrawFee = {
 let krakenMakerFee: number = 0.0024;
 let krakenTakerFee: number = 0.004;
 
+//example code: https://support.kraken.com/hc/en-us/articles/4413834730260-Example-code-for-NodeJs-REST-and-WebSocket-API
+
 export const getKrakenPrice = async (ticker: string) => {
 
     //TODO: UPDATE WITH YOUR KEYS :)
