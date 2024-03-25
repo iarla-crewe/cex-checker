@@ -1,6 +1,10 @@
 import axios from 'axios';
 import crypto from 'crypto';
 import WebSocket from 'ws';
+import { sortPrices } from './prices.js';
+import { binancePrice } from './binance.js';
+
+export let krakenPrice: string;
 
 export const getKrakenPrice = async (ticker: string) => {
 
@@ -11,96 +15,9 @@ export const getKrakenPrice = async (ticker: string) => {
     try {
 
         console.log("|=========================================|");
-        console.log("|      KRAKEN.COM NODEJS TEST APP         |");
+        console.log("|      KRAKEN.COM        |");
         console.log("|=========================================|");
         console.log();
-
-
-        /*
-        * PUBLIC REST API Examples
-        */
-
-        // if (option == 1) {
-        //     let publicResponse = "";
-
-        //     let publicEndpoint = "SystemStatus";
-        //     let publicInputParameters = "";
-
-        //     /*
-        //     *MORE PUBLIC REST EXAMPLES
-
-        //     let publicEndpoint = "AssetPairs";
-        //     let publicInputParameters = "pair=ethusd,xbtusd";
-
-        //     let publicEndpoint = "Ticker";
-        //     let publicInputParameters = "pair=ethusd";
-
-        //     let publicEndpoint = "Trades";
-        //     let publicInputParameters = "pair=ethusd&since=0";
-        //     */
-
-        //     publicResponse = await QueryPublicEndpoint(publicEndpoint, publicInputParameters);
-        //     console.log(publicResponse);
-
-        // }
-
-        /*
-        * PRIVATE REST API Examples
-        */
-
-        // if (option == 2) {
-        //     let privateResponse = "";
-
-        //     let privateEndpoint = "Balance";
-        //     let privateInputParameters = "";
-
-        //     /*
-        //     *MORE PRIVATE REST EXAMPLES
-
-        //     let privateEndpoint = "AddOrder";
-        //     let privateInputParameters = "pair=xbteur&type=buy&ordertype=limit&price=1.00&volume=1";
-
-        //     let privateEndpoint = "AddOrder"
-        //     let privateInputParameters = "pair=xdgeur&type=sell&ordertype=limit&volume=3000&price=%2b10.0%" //Positive Percentage Example (%2 represtes +, which is a reseved character in HTTP)
-
-        //     let privateEndpoint = "AddOrder"
-        //     let privateInputParameters = "pair=xdgeur&type=sell&ordertype=limit&volume=3000&price=-10.0%" //Negative Percentage Example
-
-        //     let privateEndpoint = "AddOrder"
-        //     let privateInputParameters = "pair=xdgeur&type=buy&ordertype=market&volume=3000&userref=789" //Userref Example
-
-        //     let privateEndpoint = "Balance" //{"error":[]} IS SUCCESS, Means EMPTY BALANCE
-        //     let privateInputParameters = "" 
-
-        //     let privateEndpoint = "QueryOrders" 
-        //     let privateInputParameters = "txid=OFUSL6-GXIIT-KZ2JDJ" 
-
-        //     let privateEndpoint = "AddOrder"
-        //     let privateInputParameters = "pair=xdgusd&type=buy&ordertype=market&volume=5000"
-
-        //     let privateEndpoint = "DepositAddresses"
-        //     let privateInputParameters = "asset=xbt&method=Bitcoin" 
-
-        //     let privateEndpoint = "DepositMethods"
-        //     let privateInputParameters = "asset=eth" 
-
-        //     let privateEndpoint = "WalletTransfer" 
-        //     let privateInputParameters = "asset=xbt&to=Futures Wallet&from=Spot Wallet&amount=0.0045" 
-
-        //     let privateEndpoint = "TradesHistory"
-        //     let privateInputParameters = "start=1577836800&end=1609459200" 
-
-        //     let privateEndpoint = "GetWebSocketsToken" 
-        //     let privateInputParameters = ""
-        //     */
-
-        //     privateResponse = await QueryPrivateEndpoint(privateEndpoint, 
-        //                                                 privateInputParameters,
-        //                                                 apiPublicKey,
-        //                                                 apiPrivateKey);
-        //     console.log(privateResponse);
-        // }
-
         /*
         * PUBLIC WEBSOCKET Examples
         */
@@ -144,12 +61,6 @@ export const getKrakenPrice = async (ticker: string) => {
 
         //     await OpenAndStreamWebSocketSubscription(privateWebSocketURL, privateWebSocketSubscriptionMsg);
         // }
-
-
-        console.log("|=======================================|");
-        console.log("| END OF PROGRAM - HAVE A GOOD DAY :)   |");
-        console.log("|=======================================|");
-        console.log("\n");
 
     }
     catch (e) {
@@ -239,9 +150,20 @@ export const getKrakenPrice = async (ticker: string) => {
             });
 
             webSocketClient.on('message', function incoming(wsMsg) {
-                var d = new Date();
-                var msgTime = d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds();
-                console.log("Kraken price", msgTime + ": " + wsMsg);
+                let priceObject = JSON.parse(wsMsg.toString())
+
+
+                if (wsMsg.toString() != '{"event":"heartbeat"}' && priceObject.event != "systemStatus" && priceObject.event != "subscriptionStatus") {
+                    krakenPrice = priceObject
+
+                    // Iterate through each nested array
+                    for (const innerArray of priceObject[1]) {
+                        // Access the first element (price) of the inner array
+                        krakenPrice = innerArray[0];
+
+                        sortPrices(binancePrice, krakenPrice)
+                    }
+                }
             });
 
             webSocketClient.on('close', function close() {
@@ -259,6 +181,3 @@ export const getKrakenPrice = async (ticker: string) => {
         }
     }
 };
-
-
-getKrakenPrice('SOL');

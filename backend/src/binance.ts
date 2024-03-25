@@ -1,5 +1,8 @@
 import WebSocket from "ws";
+import { sortPrices } from "./prices.js";
+import { krakenPrice } from "./kraken.js";
 
+export let binancePrice: string;
 
 export const getBinancePrice = (ticker: string) => {
     const binanceWebSocketUrl = 'wss://stream.binance.com:9443/ws/solusdt@avgPrice';
@@ -11,14 +14,17 @@ export const getBinancePrice = (ticker: string) => {
             "method": "SUBSCRIBE",
             "params":
             [
-            `${ticker}usdt@avgPrice`,
+            `${ticker}usdt@trade`,
             ],
             "id": 1
             }))
     }
     
     binanceSocket.onmessage = ({data}: any) => {
-        console.log("Binance data: ", data)
+        let priceObject = JSON.parse(data)
+        binancePrice = priceObject.p;
+
+        sortPrices(binancePrice, krakenPrice);
     };
     
     binanceSocket.on('close', (code: number, reason: string) => {
