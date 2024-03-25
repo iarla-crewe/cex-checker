@@ -21,5 +21,9 @@ export const sortPrices = (binancePrice: string, krakenPrice: string) => {
     console.log(sortedPriceOrder);
 }
 
+export const minusFees = (inputAmount: string, takerFee: number): string => {
+    return (Number(inputAmount) * (1 - takerFee)).toFixed(5).toString()
+}
+
 getBinancePrice("sol")
 getKrakenPrice("SOL")

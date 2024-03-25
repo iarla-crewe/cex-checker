@@ -1,10 +1,19 @@
 import axios from 'axios';
 import crypto from 'crypto';
 import WebSocket from 'ws';
-import { sortPrices } from './prices.js';
+import { minusFees, sortPrices } from './prices.js';
 import { binancePrice } from './binance.js';
 
 export let krakenPrice: string;
+
+let krakenDepoistFee = {
+    sol: 0
+}
+let krakenWithdrawFee = {
+    usdc: 1
+}
+let krakenMakerFee: number = 0.0024;
+let krakenTakerFee: number = 0.004;
 
 export const getKrakenPrice = async (ticker: string) => {
 
@@ -159,7 +168,7 @@ export const getKrakenPrice = async (ticker: string) => {
                     // Iterate through each nested array
                     for (const innerArray of priceObject[1]) {
                         // Access the first element (price) of the inner array
-                        krakenPrice = innerArray[0];
+                        krakenPrice = minusFees(innerArray[0], krakenTakerFee)
 
                         sortPrices(binancePrice, krakenPrice)
                     }
