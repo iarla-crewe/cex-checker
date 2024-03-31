@@ -10,13 +10,16 @@ export default function CEXList() {
         <ul className={styles["cex-list"]}>
             {CEXs.map((cex, index) => (
                 <li key={index} style={{backgroundColor: cex.brandColor}}>
-                    <Image 
-                        src={cex.logoSrc}
-                        alt={cex.name}
-                        width={0}
-                        height={0}
-                        style={{ width: "250px", height: "auto"}}
-                    />
+                    <div className={styles["cex-logo-wrapper"]}>
+                        <Image 
+                            className={styles["cex-logo"]}
+                            src={cex.logoSrc}
+                            alt={cex.name}
+                            width={0}
+                            height={0}
+                            style={{ width: "auto", height: "100%"}}
+                        />
+                    </div>
 
                     <div className={styles["price-info"]} style={{color: cex.textColor}}>
                         <p className={styles["price-heading"]}>Expected</p>
@@ -25,7 +28,7 @@ export default function CEXList() {
                         <p className={styles["price-currency"]}>USDC</p>
                     </div>
 
-                    <OpenLink textColor={cex.textColor}/>
+                    <OpenLink textColor={cex.textColor} link={cex.website}/>
                 </li>
             ))}
         </ul>

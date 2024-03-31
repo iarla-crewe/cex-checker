@@ -4,6 +4,8 @@ import SwapButton from "./SwapButton";
 import styles from "./TradeInfo.module.css";
 
 export default function TradeInfo() {
+    let isBuying
+
     return (
         <div className={styles["trade-info"]}>
             <SwapButton/>

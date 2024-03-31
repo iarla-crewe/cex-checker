@@ -45,3 +45,12 @@
     opacity: var(--light-text-opacity);
     margin: 0px;
 }
+
+.cex-logo-wrapper {
+    width: 250px;
+    height: 40px;
+}
+
+.cex-logo {
+    max-width: 100%;
+}
