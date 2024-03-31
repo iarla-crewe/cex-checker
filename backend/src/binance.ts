@@ -13,7 +13,7 @@ let binanceWithdrawFee = {
 let binanceMakerFee: number = 0.001;
 let binanceTakerFee: number = 0.001;
 
-export const getBinancePrice = (ticker: string) => {
+export const getBinancePrice = (inputToken: string, outputToken: string, inputAmount: number) => {
     const binanceWebSocketUrl = 'wss://stream.binance.com:9443/ws/solusdt@avgPrice';
 
     const binanceSocket = new WebSocket(binanceWebSocketUrl);
@@ -23,7 +23,7 @@ export const getBinancePrice = (ticker: string) => {
             "method": "SUBSCRIBE",
             "params":
             [
-            `${ticker}usdt@trade`,
+            `${inputToken}${outputToken}@aggTrade`,
             ],
             "id": 1
             }))
@@ -31,8 +31,8 @@ export const getBinancePrice = (ticker: string) => {
     
     binanceSocket.onmessage = ({data}: any) => {
         let priceObject = JSON.parse(data)
-        binancePrice = minusFees(priceObject.p, binanceTakerFee)
-
+        binancePrice = minusFees(priceObject.p, binanceTakerFee, inputAmount)
+        
         sortPrices(binancePrice, krakenPrice);
     };
     

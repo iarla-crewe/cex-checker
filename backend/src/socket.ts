@@ -2,6 +2,8 @@ import express, { Request, Response } from 'express';
 import http from 'http'
 import { Server } from "socket.io";
 import { sortedPrices } from './prices.js';
+import { getBinancePrice } from './binance.js';
+import { getKrakenPrice } from './kraken.js';
 
 const app = express();
 
@@ -25,6 +27,18 @@ type PriceQuery = {
     cexList: CexList
 }
 
+let cexList: CexList = {
+    binance: true,
+    kraken: true
+  }
+
+  let params: PriceQuery = {
+    inputToken: 'sol',
+    outputToken: 'usdc',
+    inputAmount: 1,
+    cexList: cexList
+  }
+
 //client must make connection make a get-price request with the default search params
 // automatically when they open the site
 
@@ -34,10 +48,18 @@ type PriceQuery = {
 //connection with the client
 io.on('connection', (socket) => {
     //We get the search params
-    socket.on('get-price', ({inputToken, outputToken, inputAmount, cexList}: PriceQuery) => {
-        //get the sorted prices here (maybe)
+    console.log("Connection")
+            //get the sorted prices here (maybe)
 
+    socket.on('get-price', ({inputToken, outputToken, inputAmount, cexList}: PriceQuery) => {
+        getBinancePrice(inputToken, outputToken, inputAmount)
+        getKrakenPrice(inputToken, outputToken, inputAmount)
         //send the client the sortedPrices
-        socket.emit('get-price', {sortedPrices})
+        console.log("emitting sorted prices: ", sortedPrices)
+        io.emit('get-price', {sortedPrices})
     })
+})
+
+server.listen(3001, () => {
+    console.log("Server running at http://localhost:3001");
 })

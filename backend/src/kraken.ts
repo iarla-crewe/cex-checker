@@ -17,25 +17,24 @@ let krakenTakerFee: number = 0.004;
 
 //example code: https://support.kraken.com/hc/en-us/articles/4413834730260-Example-code-for-NodeJs-REST-and-WebSocket-API
 
-export const getKrakenPrice = async (ticker: string) => {
+export const getKrakenPrice = async (inputToken: string, outputToken: string, inputAmount: number) => {
 
     //TODO: UPDATE WITH YOUR KEYS :)
     let apiPublicKey = "EwS5M0YFHRsM3a4UqWicIY161mMM8iL0F3BPxGIDhtU1GSgk9BMDBg7g"
     let apiPrivateKey = "btdWLH9Gldbme2fL4l0oe1hAfQ8grwC"
 
-    try {
+    //convert usdc into usd or usdt
+    outputToken = outputToken.slice(0, -1) + "t";
 
-        console.log("|=========================================|");
-        console.log("|      KRAKEN.COM        |");
-        console.log("|=========================================|");
-        console.log();
+
+    try {
         /*
         * PUBLIC WEBSOCKET Examples
         */
 
 
         let publicWebSocketURL = "wss://ws.kraken.com/";
-        let publicWebSocketSubscriptionMsg = `{ "event":"subscribe", "subscription":{"name":"trade"},"pair":["${ticker}/USD"] }`;
+        let publicWebSocketSubscriptionMsg = `{ "event":"subscribe", "subscription":{"name":"trade"},"pair":["${inputToken.toUpperCase()}/${outputToken.toUpperCase()}"] }`;
 
         /*
         *MORE PUBLIC WEBSOCKET EXAMPLES
@@ -170,7 +169,7 @@ export const getKrakenPrice = async (ticker: string) => {
                     // Iterate through each nested array
                     for (const innerArray of priceObject[1]) {
                         // Access the first element (price) of the inner array
-                        krakenPrice = minusFees(innerArray[0], krakenTakerFee)
+                        krakenPrice = minusFees(innerArray[0], krakenTakerFee, inputAmount)
 
                         sortPrices(binancePrice, krakenPrice)
                     }
