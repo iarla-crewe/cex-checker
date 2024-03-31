@@ -1,5 +1,7 @@
 import { io } from "./socket.js";
 
+let lastEmitTime: number = 0; // Initialize the last emission time
+
 export type Prices = {
     binance: string,
     kraken: string,
@@ -50,7 +52,15 @@ export const sortPrices = (binancePrice: string, krakenPrice: string) => {
 
         //@ts-ignore
         sortedPrices = sortedPriceOrder
-        io.emit('get-price', {sortedPrices})
+
+        // Check if it's been at least 5 seconds since the last emission
+        const currentTime = Date.now();
+        if (currentTime - lastEmitTime >= 5000) {
+            // Update the last emission time
+            lastEmitTime = currentTime;
+            io.emit('get-price', {sortedPrices})
+            return
+        }
     } 
 }
 
