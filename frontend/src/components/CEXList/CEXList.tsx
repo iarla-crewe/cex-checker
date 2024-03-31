@@ -4,7 +4,7 @@ import Image from "next/image";
 import OpenLink from "./OpenLink";
 
 export default function CEXList() {
-
+    
 
     return (
         <ul className={styles["cex-list"]}>
