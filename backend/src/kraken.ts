@@ -3,6 +3,8 @@ import crypto from 'crypto';
 import WebSocket from 'ws';
 import { minusFees, sortPrices } from './prices.js';
 import { binancePrice } from './binance.js';
+import dotenv from 'dotenv';
+dotenv.config();
 
 export let krakenPrice: string;
 
@@ -20,8 +22,8 @@ let krakenTakerFee: number = 0.004;
 export const getKrakenPrice = async (inputToken: string, outputToken: string, inputAmount: number) => {
 
     //TODO: UPDATE WITH YOUR KEYS :)
-    let apiPublicKey = "EwS5M0YFHRsM3a4UqWicIY161mMM8iL0F3BPxGIDhtU1GSgk9BMDBg7g"
-    let apiPrivateKey = "btdWLH9Gldbme2fL4l0oe1hAfQ8grwC"
+    let apiPublicKey = process.env.KRAKEN_PUBLIC
+    let apiPrivateKey = process.env.KRAKEN_PRIVATE 
 
     //convert usdc into usd or usdt
     outputToken = outputToken.slice(0, -1) + "t";
@@ -78,22 +80,6 @@ export const getKrakenPrice = async (inputToken: string, outputToken: string, in
         console.log("AN EXCEPTION OCCURED :(");
         console.log(e);
     }
-
-
-    /*
-    * Public REST API Endpoints
-    */
-
-    async function QueryPublicEndpoint(endPointName: string, inputParameters: any) {
-        let jsonData;
-        const baseDomain = "https://api.kraken.com";
-        const publicPath = "/0/public/";
-        const apiEndpointFullURL = baseDomain + publicPath + endPointName + "?" + inputParameters;
-
-        jsonData = await axios.get(apiEndpointFullURL);
-        return jsonData.data.result;
-    }
-
 
     /*
     * Private REST API Endpoints
@@ -181,6 +167,10 @@ export const getKrakenPrice = async (inputToken: string, outputToken: string, in
                 console.log("|     END OF PROGRAM - HAVE A GOOD DAY :)      |");
                 console.log("|==============================================|");
                 console.log("\n");
+            });
+
+            webSocketClient.on('error', (error: Error) => {
+                console.error('Kraken WebSocket error:', error.message);
             });
 
         }

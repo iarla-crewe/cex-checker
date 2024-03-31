@@ -9,7 +9,7 @@ const app = express();
 
 const server = http.createServer(app)
 
-const io = new Server(server, {
+export const io = new Server(server, {
     cors: {
         origin: '*',
     },
@@ -17,7 +17,10 @@ const io = new Server(server, {
 
 type CexList = {
     binance: boolean,
-    kraken: boolean
+    kraken: boolean,
+    coinbase: boolean,
+    crypto_com: boolean,
+    bybit: boolean,
 }
 
 type PriceQuery = {
@@ -29,7 +32,10 @@ type PriceQuery = {
 
 let cexList: CexList = {
     binance: true,
-    kraken: true
+    kraken: true,
+    coinbase: false,
+    crypto_com: false,
+    bybit: false,
   }
 
   let params: PriceQuery = {

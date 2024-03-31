@@ -1,31 +1,42 @@
-type Prices = {
-    Binance: string,
-    Kraken: string
+import { io } from "./socket.js";
+
+export type Prices = {
+    binance: string,
+    kraken: string,
+    coinbase: string,
+    crypto_com: string,
+    bybit: string,
 }
 
 export let sortedPrices: Prices = {
-    Binance: "",
-    Kraken: ""
+    binance: "",
+    kraken: "",
+    coinbase: "",
+    crypto_com: "",
+    bybit: ""
 };
 
 export const sortPrices = (binancePrice: string, krakenPrice: string) => { 
 
     //sort prices into an object
     let priceOrder: Prices = {
-        "Binance": sortedPrices.Binance,
-        "Kraken": sortedPrices.Kraken
+        binance: sortedPrices.binance,
+        kraken: sortedPrices.kraken,
+        coinbase: "",
+        crypto_com: "",
+        bybit: ""
     }
 
-    if (binancePrice !== sortedPrices.Binance && binancePrice !== undefined && binancePrice !== "NaN") {
-        priceOrder.Binance = binancePrice
+    if (binancePrice !== sortedPrices.binance && binancePrice !== undefined && binancePrice !== "NaN") {
+        priceOrder.binance = binancePrice
         console.log("New Binance price")
     }
-    if (krakenPrice !== sortedPrices.Kraken && krakenPrice !== undefined && krakenPrice !== "NaN") {
-        priceOrder.Kraken = krakenPrice
+    if (krakenPrice !== sortedPrices.kraken && krakenPrice !== undefined && krakenPrice !== "NaN") {
+        priceOrder.kraken = krakenPrice
         console.log("New kraken price")
     }
 
-    if (priceOrder.Binance !== sortedPrices.Binance || priceOrder.Kraken !== sortedPrices.Kraken) {
+    if (priceOrder.binance !== sortedPrices.binance || priceOrder.kraken !== sortedPrices.kraken) {
         // Convert the object into an array of key-value pairs
         let priceOrderArray = Object.entries(priceOrder);
 
@@ -39,6 +50,7 @@ export const sortPrices = (binancePrice: string, krakenPrice: string) => {
 
         //@ts-ignore
         sortedPrices = sortedPriceOrder
+        io.emit('get-price', {sortedPrices})
     } 
 }
 

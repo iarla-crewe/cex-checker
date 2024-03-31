@@ -16,7 +16,10 @@ export default function Home() {
 
   type CexList = {
     binance: boolean,
-    kraken: boolean
+    kraken: boolean,
+    coinbase: boolean,
+    crypto_com: boolean,
+    bybit: boolean,
   }
 
   type PriceQuery = {
@@ -35,7 +38,10 @@ export default function Home() {
 
   let cexList: CexList = {
     binance: true,
-    kraken: true
+    kraken: true,
+    coinbase: false,
+    crypto_com: false,
+    bybit: false
   }
 
   let params: PriceQuery = {
@@ -46,21 +52,24 @@ export default function Home() {
   }
 
   useEffect(() => {
-    socket.on('get-price', (sortedPrices: any) => {
-      setPriceData(sortedPrices)
-    })
+    getPriceData(params);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); 
+
+  useEffect(() => {
+    socket.on("get-price", (sortedPrices: any) => {
+      setPriceData(sortedPrices);
+    });
   }, []);
 
   return (
     <main className={styles["main"]}>
       <div className={styles["container"]}>
-        <button onClick={() => getPriceData(params)}>Get Price Data</button>
-        {/* Render price data */}
         {priceData && (
           <div>
             <h2>Price Data</h2>
-            <p>Binance Price: {priceData.sortedPrices.Binance}</p>
-            <p>Kraken Price: {priceData.sortedPrices.Kraken}</p>
+            <p>Binance Price: {priceData.sortedPrices.binance}</p>
+            <p>Kraken Price: {priceData.sortedPrices.kraken}</p>
           </div>
         )}
         <TradeInfo />
