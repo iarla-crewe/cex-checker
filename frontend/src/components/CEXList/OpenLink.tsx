@@ -14,7 +14,7 @@ export default function OpenLink(props: OpenLinkProps) {
     const height = 35;
     
     return (
-        <a href={link}>
+        <a href={link} target="_blank">
             <Image
                 src={svg_file}
                 alt={altText}
