@@ -3,13 +3,14 @@ import Image from "next/image";
 
 interface SelectCurrencyProps {
     defaultValue: string;
+    onClickHandler: () => void;
 }
 
 export default function SelectCurrency(props: SelectCurrencyProps) {
-    const { defaultValue } = props;
+    const { defaultValue, onClickHandler } = props;
 
     return (
-        <button className={styles["select-currency"]}>
+        <button className={styles["select-currency"]} onClick={onClickHandler}>
             <p>{defaultValue}</p>
             <Image 
                 src="/down_arrow.svg"

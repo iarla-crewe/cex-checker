@@ -1,9 +1,15 @@
 import Image from "next/image";
 import styles from "./TradeInfo.module.css";
 
-export default function SwapCurrencyButton() {
+interface SwapCurrencyButtonProps {
+    onClickHandler: () => void;
+}
+
+export default function SwapCurrencyButton(props: SwapCurrencyButtonProps) {
+    const { onClickHandler } = props;
+
     return (
-        <button className={styles["swap-currency-button"]}>
+        <button className={styles["swap-currency-button"]} onClick={onClickHandler}>
             <Image 
                 src="/swap_icon.svg"
                 alt="Swap currency"

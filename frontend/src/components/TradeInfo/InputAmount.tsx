@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 
 export default function InputAmount() {
     const [inputValue, setInputValue] = useState<string>('');
-    const maxLength = 12;
+    const maxLength = 11;
 
     const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
         if (event.key == "-" || event.key == "e" || event.key == "E") {

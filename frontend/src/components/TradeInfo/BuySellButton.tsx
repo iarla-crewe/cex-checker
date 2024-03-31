@@ -1,16 +1,17 @@
 import Image from "next/image";
 
 interface BuySellButtonProps {
-    isBuying: boolean
+    isBuying: boolean,
+    onClickHandler: () => void
 }
 
 export default function BuySellButton(props: BuySellButtonProps) {
-    const { isBuying } = props;
+    const { isBuying, onClickHandler } = props;
 
     const text = (isBuying) ? "Buy" : "Sell";
 
     return (
-        <button>
+        <button onClick={onClickHandler}>
             <p>{text}</p>
             <Image 
                 src="/buy_sell_icon.svg"
