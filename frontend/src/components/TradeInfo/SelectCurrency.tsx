@@ -1,4 +1,4 @@
-import styles from "./SelectCurrency.module.css"
+import styles from "./TradeInfo.module.css"
 import Image from "next/image";
 
 interface SelectCurrencyProps {

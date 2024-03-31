@@ -1,18 +1,22 @@
 import InputAmount from "./InputAmount";
 import SelectCurrency from "./SelectCurrency";
-import SwapButton from "./SwapButton";
+import BuySellButton from "./BuySellButton";
 import styles from "./TradeInfo.module.css";
+import SwapCurrencyButton from "./SwapCurrencyButton";
 
 export default function TradeInfo() {
-    let isBuying
+    let isBuying = false;
+
+    const text = (isBuying) ? "with" : "for";
 
     return (
         <div className={styles["trade-info"]}>
-            <SwapButton/>
+            <BuySellButton isBuying={isBuying}/>
             <InputAmount/>
             <SelectCurrency defaultValue="USDC"/>
-            <p>with</p>
+            <p>{text}</p>
             <SelectCurrency defaultValue="SOL"/>
+            <SwapCurrencyButton/>
         </div>
     );
 }

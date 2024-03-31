@@ -4,7 +4,7 @@
     justify-content: space-between;
     align-items: center;
     gap: 25px;
-    padding: 30px 60px;
+    padding: 30px 30px;
     border-radius: var(--card-border-radius);
     border: var(--card-border);
     margin-bottom: 100px;
@@ -16,4 +16,13 @@
         gap: 15px;
         padding: 30px 40px;
     }
+}
+
+.select-currency{
+    min-width: 120px;
+}
+
+.swap-currency-button{
+    padding: 13px;
+    border-radius: 100%;
 }

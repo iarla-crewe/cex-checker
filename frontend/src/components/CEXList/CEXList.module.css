@@ -16,6 +16,10 @@
     margin-bottom: 20px;
 }
 
+.cex-list a {
+    text-decoration: none;
+}
+
 .price-info {
     display: flex;
     flex-direction: column;
