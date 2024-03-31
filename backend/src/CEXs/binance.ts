@@ -1,5 +1,5 @@
 import WebSocket from "ws";
-import { minusFees, sortPrices } from "./prices.js";
+import { minusFees, sortPrices } from "../prices.js";
 import { krakenPrice } from "./kraken.js";
 
 export let binancePrice: string;

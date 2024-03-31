@@ -2,8 +2,8 @@ import express, { Request, Response } from 'express';
 import http from 'http'
 import { Server } from "socket.io";
 import { sortedPrices } from './prices.js';
-import { getBinancePrice } from './binance.js';
-import { getKrakenPrice } from './kraken.js';
+import { getBinancePrice } from './CEXs/binance.js';
+import { getKrakenPrice } from './CEXs/kraken.js';
 
 const app = express();
 

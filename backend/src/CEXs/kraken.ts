@@ -1,7 +1,7 @@
 import axios from 'axios';
 import crypto from 'crypto';
 import WebSocket from 'ws';
-import { minusFees, sortPrices } from './prices.js';
+import { minusFees, sortPrices } from '../prices.js';
 import { binancePrice } from './binance.js';
 import dotenv from 'dotenv';
 dotenv.config();
