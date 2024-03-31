@@ -1,17 +1,19 @@
 //Receive input and output tokens and exchange list from user (http endpoint)
 // Import necessary modules
-const express = require('express');
-import { Request, Response } from 'express';
+// const express = require('express');
+import express, { Request, Response } from 'express';
+import http from 'http'
+import { Server } from "socket.io";
 
 // Create an Express application
 const app = express();
-const port = 3000;
+const port = 3001;
 
 // Middleware to parse JSON bodies
 app.use(express.json());
 
 // Define a POST endpoint to receive data from the client
-app.post('/send-data', (req: Request, res: Response) => {
+app.post('/get-best-price', (req: Request, res: Response) => {
     const data = req.body; // Access the data sent by the client
 
     // Process the received data here
@@ -27,11 +29,11 @@ app.listen(port, () => {
 
 
 
-//get price data (websocket)
+//get price data (websocket) done
 
-//get fee data (database)
+//get fee data (database) done
 
-//calculate estimated output
+//calculate estimated output done
 
-//Send output to client continously via (websocket)
+//Send output to client continously via (socket.io)
 
