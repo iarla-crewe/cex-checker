@@ -6,6 +6,13 @@
 
 .cex-list li {
     text-decoration: none;
+}
+
+.cex-list a {
+    text-decoration: none;
+}
+
+.cex-card {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -14,10 +21,6 @@
     border-radius: var(--card-border-radius);
     padding: 20px 50px;
     margin-bottom: 20px;
-}
-
-.cex-list a {
-    text-decoration: none;
 }
 
 .price-info {
