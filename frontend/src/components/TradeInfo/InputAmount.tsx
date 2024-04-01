@@ -2,7 +2,14 @@
 
 import React, { useState } from 'react';
 
-export default function InputAmount() {
+interface InputAmountProps {
+    defaultValue: number;
+    updateAmount: (amount: number) => void;
+}
+
+export default function InputAmount(props: InputAmountProps) {
+    const { defaultValue, updateAmount } = props;
+
     const [inputValue, setInputValue] = useState<string>('');
     const maxLength = 11;
 
@@ -24,6 +31,9 @@ export default function InputAmount() {
 
         if (event.target.value.length <= checkedLength) {
             setInputValue(event.target.value);
+            
+            const num = Number(event.target.value);
+            if (!isNaN(num) && num > 0) updateAmount(num);
         }
     };
 
@@ -31,7 +41,7 @@ export default function InputAmount() {
     // If changing type, change css in globals.css
 
     return (
-        <input type="number" value={inputValue} onChange={handleChange} onKeyDown={handleKeyDown} maxLength={9} placeholder="0.00"/>
+        <input type="number" value={inputValue} onChange={handleChange} onKeyDown={handleKeyDown} maxLength={9} placeholder={defaultValue.toFixed(2)}/>
     );
 }
 

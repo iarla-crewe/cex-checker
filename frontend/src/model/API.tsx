@@ -10,6 +10,13 @@ export interface PriceQuery {
     filter: Filter;
 }
 
+export interface QueryUpdateData {
+    inputToken?: string;
+    outputToken?: string;
+    amount?: number; 
+    filter?: Filter;
+}
+
 export function getPriceData({ inputToken, outputToken, amount, filter }: PriceQuery) {
     console.log("get price data")
     socket.emit('get-price', { inputToken, outputToken, inputAmount: amount, cexList: filter })

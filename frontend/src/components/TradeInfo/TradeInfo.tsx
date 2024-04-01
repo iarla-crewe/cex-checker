@@ -6,29 +6,49 @@ import BuySellButton from "./BuySellButton";
 import styles from "./TradeInfo.module.css";
 import SwapCurrencyButton from "./SwapCurrencyButton";
 import { useState } from "react";
+import { QueryUpdateData } from "@/model/API";
 
-export default function TradeInfo() {
+interface TradeInfoProps {
+    defaultInputToken: string,
+    defaultOutputToken: string,
+    defaultAmount: number,
+    handleUpdate: (data: QueryUpdateData) => void;
+}
+
+export default function TradeInfo(props: TradeInfoProps) {
+    const { defaultInputToken, defaultOutputToken, defaultAmount, handleUpdate } = props;
+
     const [isBuying, setIsBuying] = useState(false);
-    const [amount, setAmount] = useState(0);
-    const [currency1, setCurrency1] = useState("USDC");
-    const [currency2, setCurrency2] = useState("SOL");
+    const [inputToken, setInputToken] = useState(defaultInputToken);
+    const [outputToken, setOutputToken] = useState(defaultOutputToken);
     
-    const handleBuySell = () => {
-        setIsBuying(!isBuying);
+    const handleBuySell = () => setIsBuying(!isBuying); // TODO - actually change the query
+
+    const handleInputToken = () => {
+        const value = "WIF";
+
+        setInputToken(value);
+        handleUpdate({inputToken: value});
     }
 
-    const handleCurrency1 = () => {
-        setCurrency1("WIF");
-    }
+    const handleOutputToken = () => {
+        const value = "WIF";
 
-    const handleCurrency2 = () => {
-        setCurrency2("WIF");
+        setOutputToken(value);
+        handleUpdate({outputToken: value});
     }
 
     const handleSwap = () => {
-        const tmp = currency1;
-        setCurrency1(currency2);
-        setCurrency2(tmp);
+        const valueInput = outputToken;
+        const valueOutput = inputToken;
+        
+        setInputToken(valueInput);
+        setOutputToken(valueOutput);
+        handleUpdate({inputToken: valueInput, outputToken: valueOutput});
+    }
+
+    const handleAmount = (amount: number) => {
+        handleUpdate({amount: amount})
     }
 
     const text = (isBuying) ? "with" : "for";
@@ -36,10 +56,10 @@ export default function TradeInfo() {
     return (
         <div className={styles["trade-info"]}>
             <BuySellButton isBuying={isBuying} onClickHandler={handleBuySell}/>
-            <InputAmount/>
-            <SelectCurrency defaultValue={currency1} onClickHandler={handleCurrency1}/>
+            <InputAmount defaultValue={defaultAmount} updateAmount={handleAmount}/>
+            <SelectCurrency defaultValue={inputToken} onClickHandler={handleInputToken}/>
             <p>{text}</p>
-            <SelectCurrency defaultValue={currency2} onClickHandler={handleCurrency2}/>
+            <SelectCurrency defaultValue={outputToken} onClickHandler={handleOutputToken}/>
             <SwapCurrencyButton onClickHandler={handleSwap}/>
         </div>
     );
