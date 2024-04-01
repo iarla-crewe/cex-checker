@@ -2,8 +2,8 @@
 
 import Image from "next/image";
 import OpenLink from "./OpenLink";
-import { CEX } from "@/model/CEX";
-import styles from "./CEXList.module.css";
+import { CEX } from "@/model/CEXList";
+import styles from "./Results.module.css";
 import { useState } from "react";
 
 interface CEXCardProps {

@@ -3,62 +3,30 @@
 import styles from "./page.module.css";
 
 import TradeInfo from "@/components/TradeInfo/TradeInfo";
-import Filters from "@/components/Filters";
-import CEXList from "@/components/CEXList/CEXList";
-import { io } from "socket.io-client"
+import SelectFilters from "@/components/SelectFilters";
+import Results from "@/components/Results/Results";
 import { useEffect, useState } from "react";
-
-const socket = io('http://localhost:3001')
+import { PriceQuery, getPriceData, socket } from "@/model/API";
 
 export default function Home() {
-  let hasSearched = true;
-  const [priceData, setPriceData] = useState<any>(null); // State to store price data
-
-  type CexList = {
-    binance: boolean,
-    kraken: boolean,
-    coinbase: boolean,
-    crypto_com: boolean,
-    bybit: boolean,
-  }
-
-  type PriceQuery = {
-    inputToken: string,
-    outputToken: string,
-    inputAmount: number,
-    cexList: CexList
-  }
-
-  function getPriceData({ inputToken, outputToken, inputAmount, cexList }: PriceQuery) {
-    //sends the server the params and get-price query
-    socket.emit('get-price', { inputToken, outputToken, inputAmount, cexList })
-    console.log("get price data")
-    //update the front end 
-  }
-
-  let cexList: CexList = {
-    binance: true,
-    kraken: true,
-    coinbase: false,
-    crypto_com: false,
-    bybit: false
-  }
-
-  let params: PriceQuery = {
+  const [priceData, setPriceData] = useState<any>(null);
+  const [queryData, setQueryData] = useState<PriceQuery>({
     inputToken: 'sol',
     outputToken: 'usdc',
-    inputAmount: 1,
-    cexList: cexList
-  }
+    amount: 1,
+    filter: {
+      binance: true,
+      kraken: true,
+      coinbase: false,
+      crypto_com: false,
+      bybit: false
+    }
+  });
 
   useEffect(() => {
-    getPriceData(params);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []); 
-
-  useEffect(() => {
+    getPriceData(queryData);
     socket.on("get-price", (sortedPrices: any) => {
-      setPriceData(sortedPrices);
+      setPriceData(sortedPrices.sortedPrices);
     });
   }, []);
 
@@ -68,13 +36,13 @@ export default function Home() {
         {priceData && (
           <div>
             <h2>Price Data</h2>
-            <p>Binance Price: {priceData.sortedPrices.binance}</p>
-            <p>Kraken Price: {priceData.sortedPrices.kraken}</p>
+            <p>Binance Price: {priceData.binance}</p>
+            <p>Kraken Price: {priceData.kraken}</p>
           </div>
         )}
         <TradeInfo />
-        <Filters />
-        <CEXList/>
+        <SelectFilters />
+        <Results/>
       </div>
     </main>
   );
