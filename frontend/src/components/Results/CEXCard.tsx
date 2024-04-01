@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import OpenLink from "./OpenLink";
+import OpenLinkSVG from "./OpenLinkSVG";
 import { CEX } from "@/model/CEXList";
 import styles from "./Results.module.css";
 import { useState } from "react";
@@ -39,7 +39,7 @@ export default function CEXCard(props: CEXCardProps) {
                         <p className={styles["price-currency"]}>USDC</p>
                     </div>
 
-                    <OpenLink textColor={cex.textColor} link={cex.website}/>
+                    <OpenLinkSVG textColor={cex.textColor} link={cex.website}/>
                 </div>
             </a>
         </li>

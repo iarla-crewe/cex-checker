@@ -1,11 +1,11 @@
 import Image from "next/image";
 
-interface OpenLinkProps {
+interface OpenLinkSVGProps {
     textColor: string
     link: string
 }
 
-export default function OpenLink(props: OpenLinkProps) {
+export default function OpenLinkSVG(props: OpenLinkSVGProps) {
     const { textColor, link } = props;
 
     const svg_file = (textColor == "white") ? "/open_link_light.svg" : "/open_link_dark.svg";
