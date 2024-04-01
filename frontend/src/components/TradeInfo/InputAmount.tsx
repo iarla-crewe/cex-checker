@@ -10,8 +10,12 @@ interface InputAmountProps {
 export default function InputAmount(props: InputAmountProps) {
     const { defaultValue, updateAmount } = props;
 
+    const maxLength = 10;
+    const emptyPlaceholder = "0.00";
+
     const [inputValue, setInputValue] = useState<string>('');
-    const maxLength = 11;
+    const [placeholder, setPlaceholder] = useState(defaultValue.toFixed(2));
+    
 
     const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
         if (event.key == "-" || event.key == "e" || event.key == "E") {
@@ -24,15 +28,18 @@ export default function InputAmount(props: InputAmountProps) {
     };
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const targetValue = event.target.value;
+
         let checkedLength = maxLength;
-        if (event.target.value.includes(",") || event.target.value.includes(".")) {
+        if (targetValue.includes(",") || targetValue.includes(".")) {
             checkedLength++;
         }
 
-        if (event.target.value.length <= checkedLength) {
-            setInputValue(event.target.value);
+        if (targetValue.length <= checkedLength) {
+            if (targetValue == "") setPlaceholder(emptyPlaceholder);
+            setInputValue(targetValue);
             
-            const num = Number(event.target.value);
+            const num = Number(targetValue);
             if (!isNaN(num) && num > 0) updateAmount(num);
         }
     };
@@ -41,7 +48,7 @@ export default function InputAmount(props: InputAmountProps) {
     // If changing type, change css in globals.css
 
     return (
-        <input type="number" value={inputValue} onChange={handleChange} onKeyDown={handleKeyDown} maxLength={9} placeholder={defaultValue.toFixed(2)}/>
+        <input type="number" value={inputValue} onChange={handleChange} onKeyDown={handleKeyDown} maxLength={9} placeholder={placeholder}/>
     );
 }
 
