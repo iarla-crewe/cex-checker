@@ -21,7 +21,9 @@ export default function Results(props: ResultsProps) {
     return (
         <ul className={styles["cex-list"]}>
             {pricedCEXList.map((cex, index) => (
-                <CEXCard index={index} cex={cex}/>
+                <li key={index}>
+                    <CEXCard index={index} cex={cex}/>
+                </li>
             ))}
         </ul>
     );
