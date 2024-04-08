@@ -1,7 +1,7 @@
-import { QueryUpdateData } from "@/model/API";
+import { UpdatePriceQuery } from "@/model/API";
 
 interface SelectFiltersProps {
-    handleUpdate: (data: QueryUpdateData) => void;
+    handleUpdate: (data: UpdatePriceQuery) => void;
 }
 
 export default function SelectFilters(props: SelectFiltersProps) {

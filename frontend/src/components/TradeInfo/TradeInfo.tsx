@@ -6,13 +6,13 @@ import BuySellButton from "./BuySellButton";
 import styles from "./TradeInfo.module.css";
 import SwapCurrencyButton from "./SwapCurrencyButton";
 import { useState } from "react";
-import { QueryUpdateData } from "@/model/API";
+import { UpdatePriceQuery } from "@/model/API";
 
 interface TradeInfoProps {
     defaultInputToken: string,
     defaultOutputToken: string,
     defaultAmount: number,
-    handleUpdate: (data: QueryUpdateData) => void;
+    handleUpdate: (data: UpdatePriceQuery) => void;
 }
 
 export default function TradeInfo(props: TradeInfoProps) {

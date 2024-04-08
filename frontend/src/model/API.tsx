@@ -10,14 +10,22 @@ export interface PriceQuery {
     filter: Filter;
 }
 
-export interface QueryUpdateData {
+export interface UpdatePriceQuery {
     inputToken?: string;
     outputToken?: string;
     amount?: number; 
     filter?: Filter;
 }
 
+export interface PriceData {
+    [exchange: string]: string;
+    binance: string;
+    bybit: string;
+    coinbase: string;
+    crypto_com: string;
+    kraken: string;
+}
+
 export function getPriceData({ inputToken, outputToken, amount, filter }: PriceQuery) {
-    console.log("get price data")
     socket.emit('get-price', { inputToken, outputToken, inputAmount: amount, cexList: filter })
 }

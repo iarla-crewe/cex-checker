@@ -7,12 +7,13 @@ import styles from "./Results.module.css";
 import { useState } from "react";
 
 interface CEXCardProps {
-    index: number,
-    cex: CEX
+    index: number;
+    cex: CEX;
+    price: string;
 }
 
 export default function CEXCard(props: CEXCardProps) {
-    const { index, cex } = props;
+    const { index, cex, price } = props;
 
     const borderColor = (cex.borderColor != "") ? cex.borderColor : cex.brandColor;
     const border = "1.5px solid " + borderColor;
@@ -35,7 +36,9 @@ export default function CEXCard(props: CEXCardProps) {
                     <div className={styles["price-info"]} style={{color: cex.textColor}}>
                         <p className={styles["price-heading"]}>Expected</p>
                         <p className={styles["price-subheading"]}>(after fees)</p>
-                        <p className={styles["price"]}>0.00</p>
+                        <p className={styles["price"]}>
+                            {price}
+                        </p>
                         <p className={styles["price-currency"]}>USDC</p>
                     </div>
 

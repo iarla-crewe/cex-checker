@@ -6,10 +6,12 @@ import TradeInfo from "@/components/TradeInfo/TradeInfo";
 import SelectFilters from "@/components/SelectFilters";
 import Results from "@/components/Results/Results";
 import { useEffect, useState } from "react";
-import { PriceQuery, QueryUpdateData, getPriceData, socket } from "@/model/API";
+import { PriceData, PriceQuery, UpdatePriceQuery, getPriceData, socket } from "@/model/API";
 
 export default function Home() {
-  const [priceData, setPriceData] = useState<any>(null);
+  const [priceData, setPriceData] = useState<PriceData>({
+    binance: "", bybit: "", coinbase: "", crypto_com: "", kraken: ""
+  });
   const [queryData, setQueryData] = useState<PriceQuery>({
     inputToken: 'SOL',
     outputToken: 'USDC',
@@ -30,7 +32,7 @@ export default function Home() {
     });
   }, []);
 
-  const handleQueryUpdate = (data: QueryUpdateData) => {
+  const handleQueryUpdate = (data: UpdatePriceQuery) => {
     if (data.inputToken === undefined) data.inputToken = queryData.inputToken;
     if (data.outputToken === undefined) data.outputToken = queryData.outputToken;
     if (data.amount === undefined) data.amount = queryData.amount;
@@ -45,19 +47,6 @@ export default function Home() {
   return (
     <main className={styles["main"]}>
       <div className={styles["container"]}>
-        {priceData && (
-          <div>
-            <h2>Price Data</h2>
-            <p>Binance Price: {priceData.binance}</p>
-            <p>Kraken Price: {priceData.kraken}</p>
-          </div>
-        )}
-        <div>
-          <h2>Query:</h2>
-          <p>Input: {queryData.inputToken}</p>
-          <p>Output: {queryData.outputToken}</p>
-          <p>Amount: {queryData.amount}</p>
-        </div>
         <TradeInfo 
           defaultInputToken={queryData.inputToken} 
           defaultOutputToken={queryData.outputToken} 
@@ -65,7 +54,7 @@ export default function Home() {
           handleUpdate={handleQueryUpdate}
         />
         <SelectFilters handleUpdate={handleQueryUpdate}/>
-        <Results/>
+        <Results priceData={priceData}/>
       </div>
     </main>
   );
