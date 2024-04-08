@@ -9,9 +9,7 @@ import { useEffect, useState } from "react";
 import { PriceData, PriceQuery, UpdatePriceQuery, getPriceData, socket } from "@/model/API";
 
 export default function Home() {
-  const [priceData, setPriceData] = useState<PriceData>({
-    binance: "", bybit: "", coinbase: "", crypto_com: "", kraken: ""
-  });
+  const [priceData, setPriceData] = useState<PriceData>({binance: "", bybit: "", coinbase: "", crypto_com: "", kraken: ""});
   const [queryData, setQueryData] = useState<PriceQuery>({
     inputToken: 'SOL',
     outputToken: 'USDC',
@@ -24,6 +22,7 @@ export default function Home() {
       bybit: false
     }
   });
+  const [sortHighLow, setSortHighLow] = useState(true);
 
   useEffect(() => {
     getPriceData(queryData);
@@ -51,10 +50,12 @@ export default function Home() {
           defaultInputToken={queryData.inputToken} 
           defaultOutputToken={queryData.outputToken} 
           defaultAmount={queryData.amount}
+          defaultIsBuying={sortHighLow}
           handleUpdate={handleQueryUpdate}
+          setSortHighLow={setSortHighLow}
         />
         <SelectFilters handleUpdate={handleQueryUpdate}/>
-        <Results priceData={priceData}/>
+        <Results priceData={priceData} sortHighLow={sortHighLow}/>
       </div>
     </main>
   );

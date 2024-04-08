@@ -6,6 +6,7 @@ export interface CEX {
     textColor: string;
     borderColor: string;
     website: string;
+    price?: string;
 }
 
 export const CEXList: CEX[] = [

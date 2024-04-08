@@ -9,11 +9,10 @@ import { useState } from "react";
 interface CEXCardProps {
     index: number;
     cex: CEX;
-    price: string;
 }
 
 export default function CEXCard(props: CEXCardProps) {
-    const { index, cex, price } = props;
+    const { index, cex } = props;
 
     const borderColor = (cex.borderColor != "") ? cex.borderColor : cex.brandColor;
     const border = "1.5px solid " + borderColor;
@@ -37,7 +36,7 @@ export default function CEXCard(props: CEXCardProps) {
                         <p className={styles["price-heading"]}>Expected</p>
                         <p className={styles["price-subheading"]}>(after fees)</p>
                         <p className={styles["price"]}>
-                            {price}
+                            {cex.price ? cex.price : "0.00"}
                         </p>
                         <p className={styles["price-currency"]}>USDC</p>
                     </div>

@@ -12,17 +12,22 @@ interface TradeInfoProps {
     defaultInputToken: string,
     defaultOutputToken: string,
     defaultAmount: number,
+    defaultIsBuying: boolean,
     handleUpdate: (data: UpdatePriceQuery) => void;
+    setSortHighLow: (value: boolean) => void;
 }
 
 export default function TradeInfo(props: TradeInfoProps) {
-    const { defaultInputToken, defaultOutputToken, defaultAmount, handleUpdate } = props;
+    const { defaultInputToken, defaultOutputToken, defaultAmount, defaultIsBuying, handleUpdate, setSortHighLow } = props;
 
-    const [isBuying, setIsBuying] = useState(false);
+    const [isSelling, setIsSelling] = useState(defaultIsBuying);
     const [inputToken, setInputToken] = useState(defaultInputToken);
     const [outputToken, setOutputToken] = useState(defaultOutputToken);
     
-    const handleBuySell = () => setIsBuying(!isBuying); // TODO - actually change the query
+    const swapBuySell = () => {
+        setIsSelling(!isSelling);
+        setSortHighLow(!isSelling);
+    }
 
     const handleInputToken = () => {
         const value = "WIF";
@@ -51,11 +56,11 @@ export default function TradeInfo(props: TradeInfoProps) {
         handleUpdate({amount: amount})
     }
 
-    const text = (isBuying) ? "with" : "for";
+    const text = (isSelling) ? "for" : "with";
 
     return (
         <div className={styles["trade-info"]}>
-            <BuySellButton isBuying={isBuying} onClickHandler={handleBuySell}/>
+            <BuySellButton isSelling={isSelling} onClickHandler={swapBuySell}/>
             <InputAmount defaultValue={defaultAmount} updateAmount={handleAmount}/>
             <SelectCurrency defaultValue={inputToken} onClickHandler={handleInputToken}/>
             <p>{text}</p>

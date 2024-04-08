@@ -3,25 +3,43 @@ import styles from "./Results.module.css";
 import CEXCard from "./CEXCard";
 import { PriceData } from "@/model/API";
 
-function generateCEX(cex: CEX, index: number, priceData: PriceData) {
-    let price = priceData[cex.name];
-    if (price == "") price = "0.00";
-
-    return (
-        <CEXCard index={index} cex={cex} price={price} />
-    )
-}
-
 interface ResultsProps {
-    priceData: PriceData
+    priceData: PriceData;
+    sortHighLow: boolean;
 }
 
 export default function Results(props: ResultsProps) {
-    const { priceData } = props;
+    const { priceData, sortHighLow } = props;
+
+    let pricedCEXList = CEXList.map((cex) => {
+        let price = priceData[cex.name];
+        return {...cex, price};
+    })
+
+    pricedCEXList.sort((a, b) => sortCEXList(a, b, sortHighLow));
 
     return (
         <ul className={styles["cex-list"]}>
-            {CEXList.map((cex, index) => generateCEX(cex, index, priceData))}
+            {pricedCEXList.map((cex, index) => (
+                <CEXCard index={index} cex={cex}/>
+            ))}
         </ul>
     );
+}
+
+function sortCEXList(a: CEX, b: CEX, sortHighLow: boolean): number {
+    if (a.price == undefined && b.price == undefined) {
+        return 0; // Both are loading, maintain original order
+    } else if (a.price == undefined) {
+        return 1; // A is loading, place last
+    } else if (b.price == undefined) {
+        return -1; // B is loading, place first
+    } else {
+        // Sort all loaded values
+        if (sortHighLow) {
+            return parseFloat(b.price) - parseFloat(a.price);
+        } else {
+            return parseFloat(a.price) - parseFloat(b.price);
+        }
+    }
 }
