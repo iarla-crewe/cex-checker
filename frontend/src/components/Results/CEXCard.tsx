@@ -5,6 +5,7 @@ import OpenLinkSVG from "./OpenLinkSVG";
 import { CEX } from "@/model/CEXList";
 import styles from "./Results.module.css";
 import { useState } from "react";
+import DisplayPrice from "./DisplayPrice";
 
 interface CEXCardProps {
     index: number;
@@ -32,14 +33,7 @@ export default function CEXCard(props: CEXCardProps) {
                         />
                     </div>
 
-                    <div className={styles["price-info"]} style={{color: cex.textColor}}>
-                        <p className={styles["price-heading"]}>Expected</p>
-                        <p className={styles["price-subheading"]}>(after fees)</p>
-                        <p className={styles["price"]}>
-                            {cex.price ? cex.price : "0.00"}
-                        </p>
-                        <p className={styles["price-currency"]}>USDC</p>
-                    </div>
+                    <DisplayPrice price={cex.price} textColor={cex.textColor}/>
 
                     <OpenLinkSVG textColor={cex.textColor} link={cex.website}/>
                 </div>
