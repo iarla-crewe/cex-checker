@@ -1,6 +1,6 @@
 import { CEX, CEXList } from "@/model/CEXList";
 import styles from "./Results.module.css";
-import CEXCard from "./CEXCard";
+import CEXCardWrapper from "./CEXCardWrapper";
 import { PriceData } from "@/model/API";
 
 interface ResultsProps {
@@ -23,7 +23,7 @@ export default function Results(props: ResultsProps) {
         <ul className={styles["cex-list"]}>
             {pricedCEXList.map((cex, index) => (
                 <li key={index}>
-                    <CEXCard cex={cex} currency={currency}/>
+                    <CEXCardWrapper cex={cex} currency={currency}/>
                 </li>
             ))}
         </ul>

@@ -19,7 +19,7 @@ export const CEXList: CEX[] = [
         textColor: "black", 
         borderColor: "", 
         website: "https://www.binance.com/en/trade/SOL_USDT?_from=markets&type=spot",
-        withdrawFee: ""
+        withdrawFee: "4 USDC"
     },
     {
         name: "kraken", 
@@ -29,7 +29,7 @@ export const CEXList: CEX[] = [
         textColor: "white", 
         borderColor: "", 
         website: "https://www.kraken.com/",
-        withdrawFee: ""
+        withdrawFee: "1 USDC"
     },
     {
         name: "bybit", 

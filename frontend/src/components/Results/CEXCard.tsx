@@ -19,23 +19,21 @@ export default function CEXCard(props: CEXCardProps) {
     const border = "1.5px solid " + borderColor;
 
     return (
-        <a href={cex.website} target="_blank">
-            <div className={styles["cex-card"]} style={{backgroundColor: cex.brandColor, border: border}}>
-                <div className={styles["cex-logo-wrapper"]}>
-                    <Image 
-                        className={styles["cex-logo"]}
-                        src={cex.logoSrc}
-                        alt={cex.name}
-                        width={0}
-                        height={0}
-                        style={{ width: "auto", height: "100%"}}
-                    />
-                </div>
-
-                <DisplayPrice price={cex.price} currency={currency} withdrawFee={cex.withdrawFee} textColor={cex.textColor}/>
-
-                <OpenLinkSVG textColor={cex.textColor} link={cex.website}/>
+        <div className={styles["cex-card"]} style={{backgroundColor: cex.brandColor, border: border}}>
+            <div className={styles["cex-logo-wrapper"]}>
+                <Image 
+                    className={styles["cex-logo"]}
+                    src={cex.logoSrc}
+                    alt={cex.name}
+                    width={0}
+                    height={0}
+                    style={{ width: "auto", height: "100%"}}
+                />
             </div>
-        </a>
+
+            <DisplayPrice price={cex.price} currency={currency} withdrawFee={cex.withdrawFee} textColor={cex.textColor}/>
+
+            <OpenLinkSVG textColor={cex.textColor} link={cex.website}/>
+        </div>
     )
 }
