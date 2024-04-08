@@ -5,11 +5,12 @@ import { PriceData } from "@/model/API";
 
 interface ResultsProps {
     priceData: PriceData;
+    currency: string;
     sortHighLow: boolean;
 }
 
 export default function Results(props: ResultsProps) {
-    const { priceData, sortHighLow } = props;
+    const { priceData, currency, sortHighLow } = props;
 
     let pricedCEXList = CEXList.map((cex) => {
         let price = priceData[cex.name];
@@ -22,7 +23,7 @@ export default function Results(props: ResultsProps) {
         <ul className={styles["cex-list"]}>
             {pricedCEXList.map((cex, index) => (
                 <li key={index}>
-                    <CEXCard index={index} cex={cex}/>
+                    <CEXCard cex={cex} currency={currency}/>
                 </li>
             ))}
         </ul>

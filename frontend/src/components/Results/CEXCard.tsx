@@ -8,12 +8,12 @@ import { useState } from "react";
 import DisplayPrice from "./DisplayPrice";
 
 interface CEXCardProps {
-    index: number;
     cex: CEX;
+    currency: string;
 }
 
 export default function CEXCard(props: CEXCardProps) {
-    const { index, cex } = props;
+    const { cex, currency } = props;
 
     const borderColor = (cex.borderColor != "") ? cex.borderColor : cex.brandColor;
     const border = "1.5px solid " + borderColor;
@@ -32,7 +32,7 @@ export default function CEXCard(props: CEXCardProps) {
                     />
                 </div>
 
-                <DisplayPrice price={cex.price} textColor={cex.textColor}/>
+                <DisplayPrice price={cex.price} currency={currency} withdrawFee={cex.withdrawFee} textColor={cex.textColor}/>
 
                 <OpenLinkSVG textColor={cex.textColor} link={cex.website}/>
             </div>

@@ -22,7 +22,7 @@ export default function Home() {
       bybit: false
     }
   });
-  const [sortHighLow, setSortHighLow] = useState(true);
+  const [sortHighLow, setSortHighLow] = useState(false);
 
   useEffect(() => {
     getPriceData(queryData);
@@ -55,7 +55,7 @@ export default function Home() {
           setSortHighLow={setSortHighLow}
         />
         <SelectFilters handleUpdate={handleQueryUpdate}/>
-        <Results priceData={priceData} sortHighLow={sortHighLow}/>
+        <Results priceData={priceData} currency={queryData.outputToken} sortHighLow={sortHighLow}/>
       </div>
     </main>
   );

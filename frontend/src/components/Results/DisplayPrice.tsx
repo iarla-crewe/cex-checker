@@ -3,21 +3,23 @@ import styles from "./Results.module.css";
 
 interface DisplayPriceProps {
     price: string | undefined;
+    currency: string;
+    withdrawFee: string;
     textColor: string;
 }
 
 export default function DisplayPrice(props: DisplayPriceProps) {
-    const { price, textColor } = props;
+    const { price, currency, withdrawFee, textColor } = props;
 
     if(price) {
         return (
             <div className={styles["price-info"]} style={{color: textColor}}>
-                <p className={styles["price-heading"]}>Expected</p>
+                <p className={styles["price-heading"]}>Expected {currency}</p>
                 <p className={styles["price-subheading"]}>(after fees)</p>
                 <p className={styles["price"]}>
                     {price}
                 </p>
-                <p className={styles["price-currency"]}>USDC</p>
+                <p className={styles["price-withdrawal"]}>{withdrawFee}</p>
             </div>
         );
     }
