@@ -10,14 +10,16 @@ export default function SelectCurrency(props: SelectCurrencyProps) {
     const { defaultValue, onClickHandler } = props;
 
     return (
-        <button className={styles["select-currency"]} onClick={onClickHandler}>
+        <button className={styles["select-currency"]}> {/* TODO: Add onClick={onClickHandler} */}
             <p>{defaultValue}</p>
+            {/* TODO: Add in select functionality 
             <Image 
                 src="/down_arrow.svg"
                 alt="Select"
                 width={12}
                 height={12}
-            />
+            /> 
+            */}
         </button>
     )
 }

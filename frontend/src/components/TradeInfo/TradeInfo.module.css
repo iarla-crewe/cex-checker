@@ -19,7 +19,8 @@
 }
 
 .select-currency{
-    min-width: 130px;
+    min-width: 100px; /* TODO: Change back to 130px once a functional button again, and remove justify alignment */
+    justify-content: center;
 }
 
 .swap-currency-button{
