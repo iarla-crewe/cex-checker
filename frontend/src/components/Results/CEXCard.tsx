@@ -33,7 +33,7 @@ export default function CEXCard(props: CEXCardProps) {
 
             <DisplayPrice price={cex.price} currency={currency} withdrawFee={cex.withdrawFee} textColor={cex.textColor}/>
 
-            <OpenLinkSVG textColor={cex.textColor} link={cex.website}/>
+            <OpenLinkSVG textColor={cex.textColor} loaded={(cex.price != undefined && cex.price != "")}/>
         </div>
     )
 }
