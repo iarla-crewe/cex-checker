@@ -15,7 +15,7 @@ export default function DisplayPrice(props: DisplayPriceProps) {
         return (
             <div className={styles["price-info"]} style={{color: textColor}}>
                 <p className={styles["price-heading"]}>Expected {currency}</p>
-                <p className={styles["price-subheading"]}>(after fees)</p>
+                <p className={styles["price-subheading"]}>(after maker/taker fees)</p>
                 <p className={styles["price"]}>
                     {price}
                 </p>
