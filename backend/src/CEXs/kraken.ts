@@ -4,6 +4,7 @@ import WebSocket from 'ws';
 import { minusFees, sortPrices } from '../prices.js';
 import { binancePrice } from './binance.js';
 import dotenv from 'dotenv';
+import { bybitPrice } from './bybit.js';
 dotenv.config();
 
 export let krakenPrice: string;
@@ -157,7 +158,7 @@ export const getKrakenPrice = async (inputToken: string, outputToken: string, in
                         // Access the first element (price) of the inner array
                         krakenPrice = minusFees(innerArray[0], krakenTakerFee, inputAmount)
 
-                        sortPrices(binancePrice, krakenPrice)
+                        sortPrices(binancePrice, krakenPrice, bybitPrice)
                     }
                 }
             });

@@ -4,6 +4,7 @@ import { Server } from "socket.io";
 import { sortedPrices } from './prices.js';
 import { getBinancePrice } from './CEXs/binance.js';
 import { getKrakenPrice } from './CEXs/kraken.js';
+import { getBybitPrice } from './CEXs/bybit.js';
 
 const app = express();
 
@@ -60,6 +61,7 @@ io.on('connection', (socket) => {
     socket.on('get-price', ({inputToken, outputToken, inputAmount, cexList}: PriceQuery) => {
         getBinancePrice(inputToken, outputToken, inputAmount)
         getKrakenPrice(inputToken, outputToken, inputAmount)
+        getBybitPrice(inputToken, outputToken, inputAmount)
         //send the client the sortedPrices
         console.log("emitting sorted prices: ", sortedPrices)
         io.emit('get-price', {sortedPrices})

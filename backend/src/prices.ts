@@ -18,7 +18,7 @@ export let sortedPrices: Prices = {
     bybit: ""
 };
 
-export const sortPrices = (binancePrice: string, krakenPrice: string) => { 
+export const sortPrices = (binancePrice: string, krakenPrice: string, bybitPrice: string) => { 
 
     //sort prices into an object
     let priceOrder: Prices = {
@@ -26,7 +26,7 @@ export const sortPrices = (binancePrice: string, krakenPrice: string) => {
         kraken: sortedPrices.kraken,
         coinbase: "",
         crypto_com: "",
-        bybit: ""
+        bybit: sortedPrices.bybit
     }
 
     if (binancePrice !== sortedPrices.binance && binancePrice !== undefined && binancePrice !== "NaN") {
@@ -38,8 +38,15 @@ export const sortPrices = (binancePrice: string, krakenPrice: string) => {
         console.log("New kraken price")
     }
 
-    if (priceOrder.binance !== sortedPrices.binance || priceOrder.kraken !== sortedPrices.kraken) {
+    if (bybitPrice !== sortedPrices.bybit && bybitPrice !== undefined && bybitPrice !== "NaN") {
+        priceOrder.bybit = bybitPrice
+        console.log("New bybit price")
+    }
+
+    if (priceOrder.binance !== sortedPrices.binance || priceOrder.kraken !== sortedPrices.kraken || priceOrder.bybit !== sortedPrices.bybit) {
         // Convert the object into an array of key-value pairs
+        console.log("price order", priceOrder)
+
         let priceOrderArray = Object.entries(priceOrder);
 
         // Sort the array based on the values in descending order
