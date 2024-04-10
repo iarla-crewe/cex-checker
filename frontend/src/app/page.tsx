@@ -22,14 +22,25 @@ export default function Home() {
       bybit: true
     }
   });
-  const [sortHighLow, setSortHighLow] = useState(false);
+  const [sortHighLow, setSortHighLow] = useState(true);
 
   useEffect(() => {
-    getPriceData(queryData);
-    socket.on("get-price", (sortedPrices: any) => {
+    // Function to handle "get-price" events
+    const handleGetPrice = (sortedPrices: any) => {
       setPriceData(sortedPrices.sortedPrices);
-    });
-  }, []);
+    };
+
+    // Initial call to getPriceData with queryData
+    getPriceData(queryData);
+
+    // Add listener for "get-price" events
+    socket.on("get-price", handleGetPrice);
+
+    // Clean-up function to remove the old listener when queryData changes
+    return () => {
+      socket.off("get-price", handleGetPrice);
+    };
+  }, [queryData])
 
   const handleQueryUpdate = (data: UpdatePriceQuery) => {
     if (data.inputToken === undefined) data.inputToken = queryData.inputToken;

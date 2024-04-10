@@ -9,7 +9,7 @@ let bybitDepoistFee = {
     sol: 0
 }
 let bybitWithdrawFee = {
-    usdc: 4
+    usdc: 1
 }
 let bybitMakerFee: number = 0.001;
 let bybitTakerFee: number = 0.001;
@@ -46,4 +46,5 @@ export const getBybitPrice = (inputToken: string, outputToken: string, inputAmou
         console.error('WebSocket error:', error.message);
     });
 
+    return bybitSocket;
 }

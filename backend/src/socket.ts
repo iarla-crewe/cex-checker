@@ -5,6 +5,7 @@ import { sortedPrices } from './prices.js';
 import { getBinancePrice } from './CEXs/binance.js';
 import { getKrakenPrice } from './CEXs/kraken.js';
 import { getBybitPrice } from './CEXs/bybit.js';
+import WebSocket from 'ws';
 
 const app = express();
 
@@ -54,17 +55,35 @@ let cexList: CexList = {
 
 //connection with the client
 io.on('connection', (socket) => {
-    //We get the search params
     console.log("Connection")
-            //get the sorted prices here (maybe)
+    let binanceSocket: WebSocket;
+    let krakenSocket: WebSocket;
+    let bybitSocket: WebSocket;
+
+    let previousQueryData: PriceQuery; // Variable to store previous query data
 
     socket.on('get-price', ({inputToken, outputToken, inputAmount, cexList}: PriceQuery) => {
-        getBinancePrice(inputToken, outputToken, inputAmount)
-        getKrakenPrice(inputToken, outputToken, inputAmount)
-        getBybitPrice(inputToken, outputToken, inputAmount)
-        //send the client the sortedPrices
-        console.log("emitting sorted prices: ", sortedPrices)
-        io.emit('get-price', {sortedPrices})
+        const currentQueryData: PriceQuery = { inputToken, outputToken, inputAmount, cexList };
+
+        // Check if the current query is the same as the previous one
+        if (JSON.stringify(currentQueryData) !== JSON.stringify(previousQueryData)) {
+            //if binanceSocket was already initialised and running -> close it
+            if (binanceSocket) binanceSocket.close()
+            if (krakenSocket) krakenSocket.close()
+            if (bybitSocket) bybitSocket.close()
+
+            binanceSocket = getBinancePrice(inputToken, outputToken, inputAmount)
+            krakenSocket = getKrakenPrice(inputToken, outputToken, inputAmount)
+            bybitSocket = getBybitPrice(inputToken, outputToken, inputAmount)
+            //send the client the sortedPrices
+            console.log("emitting sorted prices: ", sortedPrices)
+            io.emit('get-price', {sortedPrices})
+    
+            previousQueryData = currentQueryData;
+        } else {
+            //if the query is the same as previous -> emit sorted Prices
+            io.emit('get-price', {sortedPrices})
+        }
     })
 })
 

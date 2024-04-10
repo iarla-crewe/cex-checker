@@ -45,5 +45,6 @@ export const getBinancePrice = (inputToken: string, outputToken: string, inputAm
         console.error('WebSocket error:', error.message);
     });
     
+    return binanceSocket;
 }
 
