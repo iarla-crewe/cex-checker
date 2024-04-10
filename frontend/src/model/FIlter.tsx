@@ -1,4 +1,5 @@
 export interface Filter {
+    [exchange: string]: boolean;
     binance: boolean;
     kraken: boolean;
     coinbase: boolean;

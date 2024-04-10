@@ -2,20 +2,24 @@ import { CEX, CEXList } from "@/model/CEXList";
 import styles from "./Results.module.css";
 import CEXCardWrapper from "./CEXCardWrapper";
 import { PriceData } from "@/model/API";
+import { Filter } from "@/model/FIlter";
 
 interface ResultsProps {
     priceData: PriceData;
     currency: string;
     sortHighLow: boolean;
+    filter: Filter;
 }
 
 export default function Results(props: ResultsProps) {
-    const { priceData, currency, sortHighLow } = props;
+    const { priceData, currency, sortHighLow, filter } = props;
 
-    let pricedCEXList = CEXList.map((cex) => {
+    let filteredCEXList = CEXList.filter(cex => filter[cex.name] === true)
+
+    let pricedCEXList = filteredCEXList.map((cex) => {
         let price = priceData[cex.name];
         return {...cex, price};
-    })
+    });
 
     pricedCEXList.sort((a, b) => sortCEXList(a, b, sortHighLow));
 

@@ -39,7 +39,7 @@ export const CEXList: CEX[] = [
         textColor: "white", 
         borderColor: "#f7a600", 
         website: "https://www.bybit.com/en/trade/spot/SOL/USDC",
-        withdrawFee: ""
+        withdrawFee: "1 USDC"
     },
     {
         name: "coinbase", 

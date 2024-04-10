@@ -65,8 +65,15 @@ export default function Home() {
           handleUpdate={handleQueryUpdate}
           setSortHighLow={setSortHighLow}
         />
+
         <SelectFilters handleUpdate={handleQueryUpdate}/>
-        <Results priceData={priceData} currency={queryData.outputToken} sortHighLow={sortHighLow}/>
+        
+        <Results 
+          priceData={priceData} 
+          currency={queryData.outputToken} 
+          sortHighLow={sortHighLow} 
+          filter={queryData.filter}
+        />
       </div>
     </main>
   );
