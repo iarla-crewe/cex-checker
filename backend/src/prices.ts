@@ -45,7 +45,6 @@ export const sortPrices = (binancePrice: string, krakenPrice: string, bybitPrice
 
     if (priceOrder.binance !== sortedPrices.binance || priceOrder.kraken !== sortedPrices.kraken || priceOrder.bybit !== sortedPrices.bybit) {
         // Convert the object into an array of key-value pairs
-        console.log("price order", priceOrder)
 
         let priceOrderArray = Object.entries(priceOrder);
 
@@ -55,7 +54,6 @@ export const sortPrices = (binancePrice: string, krakenPrice: string, bybitPrice
 
         // Convert the sorted array back into an object
         let sortedPriceOrder = Object.fromEntries(priceOrderArray);
-        console.log(sortedPriceOrder)
 
         //@ts-ignore
         sortedPrices = sortedPriceOrder
@@ -66,6 +64,7 @@ export const sortPrices = (binancePrice: string, krakenPrice: string, bybitPrice
             // Update the last emission time
             lastEmitTime = currentTime;
             io.emit('get-price', {sortedPrices})
+            console.log("emitting sorted prices: ", sortedPrices)
             return
         }
     } 

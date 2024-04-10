@@ -47,5 +47,3 @@ export const getBybitPrice = (inputToken: string, outputToken: string, inputAmou
     });
 
 }
-
-getBybitPrice("", '', 1);

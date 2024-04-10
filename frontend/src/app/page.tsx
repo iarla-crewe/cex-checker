@@ -19,7 +19,7 @@ export default function Home() {
       kraken: true,
       coinbase: false,
       crypto_com: false,
-      bybit: false
+      bybit: true
     }
   });
   const [sortHighLow, setSortHighLow] = useState(false);
