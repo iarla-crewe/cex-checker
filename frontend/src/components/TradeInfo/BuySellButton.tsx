@@ -1,14 +1,14 @@
 import Image from "next/image";
 
 interface BuySellButtonProps {
-    isBuying: boolean,
+    isSelling: boolean,
     onClickHandler: () => void
 }
 
 export default function BuySellButton(props: BuySellButtonProps) {
-    const { isBuying, onClickHandler } = props;
+    const { isSelling, onClickHandler } = props;
 
-    const text = (isBuying) ? "Buy" : "Sell";
+    const text = (isSelling) ? "Sell" : "Buy";
 
     return (
         <button onClick={onClickHandler}>

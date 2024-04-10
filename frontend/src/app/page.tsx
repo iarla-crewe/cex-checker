@@ -3,78 +3,59 @@
 import styles from "./page.module.css";
 
 import TradeInfo from "@/components/TradeInfo/TradeInfo";
-import Filters from "@/components/Filters";
-import CEXList from "@/components/CEXList/CEXList";
-import { io } from "socket.io-client"
+import SelectFilters from "@/components/SelectFilters";
+import Results from "@/components/Results/Results";
 import { useEffect, useState } from "react";
-
-const socket = io('http://localhost:3001')
+import { PriceData, PriceQuery, UpdatePriceQuery, getPriceData, socket } from "@/model/API";
 
 export default function Home() {
-  let hasSearched = true;
-  const [priceData, setPriceData] = useState<any>(null); // State to store price data
-
-  type CexList = {
-    binance: boolean,
-    kraken: boolean,
-    coinbase: boolean,
-    crypto_com: boolean,
-    bybit: boolean,
-  }
-
-  type PriceQuery = {
-    inputToken: string,
-    outputToken: string,
-    inputAmount: number,
-    cexList: CexList
-  }
-
-  function getPriceData({ inputToken, outputToken, inputAmount, cexList }: PriceQuery) {
-    //sends the server the params and get-price query
-    socket.emit('get-price', { inputToken, outputToken, inputAmount, cexList })
-    console.log("get price data")
-    //update the front end 
-  }
-
-  let cexList: CexList = {
-    binance: true,
-    kraken: true,
-    coinbase: false,
-    crypto_com: false,
-    bybit: false
-  }
-
-  let params: PriceQuery = {
-    inputToken: 'sol',
-    outputToken: 'usdc',
-    inputAmount: 1,
-    cexList: cexList
-  }
+  const [priceData, setPriceData] = useState<PriceData>({binance: "", bybit: "", coinbase: "", crypto_com: "", kraken: ""});
+  const [queryData, setQueryData] = useState<PriceQuery>({
+    inputToken: 'SOL',
+    outputToken: 'USDC',
+    amount: 1,
+    filter: {
+      binance: true,
+      kraken: true,
+      coinbase: false,
+      crypto_com: false,
+      bybit: false
+    }
+  });
+  const [sortHighLow, setSortHighLow] = useState(false);
 
   useEffect(() => {
-    getPriceData(params);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []); 
-
-  useEffect(() => {
+    getPriceData(queryData);
     socket.on("get-price", (sortedPrices: any) => {
-      setPriceData(sortedPrices);
+      setPriceData(sortedPrices.sortedPrices);
     });
   }, []);
+
+  const handleQueryUpdate = (data: UpdatePriceQuery) => {
+    if (data.inputToken === undefined) data.inputToken = queryData.inputToken;
+    if (data.outputToken === undefined) data.outputToken = queryData.outputToken;
+    if (data.amount === undefined) data.amount = queryData.amount;
+    if (data.filter === undefined) data.filter = queryData.filter;
+
+    setQueryData({
+      inputToken: data.inputToken,outputToken: data.outputToken, amount: data.amount, filter: data.filter
+    })
+  }
+
 
   return (
     <main className={styles["main"]}>
       <div className={styles["container"]}>
-        {priceData && (
-          <div>
-            <h2>Price Data</h2>
-            <p>Binance Price: {priceData.sortedPrices.binance}</p>
-            <p>Kraken Price: {priceData.sortedPrices.kraken}</p>
-          </div>
-        )}
-        <TradeInfo />
-        <Filters />
-        <CEXList/>
+        <TradeInfo 
+          defaultInputToken={queryData.inputToken} 
+          defaultOutputToken={queryData.outputToken} 
+          defaultAmount={queryData.amount}
+          defaultIsBuying={sortHighLow}
+          handleUpdate={handleQueryUpdate}
+          setSortHighLow={setSortHighLow}
+        />
+        <SelectFilters handleUpdate={handleQueryUpdate}/>
+        <Results priceData={priceData} currency={queryData.outputToken} sortHighLow={sortHighLow}/>
       </div>
     </main>
   );
