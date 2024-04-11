@@ -1,5 +1,5 @@
 import { UpdatePriceQuery } from "@/model/API";
-import styles from "./SelectFilters.module.css";
+import styles from "./SelectFilter.module.css";
 import { Filter } from "@/model/FIlter";
 import FilterOption from "./FilterOption";
 import { useState } from "react";
