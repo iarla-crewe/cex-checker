@@ -1,0 +1,9 @@
+.select-filters {
+    border-radius: var(--button-border-radius);
+    border: var(--card-border);
+    background-color: var(--background);
+    color: var(--text);
+    margin-bottom: 100px;
+    display: flex;
+    flex-direction: row;
+}

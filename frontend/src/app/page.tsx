@@ -3,7 +3,7 @@
 import styles from "./page.module.css";
 
 import TradeInfo from "@/components/TradeInfo/TradeInfo";
-import SelectFilters from "@/components/SelectFilters";
+import SelectFilter from "@/components/SelectFilter";
 import Results from "@/components/Results/Results";
 import { useEffect, useState } from "react";
 import { PriceData, PriceQuery, UpdatePriceQuery, getPriceData, socket } from "@/model/API";
@@ -66,7 +66,10 @@ export default function Home() {
           setSortHighLow={setSortHighLow}
         />
 
-        <SelectFilters handleUpdate={handleQueryUpdate}/>
+        <SelectFilter 
+          handleUpdate={handleQueryUpdate}
+          defaultFilter={queryData.filter}  
+        />
         
         <Results 
           priceData={priceData} 
