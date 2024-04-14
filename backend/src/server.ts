@@ -7,7 +7,8 @@ import { Server } from "socket.io";
 
 // Create an Express application
 const app = express();
-const port = 3001;
+//const port = 3001
+const port = 443;
 
 // Middleware to parse JSON bodies
 app.use(express.json());
