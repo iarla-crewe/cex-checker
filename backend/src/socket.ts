@@ -6,6 +6,7 @@ import { getBinancePrice } from './CEXs/binance.js';
 import { getKrakenPrice } from './CEXs/kraken.js';
 import { getBybitPrice } from './CEXs/bybit.js';
 import WebSocket from 'ws';
+import { port } from './server.js';
 
 const app = express();
 
@@ -87,6 +88,6 @@ io.on('connection', (socket) => {
     })
 })
 
-server.listen(3001, () => {
-    console.log("Server running at http://localhost:3001");
+server.listen(port, () => {
+    console.log(`Server running at http://localhost:${port}`);
 })
