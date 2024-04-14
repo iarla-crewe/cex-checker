@@ -28,7 +28,7 @@ export const CEXList: CEX[] = [
         brandColor: "#7132F5", 
         textColor: "white", 
         borderColor: "", 
-        website: "https://www.kraken.com/",
+        website: "https://pro.kraken.com/app/trade/sol-usdt",
         withdrawFee: "1 USDC"
     },
     {
@@ -58,7 +58,7 @@ export const CEXList: CEX[] = [
         brandColor: "#032f69", 
         textColor: "white", 
         borderColor: "", 
-        website: "https://crypto.com/",
+        website: "https://crypto.com/exchange/trade/SOL_USDT",
         withdrawFee: ""
     }
 ]
