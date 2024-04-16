@@ -13,7 +13,7 @@ const app = express();
 
 const server = http.createServer(app)
 
-const port = 443;
+const socketioPort = 443;
 
 export const io = new Server(server, {
     cors: {
@@ -90,6 +90,6 @@ io.on('connection', (socket) => {
     })
 })
 
-server.listen(port, () => {
-    console.log(`Server running at http://localhost:${port}`);
+server.listen(socketioPort, () => {
+    console.log(`Server running at http://localhost:${socketioPort}`);
 })

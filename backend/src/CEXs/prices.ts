@@ -19,22 +19,22 @@ export let exchangeMakerFees: ExchangeFees = {
 }
 
 export let prices: Prices = {
-    binance: "",
-    kraken: "",
-    coinbase: "",
-    crypto_com: "",
-    bybit: ""
+    binance: undefined,
+    kraken: undefined,
+    coinbase: undefined,
+    crypto_com: undefined,
+    bybit: undefined,
 };
 
 
 export const getExchangePrices = (binanceSocket: WebSocket, krakenSocket: WebSocket, bybitSocket: WebSocket) => {
 
     let prices: Prices = {
-        binance: "",
-        kraken: "",
-        coinbase: "",
-        crypto_com: "",
-        bybit: ""
+        binance: undefined,
+        kraken: undefined,
+        coinbase: undefined,
+        crypto_com: undefined,
+        bybit: undefined,
     };
 
     binanceSocket.onmessage = ({ data }: any) => {

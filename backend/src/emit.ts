@@ -56,7 +56,7 @@ export const updateTokenAmount = (newAmount: number) => {
     tokenAmount = newAmount;
 }
 
-export const calculatePrice = (tokenPrice: string, takerFee: number): string => {
+export const calculatePrice = (tokenPrice: string, takerFee: number): number => {
     let price = (Number(tokenPrice) * (1 - takerFee))
-    return (price * tokenAmount).toFixed(5)
+    return parseFloat((price * tokenAmount).toFixed(5))
 }
