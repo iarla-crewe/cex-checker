@@ -29,11 +29,6 @@ export type PriceQuery = {
     cexList: CexList
 }
 
-export type PriceResponse = {
-    prices: Prices,
-    //withdraw price for input token and output token
-}
-
 export type TokenPair = {
     quote: string,
     base: string

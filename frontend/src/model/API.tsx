@@ -18,18 +18,12 @@ export interface UpdatePriceQuery {
 }
 
 export interface ResponseData {
-    [exchange: string]: CEXPriceData | undefined;
-    binance?: CEXPriceData;
-    bybit?: CEXPriceData;
-    coinbase?: CEXPriceData;
-    crypto_com?: CEXPriceData;
-    kraken?: CEXPriceData;
-}
-
-export interface CEXPriceData {
-    price: number;
-    inputWithdrawFee: number;
-    outputWithdrawFee: number;
+    [exchange: string]: number | undefined;
+    binance?: number;
+    bybit?: number;
+    coinbase?: number;
+    crypto_com?: number;
+    kraken?: number;
 }
 
 export function getPriceData({ inputToken, outputToken, amount, filter }: PriceQuery) {

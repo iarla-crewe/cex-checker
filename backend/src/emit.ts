@@ -1,5 +1,5 @@
 import { io } from "./socket.js";
-import { PriceResponse, Prices } from "./types.js";
+import { Prices } from "./types.js";
 
 let lastEmitTime: number = 0; // Initialize the last emission time
 
@@ -41,10 +41,7 @@ export const emitPrices = (newPrices: Prices) => {
         if (currentTime - lastEmitTime >= 5000) {
             // Update the last emission time
             lastEmitTime = currentTime;
-            let priceResponse: PriceResponse = {
-                prices: currentPrices
-            }
-            io.emit('get-price', {priceResponse: priceResponse})
+            io.emit('get-price', {prices: currentPrices})
             console.log("emitting new prices: ", currentPrices)
             return
         }

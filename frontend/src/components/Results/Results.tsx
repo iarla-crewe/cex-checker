@@ -18,7 +18,7 @@ export default function Results(props: ResultsProps) {
 
     let pricedCEXList = filteredCEXList.map((cex) => {
         let price = undefined;
-        if (responseData !== undefined) price = responseData[cex.name]?.price;
+        if (responseData !== undefined) price = responseData[cex.name];
         return {...cex, price};
     });
 
