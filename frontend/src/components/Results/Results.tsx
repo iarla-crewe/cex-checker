@@ -15,9 +15,16 @@ export default function Results(props: ResultsProps) {
     const { priceData, currency, sortHighLow, filter } = props;
 
     let filteredCEXList = CEXList.filter(cex => filter[cex.name] === true)
+    console.log("price data: ", priceData)
 
     let pricedCEXList = filteredCEXList.map((cex) => {
-        let price = priceData[cex.name];
+        console.log("cex name: ", cex.name)
+        let price = '';
+        try {
+            price = priceData[cex.name];
+        } catch (error) {
+            console.log("Parsing price data error: ", error)
+        }   
         return {...cex, price};
     });
 

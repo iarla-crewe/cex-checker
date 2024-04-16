@@ -1,16 +1,19 @@
-import express, { Request, Response } from 'express';
+import express from 'express';
 import http from 'http'
 import { Server } from "socket.io";
-import { sortedPrices } from './prices.js';
-import { getBinancePrice } from './CEXs/binance.js';
-import { getKrakenPrice } from './CEXs/kraken.js';
-import { getBybitPrice } from './CEXs/bybit.js';
+import { previousPrices, updateTokenAmount } from './emit.js';
+import { openBinanceWs } from './CEXs/binance.js';
+import { openKrakenWs } from './CEXs/kraken.js';
+import { openBybitWs } from './CEXs/bybit.js';
 import WebSocket from 'ws';
-import { port } from './server.js';
-
+import { getBaseToken } from './utils/baseToken.js';
+import { CexList, PriceQuery, Prices, TokenPair } from './types.js';
+import { getExchangePrices } from './CEXs/prices.js';
 const app = express();
 
 const server = http.createServer(app)
+
+const port = 443;
 
 export const io = new Server(server, {
     cors: {
@@ -18,41 +21,20 @@ export const io = new Server(server, {
     },
 })
 
-type CexList = {
-    binance: boolean,
-    kraken: boolean,
-    coinbase: boolean,
-    crypto_com: boolean,
-    bybit: boolean,
-}
-
-type PriceQuery = {
-    inputToken: string,
-    outputToken: string,
-    inputAmount: number,
-    cexList: CexList
-}
-
 let cexList: CexList = {
     binance: true,
     kraken: true,
     coinbase: false,
     crypto_com: false,
     bybit: false,
-  }
+}
 
-  let params: PriceQuery = {
+let params: PriceQuery = {
     inputToken: 'sol',
     outputToken: 'usdc',
     inputAmount: 1,
     cexList: cexList
-  }
-
-//client must make connection make a get-price request with the default search params
-// automatically when they open the site
-
-//When user updates search params, client must send another get-price 
-//requrest with the updated params
+}
 
 //connection with the client
 io.on('connection', (socket) => {
@@ -62,29 +44,49 @@ io.on('connection', (socket) => {
     let bybitSocket: WebSocket;
 
     let previousQueryData: PriceQuery; // Variable to store previous query data
+    let previousTokenPair: TokenPair;
 
-    socket.on('get-price', ({inputToken, outputToken, inputAmount, cexList}: PriceQuery) => {
+    socket.on('get-price', ({ inputToken, outputToken, inputAmount, cexList }: PriceQuery) => {
         const currentQueryData: PriceQuery = { inputToken, outputToken, inputAmount, cexList };
 
-        // Check if the current query is the same as the previous one
-        if (JSON.stringify(currentQueryData) !== JSON.stringify(previousQueryData)) {
-            //if binanceSocket was already initialised and running -> close it
-            if (binanceSocket) binanceSocket.close()
-            if (krakenSocket) krakenSocket.close()
-            if (bybitSocket) bybitSocket.close()
+        let currentTokenPair: TokenPair = {
+            quote: "",
+            base: ""
+        };
 
-            binanceSocket = getBinancePrice(inputToken, outputToken, inputAmount)
-            krakenSocket = getKrakenPrice(inputToken, outputToken, inputAmount)
-            bybitSocket = getBybitPrice(inputToken, outputToken, inputAmount)
-            //send the client the sortedPrices
-            console.log("emitting sorted prices: ", sortedPrices)
-            io.emit('get-price', {sortedPrices})
-    
+        try { currentTokenPair = getBaseToken(inputToken, outputToken); }
+        catch (error) { 
+            console.log("Base token getting error: ", error)
+            io.emit('error', { error }) }
+
+        console.log("Current token pair: ", currentTokenPair)
+        // Check if the current query is not the same as the previous one
+        if (JSON.stringify(currentQueryData) !== JSON.stringify(previousQueryData)) {
+
+            //new tokenpair is different 
+            if (JSON.stringify(currentTokenPair) !== JSON.stringify(previousTokenPair)) {
+                //close old websockets
+                if (binanceSocket) binanceSocket.close()
+                if (krakenSocket) krakenSocket.close()
+                if (bybitSocket) bybitSocket.close()
+
+                updateTokenAmount(inputAmount)
+                //open new ws connection with the new tokenPair
+                //TODO: only open based on the CEX list
+                binanceSocket = openBinanceWs(currentTokenPair.quote, currentTokenPair.base)
+                krakenSocket = openKrakenWs(currentTokenPair.quote, currentTokenPair.base)
+                bybitSocket = openBybitWs(currentTokenPair.quote, currentTokenPair.base)
+
+                //let prices = getExchangePrices(binanceSocket, krakenSocket, bybitSocket)
+            } else if (currentQueryData.inputAmount != previousQueryData.inputAmount) {
+                updateTokenAmount(inputAmount)
+            }
             previousQueryData = currentQueryData;
-        } else {
-            //if the query is the same as previous -> emit sorted Prices
-            io.emit('get-price', {sortedPrices})
         }
+        console.log("emitting prices: ", previousPrices)
+        io.emit('get-price', { prices: previousPrices })
+        //if the query is the same as previous -> emit previously sorted Prices
+        //let the web sockets do their thing
     })
 })
 
