@@ -14,7 +14,7 @@ interface ResultsProps {
 export default function Results(props: ResultsProps) {
     const { responseData, currency, isSelling, filter } = props;
 
-    let filteredCEXList = CEXList.filter(cex => filter[cex.name] === true)
+    let filteredCEXList = CEXList.filter(cex => filter[cex.name] === true);
 
     let pricedCEXList = filteredCEXList.map((cex) => {
         let price = undefined;

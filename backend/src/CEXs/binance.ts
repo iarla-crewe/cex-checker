@@ -1,7 +1,8 @@
 import WebSocket from "ws";
-import { minusFees, sortPrices } from "../prices.js";
+import { calculatePrice, emitPrices } from "../emit.js";
 import { krakenPrice } from "./kraken.js";
 import { bybitPrice } from "./bybit.js";
+import { exchangeTakerFees, prices } from "./prices.js";
 
 export let binancePrice: string;
 
@@ -11,40 +12,44 @@ let binanceDepoistFee = {
 let binanceWithdrawFee = {
     usdc: 4
 }
-let binanceMakerFee: number = 0.001;
-let binanceTakerFee: number = 0.001;
 
-export const getBinancePrice = (inputToken: string, outputToken: string, inputAmount: number) => {
-    const binanceWebSocketUrl = 'wss://stream.binance.com:9443/ws/solusdt@trade';
+let binanceSocket: WebSocket | null = null;
+
+export const openBinanceWs = (quoteToken: string, baseToken: string) => {
+
+
+    const binanceWebSocketUrl = `wss://stream.binance.com:9443/ws/${quoteToken + baseToken}@trade`;
 
     const binanceSocket = new WebSocket(binanceWebSocketUrl);
     
     binanceSocket.onopen = () => {
+        console.log("Quote token: ", quoteToken)
+        console.log("bae token: ", baseToken)
         binanceSocket.send(JSON.stringify({
             "method": "SUBSCRIBE",
             "params":
             [
-            `${inputToken}${outputToken}@trade`,
+            `${quoteToken + baseToken}@trade`,
             ],
             "id": 1
             }))
+            console.log("Connecting with binance")
+
     }
-    
-    binanceSocket.onmessage = ({data}: any) => {
+
+    binanceSocket.onmessage = ({ data }: any) => {
         let priceObject = JSON.parse(data)
-        binancePrice = minusFees(priceObject.p, binanceTakerFee, inputAmount)
-         
-        sortPrices(binancePrice, krakenPrice, bybitPrice);
+        prices.binance = calculatePrice(priceObject.p, exchangeTakerFees.binance)
+        emitPrices(prices)
     };
     
     binanceSocket.on('close', (code: number, reason: string) => {
-        console.log(`WebSocket connection closed, code: ${code}, reason: ${reason}`);
+        console.log(`Binance webSocket connection closed, code: ${code}, reason: ${reason}`);
     });
     
     binanceSocket.on('error', (error: Error) => {
-        console.error('WebSocket error:', error.message);
+        console.error('Binance webSocket error:', error.message);
     });
     
     return binanceSocket;
 }
-

@@ -26,8 +26,8 @@ export default function Home() {
   useEffect(() => {
     // Function to handle "get-price" events
     const handleGetPrice = (response: any) => {
+      console.log(response);
       setResponseData(response.prices);
-      console.log(responseData);
     }
 
     // Initial call to getPriceData with queryData

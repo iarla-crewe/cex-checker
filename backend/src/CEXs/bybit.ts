@@ -1,7 +1,8 @@
 import WebSocket from "ws";
-import { minusFees, sortPrices } from "../prices.js";
+import { calculatePrice, emitPrices } from "../emit.js";
 import { krakenPrice } from "./kraken.js";
 import { binancePrice } from "./binance.js";
+import { exchangeTakerFees, prices } from "./prices.js";
 
 export let bybitPrice: string;
 
@@ -11,10 +12,8 @@ let bybitDepoistFee = {
 let bybitWithdrawFee = {
     usdc: 1
 }
-let bybitMakerFee: number = 0.001;
-let bybitTakerFee: number = 0.001;
 
-export const getBybitPrice = (inputToken: string, outputToken: string, inputAmount: number) => {
+export const openBybitWs = (quoteToken: string, baseToken: string) => {
     const bybitWebSocketUrl = 'wss://stream.bybit.com/v5/public/spot';
 
     const bybitSocket = new WebSocket(bybitWebSocketUrl);
@@ -22,7 +21,7 @@ export const getBybitPrice = (inputToken: string, outputToken: string, inputAmou
     bybitSocket.onopen = () => {
         bybitSocket.send(JSON.stringify({ 
             "op": "subscribe", 
-            "args": ["publicTrade.SOLUSDC"] 
+            "args": [`publicTrade.${(quoteToken + baseToken).toUpperCase()}`] 
         }))
         console.log("Connecting with bybit")
     }
@@ -30,20 +29,20 @@ export const getBybitPrice = (inputToken: string, outputToken: string, inputAmou
     bybitSocket.onmessage = ({ data }: any) => {
         let priceObject = JSON.parse(data)
         try {
-            bybitPrice = minusFees(priceObject.data[0].p, bybitTakerFee, inputAmount)
-            console.log("Bybit price: ", bybitPrice)
+            prices.bybit = calculatePrice(priceObject.data[0].p, exchangeTakerFees.bybit)
+            console.log("Bybit price: ", prices.bybit)
         } catch (error) {
             console.log("Bybit data object does not contain a price")
         }
-        sortPrices(binancePrice, krakenPrice, bybitPrice);
+        emitPrices(prices)
     };
 
     bybitSocket.on('close', (code: number, reason: string) => {
-        console.log(`WebSocket connection closed, code: ${code}, reason: ${reason}`);
+        console.log(`Bybit webSocket connection closed, code: ${code}, reason: ${reason}`);
     });
 
     bybitSocket.on('error', (error: Error) => {
-        console.error('WebSocket error:', error.message);
+        console.error('Bybit webSocket error:', error.message);
     });
 
     return bybitSocket;
