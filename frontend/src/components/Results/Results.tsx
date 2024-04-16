@@ -1,11 +1,11 @@
 import { CEX, CEXList } from "@/model/CEXList";
 import styles from "./Results.module.css";
 import CEXCardWrapper from "./CEXCardWrapper";
-import { PriceData } from "@/model/API";
+import { ResponseData } from "@/model/API";
 import { Filter } from "@/model/FIlter";
 
 interface ResultsProps {
-    priceData: PriceData;
+    priceData: ResponseData;
     currency: string;
     sortHighLow: boolean;
     filter: Filter;
@@ -43,10 +43,7 @@ function sortCEXList(a: CEX, b: CEX, sortHighLow: boolean): number {
         return -1; // B is loading, place first
     } else {
         // Sort all loaded values
-        if (sortHighLow) {
-            return parseFloat(b.price) - parseFloat(a.price);
-        } else {
-            return parseFloat(a.price) - parseFloat(b.price);
-        }
+        if (sortHighLow) return b.price - a.price;
+        else return a.price - b.price;
     }
 }

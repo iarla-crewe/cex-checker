@@ -17,13 +17,19 @@ export interface UpdatePriceQuery {
     filter?: Filter;
 }
 
-export interface PriceData {
-    [exchange: string]: string;
-    binance: string;
-    bybit: string;
-    coinbase: string;
-    crypto_com: string;
-    kraken: string;
+export interface ResponseData {
+    [exchange: string]: CEXPriceData | undefined;
+    binance?: CEXPriceData;
+    bybit?: CEXPriceData;
+    coinbase?: CEXPriceData;
+    crypto_com?: CEXPriceData;
+    kraken?: CEXPriceData;
+}
+
+export interface CEXPriceData {
+    price: number;
+    inputWithdrawFee: number;
+    outputWithdrawFee: number;
 }
 
 export function getPriceData({ inputToken, outputToken, amount, filter }: PriceQuery) {

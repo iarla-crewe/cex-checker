@@ -1,15 +1,16 @@
 "use client"
 
 import styles from "./page.module.css";
-
 import TradeInfo from "@/components/TradeInfo/TradeInfo";
 import SelectFilter from "@/components/SelectFilter";
 import Results from "@/components/Results/Results";
 import { useEffect, useState } from "react";
-import { PriceData, PriceQuery, UpdatePriceQuery, getPriceData, socket } from "@/model/API";
+import { ResponseData, PriceQuery, UpdatePriceQuery, getPriceData, socket } from "@/model/API";
 
 export default function Home() {
-  const [priceData, setPriceData] = useState<PriceData>({binance: "", bybit: "", coinbase: "", crypto_com: "", kraken: ""});
+  const [responseData, setResponseData] = useState<ResponseData>(
+    {binance: undefined, bybit: undefined, coinbase: undefined, crypto_com: undefined, kraken: undefined}
+  );
   const [queryData, setQueryData] = useState<PriceQuery>({
     inputToken: 'SOL',
     outputToken: 'USDC',
@@ -22,13 +23,11 @@ export default function Home() {
       bybit: true
     }
   });
-  const [sortHighLow, setSortHighLow] = useState(true);
+  const [isSelling, setIsSelling] = useState(true);
 
   useEffect(() => {
     // Function to handle "get-price" events
-    const handleGetPrice = (sortedPrices: any) => {
-      setPriceData(sortedPrices.sortedPrices);
-    };
+    const handleGetPrice = (sortedPrices: any) => setResponseData(sortedPrices.sortedPrices);
 
     // Initial call to getPriceData with queryData
     getPriceData(queryData);
@@ -61,9 +60,9 @@ export default function Home() {
           defaultInputToken={queryData.inputToken} 
           defaultOutputToken={queryData.outputToken} 
           defaultAmount={queryData.amount}
-          defaultIsBuying={sortHighLow}
+          defaultIsBuying={isSelling}
           handleUpdate={handleQueryUpdate}
-          setSortHighLow={setSortHighLow}
+          setSortHighLow={setIsSelling}
         />
 
         <SelectFilter 
@@ -72,9 +71,9 @@ export default function Home() {
         />
         
         <Results 
-          priceData={priceData} 
+          priceData={responseData} 
           currency={queryData.outputToken} 
-          sortHighLow={sortHighLow} 
+          sortHighLow={isSelling} 
           filter={queryData.filter}
         />
       </div>

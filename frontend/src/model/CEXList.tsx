@@ -7,7 +7,7 @@ export interface CEX {
     borderColor: string;
     website: string;
     withdrawFee: string;
-    price?: string;
+    price?: number;
 }
 
 export const CEXList: CEX[] = [
@@ -60,5 +60,5 @@ export const CEXList: CEX[] = [
         borderColor: "", 
         website: "https://crypto.com/exchange/trade/SOL_USDT",
         withdrawFee: ""
-    }
+    },
 ]
