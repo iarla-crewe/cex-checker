@@ -8,9 +8,7 @@ import { useEffect, useState } from "react";
 import { ResponseData, PriceQuery, UpdatePriceQuery, getPriceData, socket } from "@/model/API";
 
 export default function Home() {
-  const [responseData, setResponseData] = useState<ResponseData>(
-    {binance: undefined, bybit: undefined, coinbase: undefined, crypto_com: undefined, kraken: undefined}
-  );
+  const [responseData, setResponseData] = useState<ResponseData>({});
   const [queryData, setQueryData] = useState<PriceQuery>({
     inputToken: 'SOL',
     outputToken: 'USDC',
@@ -27,7 +25,10 @@ export default function Home() {
 
   useEffect(() => {
     // Function to handle "get-price" events
-    const handleGetPrice = (sortedPrices: any) => setResponseData(sortedPrices.sortedPrices);
+    const handleGetPrice = (response: any) => {
+      setResponseData(response.prices);
+      console.log(responseData);
+    }
 
     // Initial call to getPriceData with queryData
     getPriceData(queryData);
@@ -50,6 +51,7 @@ export default function Home() {
     setQueryData({
       inputToken: data.inputToken,outputToken: data.outputToken, amount: data.amount, filter: data.filter
     })
+    setResponseData({})
   }
 
 
@@ -60,9 +62,9 @@ export default function Home() {
           defaultInputToken={queryData.inputToken} 
           defaultOutputToken={queryData.outputToken} 
           defaultAmount={queryData.amount}
-          defaultIsBuying={isSelling}
+          defaultIsSelling={isSelling}
           handleUpdate={handleQueryUpdate}
-          setSortHighLow={setIsSelling}
+          handleSetIsSelling={setIsSelling}
         />
 
         <SelectFilter 
@@ -71,9 +73,9 @@ export default function Home() {
         />
         
         <Results 
-          priceData={responseData} 
+          responseData={responseData} 
           currency={queryData.outputToken} 
-          sortHighLow={isSelling} 
+          isSelling={isSelling} 
           filter={queryData.filter}
         />
       </div>

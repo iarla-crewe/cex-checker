@@ -1,7 +1,7 @@
 import express, { Request, Response } from 'express';
 import http from 'http'
 import { Server } from "socket.io";
-import { sortedPrices } from './prices.js';
+import { prices } from './prices.js';
 import { getBinancePrice } from './CEXs/binance.js';
 import { getKrakenPrice } from './CEXs/kraken.js';
 import { getBybitPrice } from './CEXs/bybit.js';
@@ -76,13 +76,13 @@ io.on('connection', (socket) => {
             krakenSocket = getKrakenPrice(inputToken, outputToken, inputAmount)
             bybitSocket = getBybitPrice(inputToken, outputToken, inputAmount)
             //send the client the sortedPrices
-            console.log("emitting sorted prices: ", sortedPrices)
-            io.emit('get-price', {sortedPrices})
+            console.log("emitting sorted prices: ", prices)
+            io.emit('get-price', {sortedPrices: prices})
     
             previousQueryData = currentQueryData;
         } else {
             //if the query is the same as previous -> emit sorted Prices
-            io.emit('get-price', {sortedPrices})
+            io.emit('get-price', {sortedPrices: prices})
         }
     })
 })

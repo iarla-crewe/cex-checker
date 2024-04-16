@@ -5,23 +5,24 @@ import { ResponseData } from "@/model/API";
 import { Filter } from "@/model/FIlter";
 
 interface ResultsProps {
-    priceData: ResponseData;
+    responseData: ResponseData;
     currency: string;
-    sortHighLow: boolean;
+    isSelling: boolean;
     filter: Filter;
 }
 
 export default function Results(props: ResultsProps) {
-    const { priceData, currency, sortHighLow, filter } = props;
+    const { responseData, currency, isSelling, filter } = props;
 
     let filteredCEXList = CEXList.filter(cex => filter[cex.name] === true)
 
     let pricedCEXList = filteredCEXList.map((cex) => {
-        let price = priceData[cex.name];
+        let price = undefined;
+        if (responseData !== undefined) price = responseData[cex.name]?.price;
         return {...cex, price};
     });
 
-    pricedCEXList.sort((a, b) => sortCEXList(a, b, sortHighLow));
+    pricedCEXList.sort((a, b) => sortCEXList(a, b, isSelling));
 
     return (
         <ul className={styles["cex-list"]}>
