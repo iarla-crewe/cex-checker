@@ -1,15 +1,14 @@
 "use client"
 
 import styles from "./page.module.css";
-
 import TradeInfo from "@/components/TradeInfo/TradeInfo";
 import SelectFilter from "@/components/SelectFilter";
 import Results from "@/components/Results/Results";
 import { useEffect, useState } from "react";
-import { PriceData, PriceQuery, UpdatePriceQuery, getPriceData, socket } from "@/model/API";
+import { ResponseData, PriceQuery, UpdatePriceQuery, getPriceData, socket } from "@/model/API";
 
 export default function Home() {
-  const [priceData, setPriceData] = useState<PriceData>({binance: "", bybit: "", coinbase: "", crypto_com: "", kraken: ""});
+  const [responseData, setResponseData] = useState<ResponseData>({});
   const [queryData, setQueryData] = useState<PriceQuery>({
     inputToken: 'SOL',
     outputToken: 'USDC',
@@ -22,13 +21,14 @@ export default function Home() {
       bybit: true
     }
   });
-  const [sortHighLow, setSortHighLow] = useState(true);
+  const [isSelling, setIsSelling] = useState(true);
 
   useEffect(() => {
     // Function to handle "get-price" events
-    const handleGetPrice = (priceResponse: any) => {
-      setPriceData(priceResponse.prices);
-    };
+    const handleGetPrice = (response: any) => {
+      console.log(response);
+      setResponseData(response.prices);
+    }
 
     // Initial call to getPriceData with queryData
     getPriceData(queryData);
@@ -51,6 +51,7 @@ export default function Home() {
     setQueryData({
       inputToken: data.inputToken,outputToken: data.outputToken, amount: data.amount, filter: data.filter
     })
+    setResponseData({})
   }
 
 
@@ -61,20 +62,20 @@ export default function Home() {
           defaultInputToken={queryData.inputToken} 
           defaultOutputToken={queryData.outputToken} 
           defaultAmount={queryData.amount}
-          defaultIsBuying={sortHighLow}
+          defaultIsSelling={isSelling}
           handleUpdate={handleQueryUpdate}
-          setSortHighLow={setSortHighLow}
+          handleSetIsSelling={setIsSelling}
         />
 
-        <SelectFilter 
+        {/* <SelectFilter 
           handleUpdate={handleQueryUpdate}
           defaultFilter={queryData.filter}  
-        />
+        /> */}
         
         <Results 
-          priceData={priceData} 
+          responseData={responseData} 
           currency={queryData.outputToken} 
-          sortHighLow={sortHighLow} 
+          isSelling={isSelling} 
           filter={queryData.filter}
         />
       </div>

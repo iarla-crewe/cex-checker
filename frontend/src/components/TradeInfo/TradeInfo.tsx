@@ -12,21 +12,21 @@ interface TradeInfoProps {
     defaultInputToken: string,
     defaultOutputToken: string,
     defaultAmount: number,
-    defaultIsBuying: boolean,
+    defaultIsSelling: boolean,
     handleUpdate: (data: UpdatePriceQuery) => void;
-    setSortHighLow: (value: boolean) => void;
+    handleSetIsSelling: (value: boolean) => void;
 }
 
 export default function TradeInfo(props: TradeInfoProps) {
-    const { defaultInputToken, defaultOutputToken, defaultAmount, defaultIsBuying, handleUpdate, setSortHighLow } = props;
+    const { defaultInputToken, defaultOutputToken, defaultAmount, defaultIsSelling, handleUpdate, handleSetIsSelling } = props;
 
-    const [isSelling, setIsSelling] = useState(defaultIsBuying);
+    const [isSelling, setIsSelling] = useState(defaultIsSelling);
     const [inputToken, setInputToken] = useState(defaultInputToken);
     const [outputToken, setOutputToken] = useState(defaultOutputToken);
     
     const swapBuySell = () => {
         setIsSelling(!isSelling);
-        setSortHighLow(!isSelling);
+        handleSetIsSelling(!isSelling);
     }
 
     const handleInputToken = () => {
@@ -52,9 +52,7 @@ export default function TradeInfo(props: TradeInfoProps) {
         handleUpdate({inputToken: valueInput, outputToken: valueOutput});
     }
 
-    const handleAmount = (amount: number) => {
-        handleUpdate({amount: amount})
-    }
+    const handleAmount = (amount: number) => handleUpdate({amount: amount});
 
     const text = (isSelling) ? "for" : "with";
 

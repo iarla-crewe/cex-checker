@@ -1,57 +1,50 @@
 import { io } from "./socket.js";
-import { PriceResponse, Prices, TokenPair } from "./types.js";
+import { Prices, TokenPair } from "./types.js";
 
 let lastEmitTime: number = 0; // Initialize the last emission time
 
-export let previousPrices: Prices = {
-    binance: "",
-    kraken: "",
-    coinbase: "",
-    crypto_com: "",
-    bybit: ""
+export let currentPrices: Prices = {
+    binance: undefined,
+    kraken: undefined,
+    coinbase: undefined,
+    crypto_com: undefined,
+    bybit: undefined
 };
 
 export let queryChanged = false;
 
 export const emitPrices = (newPrices: Prices) => { 
+    let isChanged = false;
 
-    //sort prices into an object
-    let currentPrices: Prices = {
-        binance: previousPrices.binance,
-        kraken: previousPrices.kraken,
-        coinbase: "",
-        crypto_com: "",
-        bybit: previousPrices.bybit
-    }
     //check if new prices are different to old ones
-    if (newPrices.binance !== previousPrices.binance && newPrices.binance !== undefined && newPrices.binance !== "NaN") {
-        currentPrices.binance = newPrices.binance
+    if (newPrices.binance !== undefined && newPrices.binance !== currentPrices.binance) {
+        currentPrices.binance = newPrices.binance;
+        isChanged = true;
         console.log("New Binance price")
     }
-    if (newPrices.kraken !== previousPrices.kraken && newPrices.kraken !== undefined && newPrices.kraken !== "NaN") {
-        currentPrices.kraken = newPrices.kraken
-        console.log("New kraken price")
+    if (newPrices.kraken !== undefined && newPrices.kraken !== currentPrices.kraken) {
+        currentPrices.kraken = newPrices.kraken;
+        isChanged = true;
+        console.log("New Kraken price")
+    }
+    if (newPrices.bybit !== undefined && newPrices.bybit !== currentPrices.bybit) {
+        currentPrices.bybit = newPrices.bybit;
+        isChanged = true;
+        console.log("New ByBit price")
     }
 
-    if (newPrices.bybit !== previousPrices.bybit && newPrices.bybit !== undefined && newPrices.bybit !== "NaN") {
-        currentPrices.bybit = newPrices.bybit
-        console.log("New bybit price")
-    }
     //check that at least one currentPrice is different to the previous prices
-    if (currentPrices.binance !== previousPrices.binance || currentPrices.kraken !== previousPrices.kraken || currentPrices.bybit !== previousPrices.bybit) {
+    if (isChanged) {
 
-        previousPrices = currentPrices
+        currentPrices = currentPrices
 
         // Check if it's been at least 5 seconds since the last emission or if queryChanged is true
         const currentTime = Date.now();
         if (currentTime - lastEmitTime >= 5000 || queryChanged) {
             // Update the last emission time
             lastEmitTime = currentTime;
-            let priceResponse: PriceResponse = {
-                prices: previousPrices
-            }
-            io.emit('get-price', {priceResponse: priceResponse})
-            console.log("emitting new prices: ", previousPrices)
+            io.emit('get-price', {prices: currentPrices})
+            console.log("emitting new prices: ", currentPrices)
             queryChanged = false;
             return
         }
@@ -68,9 +61,9 @@ export const updateQueryChanged = () => {
     queryChanged = true;
 }
 
-export const calculatePrice = (tokenPrice: string, takerFee: number): string => {
+export const calculatePrice = (tokenPrice: string, takerFee: number): number => {
     let price = (Number(tokenPrice) * (1 - takerFee))
-    let priceAfterFees = price.toFixed(5)
+    return parseFloat((price * tokenAmount).toFixed(5))
 }
 
 // const calculateOutputAmount = (tokenPair: TokenPair, inputToken: string) => {

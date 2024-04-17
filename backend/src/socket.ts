@@ -1,7 +1,7 @@
 import express from 'express';
 import http from 'http'
 import { Server } from "socket.io";
-import { previousPrices, updateQueryChanged, updateTokenAmount } from './emit.js';
+import { currentPrices, updateQueryChanged, updateTokenAmount } from './emit.js';
 import { openBinanceWs } from './CEXs/binance.js';
 import { openKrakenWs } from './CEXs/kraken.js';
 import { openBybitWs } from './CEXs/bybit.js';
@@ -13,7 +13,7 @@ const app = express();
 
 const server = http.createServer(app)
 
-const port = 443;
+const socketioPort = 443;
 
 export const io = new Server(server, {
     cors: {
@@ -43,7 +43,18 @@ io.on('connection', (socket) => {
     let krakenSocket: WebSocket;
     let bybitSocket: WebSocket;
 
-    let previousQueryData: PriceQuery; // Variable to store previous query data
+    let previousQueryData: PriceQuery = {
+        inputToken: '',
+        outputToken: '',
+        inputAmount: 0,
+        cexList: {
+            binance: false,
+            kraken: false,
+            coinbase: false,
+            crypto_com: false,
+            bybit: false
+        }
+    }; // Variable to store previous query data
     let previousTokenPair: TokenPair;
 
     socket.on('get-price', ({ inputToken, outputToken, inputAmount, cexList }: PriceQuery) => {
@@ -87,15 +98,15 @@ io.on('connection', (socket) => {
             }
             previousQueryData = currentQueryData;
         }
-        console.log("emitting prices: ", previousPrices)
-        io.emit('get-price', { prices: previousPrices })
+        console.log("emitting prices: ", currentPrices)
+        io.emit('get-price', { prices: currentPrices })
         //if the query is the same as previous -> emit previously sorted Prices
         //let the web sockets do their thing
     })
 })
 
-server.listen(port, () => {
-    console.log(`Server running at http://localhost:${port}`);
+server.listen(socketioPort, () => {
+    console.log(`Server running at http://localhost:${socketioPort}`);
 })
 
 

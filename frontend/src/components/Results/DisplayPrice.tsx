@@ -2,7 +2,7 @@ import React from "react";
 import styles from "./Results.module.css";
 
 interface DisplayPriceProps {
-    price: string | undefined;
+    price: number | undefined;
     currency: string;
     withdrawFee: string;
     textColor: string;
@@ -11,7 +11,7 @@ interface DisplayPriceProps {
 export default function DisplayPrice(props: DisplayPriceProps) {
     const { price, currency, withdrawFee, textColor } = props;
 
-    if(price) {
+    if(price != undefined) {
         return (
             <div className={styles["price-info"]} style={{color: textColor}}>
                 <p className={styles["price-heading"]}>Expected {currency}</p>

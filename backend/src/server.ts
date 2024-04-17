@@ -7,8 +7,7 @@ import { Server } from "socket.io";
 
 // Create an Express application
 const app = express();
-//const port = 3001
-export const port = 443;
+const APIport = 3001;
 
 // Middleware to parse JSON bodies
 app.use(express.json());
@@ -24,8 +23,8 @@ app.post('/get-best-price', (req: Request, res: Response) => {
 });
 
 // Start the server
-app.listen(port, () => {
-    console.log(`Server running at http://localhost:${port}`);
+app.listen(APIport, () => {
+    console.log(`Server running at http://localhost:${APIport}`);
 });
 
 

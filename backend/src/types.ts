@@ -1,9 +1,9 @@
-export type Prices = {
-    binance: string,
-    kraken: string,
-    coinbase: string,
-    crypto_com: string,
-    bybit: string,
+export interface Prices {
+    binance?: number;
+    kraken?: number;
+    coinbase?: number;
+    crypto_com?: number;
+    bybit?: number;
 }
 
 export type CexList = {
@@ -27,11 +27,6 @@ export type PriceQuery = {
     outputToken: string,
     inputAmount: number,
     cexList: CexList
-}
-
-export type PriceResponse = {
-    prices: Prices,
-    //withdraw price for input token and output token
 }
 
 export type TokenPair = {
