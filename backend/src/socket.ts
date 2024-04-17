@@ -1,7 +1,7 @@
 import express from 'express';
 import http from 'http'
 import { Server } from "socket.io";
-import { currentPrices, updateQueryChanged, updateTokenAmount } from './emit.js';
+import { currentPrices, resetPriceResponse, updateQueryChanged, updateTokenAmount } from './emit.js';
 import { openBinanceWs } from './CEXs/binance.js';
 import { openKrakenWs } from './CEXs/kraken.js';
 import { openBybitWs } from './CEXs/bybit.js';
@@ -73,6 +73,9 @@ io.on('connection', (socket) => {
         console.log("Current token pair: ", currentTokenPair)
         // Check if the current query is not the same as the previous one
         if (JSON.stringify(currentQueryData) !== JSON.stringify(previousQueryData)) {
+            //set currentPrices to undefined
+            resetPriceResponse()
+
             //check if tokens are different regardless of order
             if (JSON.stringify(currentTokenPair) !== JSON.stringify(previousTokenPair)) {
                 //close old websockets

@@ -66,6 +66,14 @@ export const calculatePrice = (tokenPrice: string, takerFee: number): number => 
     return parseFloat((price * tokenAmount).toFixed(5))
 }
 
+export const resetPriceResponse = () => {
+    currentPrices.binance = undefined
+    currentPrices.bybit = undefined
+    currentPrices.coinbase = undefined
+    currentPrices.crypto_com = undefined
+    currentPrices.kraken = undefined
+}
+
 // const calculateOutputAmount = (tokenPair: TokenPair, inputToken: string) => {
 //     //get the currenttokenPair
 //     //get the current inout token.
