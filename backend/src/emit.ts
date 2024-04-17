@@ -1,5 +1,5 @@
 import { io } from "./socket.js";
-import { PriceResponse, Prices } from "./types.js";
+import { PriceResponse, Prices, TokenPair } from "./types.js";
 
 let lastEmitTime: number = 0; // Initialize the last emission time
 
@@ -10,6 +10,8 @@ export let previousPrices: Prices = {
     crypto_com: "",
     bybit: ""
 };
+
+export let queryChanged = false;
 
 export const emitPrices = (newPrices: Prices) => { 
 
@@ -40,9 +42,9 @@ export const emitPrices = (newPrices: Prices) => {
 
         previousPrices = currentPrices
 
-        // Check if it's been at least 5 seconds since the last emission
+        // Check if it's been at least 5 seconds since the last emission or if queryChanged is true
         const currentTime = Date.now();
-        if (currentTime - lastEmitTime >= 5000) {
+        if (currentTime - lastEmitTime >= 5000 || queryChanged) {
             // Update the last emission time
             lastEmitTime = currentTime;
             let priceResponse: PriceResponse = {
@@ -50,6 +52,7 @@ export const emitPrices = (newPrices: Prices) => {
             }
             io.emit('get-price', {priceResponse: priceResponse})
             console.log("emitting new prices: ", previousPrices)
+            queryChanged = false;
             return
         }
     } 
@@ -60,7 +63,23 @@ export const updateTokenAmount = (newAmount: number) => {
     tokenAmount = newAmount;
 }
 
+export const updateQueryChanged = () => {
+    console.log("Instant update - query changed")
+    queryChanged = true;
+}
+
 export const calculatePrice = (tokenPrice: string, takerFee: number): string => {
     let price = (Number(tokenPrice) * (1 - takerFee))
-    return (price * tokenAmount).toFixed(5)
+    let priceAfterFees = price.toFixed(5)
 }
+
+// const calculateOutputAmount = (tokenPair: TokenPair, inputToken: string) => {
+//     //get the currenttokenPair
+//     //get the current inout token.
+//     if (inputToken == tokenPair.quote) {
+//         return amount * price
+//     }
+//     if (inputToken == tokenPair.base) {
+//         return amount / price
+//     }
+// }

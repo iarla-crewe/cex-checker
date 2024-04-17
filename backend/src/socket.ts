@@ -1,7 +1,7 @@
 import express from 'express';
 import http from 'http'
 import { Server } from "socket.io";
-import { previousPrices, updateTokenAmount } from './emit.js';
+import { previousPrices, updateQueryChanged, updateTokenAmount } from './emit.js';
 import { openBinanceWs } from './CEXs/binance.js';
 import { openKrakenWs } from './CEXs/kraken.js';
 import { openBybitWs } from './CEXs/bybit.js';
@@ -62,8 +62,7 @@ io.on('connection', (socket) => {
         console.log("Current token pair: ", currentTokenPair)
         // Check if the current query is not the same as the previous one
         if (JSON.stringify(currentQueryData) !== JSON.stringify(previousQueryData)) {
-
-            //new tokenpair is different 
+            //check if tokens are different regardless of order
             if (JSON.stringify(currentTokenPair) !== JSON.stringify(previousTokenPair)) {
                 //close old websockets
                 if (binanceSocket) binanceSocket.close()
@@ -77,8 +76,13 @@ io.on('connection', (socket) => {
                 krakenSocket = openKrakenWs(currentTokenPair.quote, currentTokenPair.base)
                 bybitSocket = openBybitWs(currentTokenPair.quote, currentTokenPair.base)
 
+                previousTokenPair = currentTokenPair;
                 //let prices = getExchangePrices(binanceSocket, krakenSocket, bybitSocket)
-            } else if (currentQueryData.inputAmount != previousQueryData.inputAmount) {
+            } 
+            //checks if new input amount is different to old one  or check if querys inputtoken == previous output token && query outputtoke == previous input token
+            if (currentQueryData.inputAmount != previousQueryData.inputAmount || tokensFlipped(previousQueryData, currentQueryData)) {
+                console.log("Token amount is different or tokens got flipped")
+                updateQueryChanged()
                 updateTokenAmount(inputAmount)
             }
             previousQueryData = currentQueryData;
@@ -93,3 +97,11 @@ io.on('connection', (socket) => {
 server.listen(port, () => {
     console.log(`Server running at http://localhost:${port}`);
 })
+
+
+const tokensFlipped = (previousQuery: PriceQuery, newQuery: PriceQuery) => {
+    if (previousQuery.inputToken == newQuery.outputToken && previousQuery.outputToken == newQuery.inputToken) {
+        return true
+    }
+    return false
+}
