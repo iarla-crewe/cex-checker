@@ -1,18 +1,20 @@
 import express from 'express';
 import http from 'http'
 import { Server } from "socket.io";
-import { currentPrices, emitPrices, resetPriceResponse, updateQueryChanged, updateTokenAmount } from './emit.js';
-import { openBinanceWs } from './CEXs/binance.js';
-import { openKrakenWs } from './CEXs/kraken.js';
-import { openBybitWs } from './CEXs/bybit.js';
+import { currentPrices, emitPrices, resetPriceResponse, updateQueryChanged, updateTokenAmount } from '../src/emit.js';
+import { openBinanceWs } from '../src/CEXs/binance.js';
+import { openKrakenWs } from '../src/CEXs/kraken.js';
+import { openBybitWs } from '../src/CEXs/bybit.js';
 import WebSocket from 'ws';
-import { getBaseToken } from './utils/baseToken.js';
-import { CexList, PriceQuery, TokenPair } from './types.js';
+import { getBaseToken } from '../src/utils/baseToken.js';
+import { CexList, PriceQuery, TokenPair } from '../src/types.js';
+
 const app = express();
 
 const server = http.createServer(app)
 
-const socketioPort = 443;
+const pricePort = 443;
+const feesPort = 3001;
 
 export const io = new Server(server, {
     cors: {
@@ -108,8 +110,8 @@ io.on('connection', (socket) => {
     })
 })
 
-server.listen(socketioPort, () => {
-    console.log(`Server running at http://localhost:${socketioPort}`);
+server.listen(pricePort, () => {
+    console.log(`Server running at http://localhost:${pricePort}`);
 })
 
 
