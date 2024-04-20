@@ -73,11 +73,11 @@ io.on('connection', (socket) => {
         console.log("Current token pair: ", currentTokenPair)
         // Check if the current query is not the same as the previous one
         if (JSON.stringify(currentQueryData) !== JSON.stringify(previousQueryData)) {
-            //set currentPrices to undefined
-            resetPriceResponse()
 
             //check if tokens are different regardless of order
             if (JSON.stringify(currentTokenPair) !== JSON.stringify(previousTokenPair)) {
+                //set currentPrices to undefined
+                resetPriceResponse()
                 //close old websockets
                 if (binanceSocket) binanceSocket.close()
                 if (krakenSocket) krakenSocket.close()
