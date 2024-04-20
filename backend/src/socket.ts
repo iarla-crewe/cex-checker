@@ -1,14 +1,13 @@
 import express from 'express';
 import http from 'http'
 import { Server } from "socket.io";
-import { currentPrices, resetPriceResponse, updateQueryChanged, updateTokenAmount } from './emit.js';
+import { currentPrices, emitPrices, resetPriceResponse, updateQueryChanged, updateTokenAmount } from './emit.js';
 import { openBinanceWs } from './CEXs/binance.js';
 import { openKrakenWs } from './CEXs/kraken.js';
 import { openBybitWs } from './CEXs/bybit.js';
 import WebSocket from 'ws';
 import { getBaseToken } from './utils/baseToken.js';
-import { CexList, PriceQuery, Prices, TokenPair } from './types.js';
-import { getExchangePrices } from './CEXs/prices.js';
+import { CexList, PriceQuery, TokenPair } from './types.js';
 const app = express();
 
 const server = http.createServer(app)
@@ -36,6 +35,9 @@ let params: PriceQuery = {
     cexList: cexList
 }
 
+export let previousTokenPair: TokenPair;
+export let previousImportToken: string;
+
 //connection with the client
 io.on('connection', (socket) => {
     console.log("Connection")
@@ -55,7 +57,6 @@ io.on('connection', (socket) => {
             bybit: false
         }
     }; // Variable to store previous query data
-    let previousTokenPair: TokenPair;
 
     socket.on('get-price', ({ inputToken, outputToken, inputAmount, cexList }: PriceQuery) => {
         const currentQueryData: PriceQuery = { inputToken, outputToken, inputAmount, cexList };
@@ -98,13 +99,12 @@ io.on('connection', (socket) => {
                 console.log("Token amount is different or tokens got flipped")
                 updateQueryChanged()
                 updateTokenAmount(inputAmount)
+                previousTokenPair = currentTokenPair;
+                previousImportToken = currentQueryData.inputToken
             }
             previousQueryData = currentQueryData;
         }
-        console.log("emitting prices: ", currentPrices)
-        io.emit('get-price', { prices: currentPrices })
-        //if the query is the same as previous -> emit previously sorted Prices
-        //let the web sockets do their thing
+        emitPrices(currentPrices)
     })
 })
 

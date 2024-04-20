@@ -1,6 +1,6 @@
 import { exchangeTakerFees } from "./CEXs/prices.js";
-import { io } from "./socket.js";
-import { ExchangeFees, Prices } from "./types.js";
+import { io, previousImportToken, previousTokenPair } from "./socket.js";
+import { ExchangeFees, Prices, TokenPair } from "./types.js";
 
 let lastEmitTime: number = 0; // Initialize the last emission time
 
@@ -36,9 +36,6 @@ export const emitPrices = (newPrices: Prices) => {
 
     //check that at least one currentPrice is different to the previous prices
     if (isChanged) {
-
-        currentPrices = currentPrices
-
         // Check if it's been at least 5 seconds since the last emission or if queryChanged is true
         const currentTime = Date.now();
         if (currentTime - lastEmitTime >= 5000 || queryChanged) {
@@ -64,6 +61,7 @@ export const updateQueryChanged = () => {
 
 export const calculatePrices = (tokenPrices: Prices, takerFees: ExchangeFees, amount: number): Prices => {
     const calculatedPrices: Prices = {};
+    let inputIsQuote = checkIfInputIsQuote(previousTokenPair, previousImportToken)
     
     for (const exchange in tokenPrices) {
         if (tokenPrices.hasOwnProperty(exchange)) {
@@ -72,12 +70,10 @@ export const calculatePrices = (tokenPrices: Prices, takerFees: ExchangeFees, am
 
             // Check if both token price and taker fee are defined for the current exchange
             if (typeof tokenPrice === 'number' && typeof takerFee === 'number') {
-                const price = tokenPrice * (1 - takerFee) * amount;
+                let price = calculateOutputAmount(amount, tokenPrice, inputIsQuote)
+                price = price * (1 - takerFee);
                 calculatedPrices[exchange] = parseFloat(price.toFixed(5));
             } else {
-                // Handle cases where either token price or taker fee is not defined
-                // You might want to log an error or handle this situation differently based on your requirements
-                console.error(`Token price or taker fee is not defined for exchange ${exchange}`);
                 calculatedPrices[exchange] = undefined
             }
         }
@@ -94,13 +90,12 @@ export const resetPriceResponse = () => {
     currentPrices.kraken = undefined
 }
 
-// const calculateOutputAmount = (tokenPair: TokenPair, inputToken: string) => {
-//     //get the currenttokenPair
-//     //get the current inout token.
-//     if (inputToken == tokenPair.quote) {
-//         return amount * price
-//     }
-//     if (inputToken == tokenPair.base) {
-//         return amount / price
-//     }
-// }
+const calculateOutputAmount = (tokenAmount: number, tokenPrice: number, inputIsQuote: boolean) => {
+    if (inputIsQuote) return tokenAmount * tokenPrice
+    return tokenAmount / tokenPrice
+}
+
+const checkIfInputIsQuote = (tokenPair: TokenPair, inputToken: string) => {
+    if (inputToken.toLowerCase() == tokenPair.quote) return true;
+    return false
+}
