@@ -1,11 +1,7 @@
-import axios from 'axios';
-import crypto from 'crypto';
 import WebSocket from 'ws';
-import { calculatePrice, emitPrices } from '../emit.js';
-import { binancePrice } from './binance.js';
+import { emitPrices } from '../emit.js';
 import dotenv from 'dotenv';
-import { bybitPrice } from './bybit.js';
-import { exchangeTakerFees, prices } from './prices.js';
+import { prices } from './prices.js';
 dotenv.config();
 
 export let krakenPrice: string;
@@ -45,7 +41,7 @@ export const openKrakenWs =  (quoteToken: string, baseToken: string) => {
             // Iterate through each nested array
             for (const innerArray of priceObject[1]) {
                 // Access the first element (price) of the inner array
-                prices.kraken = calculatePrice(innerArray[0], exchangeTakerFees.kraken)
+                prices.kraken = parseFloat(innerArray[0])
                 emitPrices(prices)
             }
         }

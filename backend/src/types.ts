@@ -1,4 +1,5 @@
-export interface Prices {
+export type Prices = {
+    [exchange: string]: number | undefined;
     binance?: number;
     kraken?: number;
     coinbase?: number;
@@ -15,6 +16,7 @@ export type CexList = {
 }
 
 export type ExchangeFees = {
+    [exchange: string]: number | undefined;
     binance: number,
     kraken: number,
     coinbase: number,

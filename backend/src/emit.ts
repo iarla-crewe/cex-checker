@@ -1,5 +1,6 @@
+import { exchangeTakerFees } from "./CEXs/prices.js";
 import { io } from "./socket.js";
-import { Prices, TokenPair } from "./types.js";
+import { ExchangeFees, Prices } from "./types.js";
 
 let lastEmitTime: number = 0; // Initialize the last emission time
 
@@ -43,8 +44,8 @@ export const emitPrices = (newPrices: Prices) => {
         if (currentTime - lastEmitTime >= 5000 || queryChanged) {
             // Update the last emission time
             lastEmitTime = currentTime;
-            io.emit('get-price', {prices: currentPrices})
-            console.log("emitting new prices: ", currentPrices)
+            let pricesToEmit = calculatePrices(currentPrices, exchangeTakerFees, tokenAmount)
+            io.emit('get-price', {prices: pricesToEmit})
             queryChanged = false;
             return
         }
@@ -61,9 +62,28 @@ export const updateQueryChanged = () => {
     queryChanged = true;
 }
 
-export const calculatePrice = (tokenPrice: string, takerFee: number): number => {
-    let price = (Number(tokenPrice) * (1 - takerFee))
-    return parseFloat((price * tokenAmount).toFixed(5))
+export const calculatePrices = (tokenPrices: Prices, takerFees: ExchangeFees, amount: number): Prices => {
+    const calculatedPrices: Prices = {};
+    
+    for (const exchange in tokenPrices) {
+        if (tokenPrices.hasOwnProperty(exchange)) {
+            const tokenPrice = tokenPrices[exchange];
+            const takerFee = takerFees[exchange];
+
+            // Check if both token price and taker fee are defined for the current exchange
+            if (typeof tokenPrice === 'number' && typeof takerFee === 'number') {
+                const price = tokenPrice * (1 - takerFee) * amount;
+                calculatedPrices[exchange] = parseFloat(price.toFixed(5));
+            } else {
+                // Handle cases where either token price or taker fee is not defined
+                // You might want to log an error or handle this situation differently based on your requirements
+                console.error(`Token price or taker fee is not defined for exchange ${exchange}`);
+                calculatedPrices[exchange] = undefined
+            }
+        }
+    }
+
+    return calculatedPrices;
 }
 
 export const resetPriceResponse = () => {

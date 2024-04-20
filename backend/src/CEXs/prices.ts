@@ -1,4 +1,4 @@
-import { calculatePrice, emitPrices } from "../emit.js";
+import { emitPrices } from "../emit.js";
 import { ExchangeFees, Prices } from "../types.js";
 import WebSocket from 'ws';
 
@@ -39,7 +39,7 @@ export const getExchangePrices = (binanceSocket: WebSocket, krakenSocket: WebSoc
 
     binanceSocket.onmessage = ({ data }: any) => {
         let priceObject = JSON.parse(data)
-        prices.binance = calculatePrice(priceObject.p, exchangeTakerFees.binance)
+        prices.binance = priceObject.p
         emitPrices(prices)
     };
 
@@ -50,7 +50,7 @@ export const getExchangePrices = (binanceSocket: WebSocket, krakenSocket: WebSoc
             // Iterate through each nested array
             for (const innerArray of priceObject[1]) {
                 // Access the first element (price) of the inner array
-                prices.kraken = calculatePrice(innerArray[0], exchangeTakerFees.kraken)
+                prices.kraken = innerArray[0]
                 emitPrices(prices)
             }
         }
@@ -59,7 +59,7 @@ export const getExchangePrices = (binanceSocket: WebSocket, krakenSocket: WebSoc
     bybitSocket.onmessage = ({ data }: any) => {
         let priceObject = JSON.parse(data)
         try {
-            prices.bybit = calculatePrice(priceObject.data[0].p, exchangeTakerFees.bybit)
+            prices.bybit = priceObject.data[0].p
             console.log("Bybit price: ", prices.bybit)
         } catch (error) {
             console.log("Bybit data object does not contain a price")

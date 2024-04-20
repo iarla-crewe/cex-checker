@@ -1,5 +1,5 @@
 import WebSocket from "ws";
-import { calculatePrice, emitPrices } from "../emit.js";
+import { emitPrices } from "../emit.js";
 import { krakenPrice } from "./kraken.js";
 import { bybitPrice } from "./bybit.js";
 import { exchangeTakerFees, prices } from "./prices.js";
@@ -39,7 +39,7 @@ export const openBinanceWs = (quoteToken: string, baseToken: string) => {
 
     binanceSocket.onmessage = ({ data }: any) => {
         let priceObject = JSON.parse(data)
-        prices.binance = calculatePrice(priceObject.p, exchangeTakerFees.binance)
+        prices.binance = parseFloat(priceObject.p)
         emitPrices(prices)
     };
     
