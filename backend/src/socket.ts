@@ -69,7 +69,8 @@ io.on('connection', (socket) => {
         try { currentTokenPair = getBaseToken(inputToken, outputToken); }
         catch (error) { 
             console.log("Base token getting error: ", error)
-            io.emit('error', { error }) }
+            io.emit('error', { error }) 
+        }
 
         console.log("Current token pair: ", currentTokenPair)
         // Check if the current query is not the same as the previous one
