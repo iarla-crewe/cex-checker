@@ -17,6 +17,7 @@ export default function SelectFilter(props: SelectFilterProps) {
         <div className={styles["select-filters"]}>
             {Object.entries(defaultFilter).map(([cex, enabled]) => (
                 <FilterOption 
+                    key={cex}
                     name={cex} 
                     defaultEnabled={enabled}
                     onUpdate={(value: boolean) => {
