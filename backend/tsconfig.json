@@ -108,5 +108,5 @@
   },
   "include": [
     "src/**/*.ts" // Include the TypeScript files you want to compile
-  ]
+, "api/index.ts"  ]
 }

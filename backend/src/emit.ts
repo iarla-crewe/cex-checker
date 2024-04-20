@@ -1,5 +1,5 @@
 import { exchangeTakerFees } from "./CEXs/prices.js";
-import { io, previousImportToken, previousTokenPair } from "./socket.js";
+import { io, previousImportToken, previousTokenPair } from "../api/index.js";
 import { ExchangeFees, Prices, TokenPair } from "./types.js";
 
 let lastEmitTime: number = 0; // Initialize the last emission time
