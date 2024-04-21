@@ -30,14 +30,21 @@ export default function Home() {
       setResponseData(response.prices);
     }
 
+    const fetchPriceData = () => {
+      getPriceData(queryData);
+    };
+
     // Initial call to getPriceData with queryData
-    getPriceData(queryData);
+    fetchPriceData();
 
     // Add listener for "get-price" events
     socket.on("get-price", handleGetPrice);
 
+    const intervalId = setInterval(fetchPriceData, 5000);
+
     // Clean-up function to remove the old listener when queryData changes
     return () => {
+      clearInterval(intervalId);
       socket.off("get-price", handleGetPrice);
     };
   }, [queryData])

@@ -1,7 +1,6 @@
 import WebSocket from 'ws';
-import { emitPrices } from '../emit.js';
+import { currentPrices } from '../emit.js';
 import dotenv from 'dotenv';
-import { prices } from './prices.js';
 dotenv.config();
 
 export let krakenPrice: string;
@@ -41,8 +40,8 @@ export const openKrakenWs =  (quoteToken: string, baseToken: string) => {
             // Iterate through each nested array
             for (const innerArray of priceObject[1]) {
                 // Access the first element (price) of the inner array
-                prices.kraken = parseFloat(innerArray[0])
-                emitPrices(prices)
+                currentPrices.kraken = parseFloat(innerArray[0])
+                console.log("new kraken price: ", currentPrices.kraken)
             }
         }
     });

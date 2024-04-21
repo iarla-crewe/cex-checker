@@ -1,7 +1,7 @@
 import express from 'express';
 import http from 'http'
 import { Server } from "socket.io";
-import { currentPrices, emitPrices, resetPriceResponse, updateQueryChanged, updateTokenAmount } from './emit.js';
+import { currentPrices, emitPrices, resetPriceResponse } from './emit.js';
 import { openBinanceWs } from './CEXs/binance.js';
 import { openKrakenWs } from './CEXs/kraken.js';
 import { openBybitWs } from './CEXs/bybit.js';
@@ -73,8 +73,8 @@ io.on('connection', (socket) => {
             console.log("Base token getting error: ", error)
             io.emit('error', { error }) 
         }
+        let queryChanged = false;
 
-        console.log("Current token pair: ", currentTokenPair)
         // Check if the current query is not the same as the previous one
         if (JSON.stringify(currentQueryData) !== JSON.stringify(previousQueryData)) {
 
@@ -87,7 +87,8 @@ io.on('connection', (socket) => {
                 if (krakenSocket) krakenSocket.close()
                 if (bybitSocket) bybitSocket.close()
 
-                updateTokenAmount(inputAmount)
+                //updateTokenAmount(inputAmount)
+
                 //open new ws connection with the new tokenPair
                 //TODO: only open based on the CEX list
                 binanceSocket = openBinanceWs(currentTokenPair.quote, currentTokenPair.base)
@@ -99,15 +100,15 @@ io.on('connection', (socket) => {
             } 
             //checks if new input amount is different to old one  or check if querys inputtoken == previous output token && query outputtoke == previous input token
             if (currentQueryData.inputAmount != previousQueryData.inputAmount || tokensFlipped(previousQueryData, currentQueryData)) {
-                console.log("Token amount is different or tokens got flipped")
-                updateQueryChanged()
-                updateTokenAmount(inputAmount)
+                //updateQueryChanged()
+                queryChanged = true
+                //updateTokenAmount(inputAmount)
                 previousTokenPair = currentTokenPair;
                 previousImportToken = currentQueryData.inputToken
             }
             previousQueryData = currentQueryData;
         }
-        emitPrices(currentPrices)
+        emitPrices(currentPrices, inputAmount, queryChanged)
     })
 
     socket.on('disconnect', () => { 

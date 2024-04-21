@@ -1,8 +1,5 @@
 import WebSocket from "ws";
-import { emitPrices } from "../emit.js";
-import { krakenPrice } from "./kraken.js";
-import { binancePrice } from "./binance.js";
-import { exchangeTakerFees, prices } from "./prices.js";
+import { currentPrices } from "../emit.js";
 
 export let bybitPrice: string;
 
@@ -29,12 +26,11 @@ export const openBybitWs = (quoteToken: string, baseToken: string) => {
     bybitSocket.onmessage = ({ data }: any) => {
         let priceObject = JSON.parse(data)
         try {
-            prices.bybit = parseFloat(priceObject.data[0].p)
-            console.log("Bybit price: ", prices.bybit)
+            currentPrices.bybit = parseFloat(priceObject.data[0].p)
+            console.log("new bybit price: ", currentPrices.bybit)
         } catch (error) {
             console.log("Bybit data object does not contain a price")
         }
-        emitPrices(prices)
     };
 
     bybitSocket.on('close', (code: number, reason: string) => {

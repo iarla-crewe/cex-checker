@@ -1,8 +1,5 @@
 import WebSocket from "ws";
-import { emitPrices } from "../emit.js";
-import { krakenPrice } from "./kraken.js";
-import { bybitPrice } from "./bybit.js";
-import { exchangeTakerFees, prices } from "./prices.js";
+import { currentPrices } from "../emit.js";
 
 export let binancePrice: string;
 
@@ -23,8 +20,6 @@ export const openBinanceWs = (quoteToken: string, baseToken: string) => {
     const binanceSocket = new WebSocket(binanceWebSocketUrl);
     
     binanceSocket.onopen = () => {
-        console.log("Quote token: ", quoteToken)
-        console.log("bae token: ", baseToken)
         binanceSocket.send(JSON.stringify({
             "method": "SUBSCRIBE",
             "params":
@@ -39,8 +34,8 @@ export const openBinanceWs = (quoteToken: string, baseToken: string) => {
 
     binanceSocket.onmessage = ({ data }: any) => {
         let priceObject = JSON.parse(data)
-        prices.binance = parseFloat(priceObject.p)
-        emitPrices(prices)
+        currentPrices.binance = parseFloat(priceObject.p)
+        console.log("new binance price: ", currentPrices.binance)
     };
     
     binanceSocket.on('close', (code: number, reason: string) => {

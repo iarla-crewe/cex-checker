@@ -44,9 +44,6 @@ export const getBaseToken = (input: string, output: string) => {
         throw Error("No base token")
     }
 
-    console.log(`${baseToken} is the baseToken.`);
-    console.log(`${quoteToken} is the quoteToken.`);
-
     let tokenPair: TokenPair = {
         quote: quoteToken,
         base: baseToken

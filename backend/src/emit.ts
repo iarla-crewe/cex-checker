@@ -12,9 +12,9 @@ export let currentPrices: Prices = {
     bybit: undefined
 };
 
-export let queryChanged = false;
+// export let queryChanged = false;
 
-export const emitPrices = (newPrices: Prices) => { 
+export const emitPrices = (newPrices: Prices, amount: number, queryChanged: boolean) => { 
     let isChanged = false;
 
     //check if new prices are different to old ones
@@ -35,29 +35,30 @@ export const emitPrices = (newPrices: Prices) => {
     }
 
     //check that at least one currentPrice is different to the previous prices
-    if (isChanged) {
+    if (isChanged || queryChanged) {
         // Check if it's been at least 5 seconds since the last emission or if queryChanged is true
-        const currentTime = Date.now();
-        if (currentTime - lastEmitTime >= 5000 || queryChanged) {
-            // Update the last emission time
-            lastEmitTime = currentTime;
-            let pricesToEmit = calculatePrices(currentPrices, exchangeTakerFees, tokenAmount)
+        // const currentTime = Date.now();
+        // if (currentTime - lastEmitTime >= 5000 || queryChanged) {
+        //     // Update the last emission time
+        //     lastEmitTime = currentTime;
+            let pricesToEmit = calculatePrices(currentPrices, exchangeTakerFees, amount)
+            console.log("Emiting price:", pricesToEmit);
             io.emit('get-price', {prices: pricesToEmit})
-            queryChanged = false;
+            // queryChanged = false;
             return
         }
-    } 
+    // } 
 }
-export let tokenAmount = 1;
+// export let tokenAmount = 1;
 
-export const updateTokenAmount = (newAmount: number) => {
-    tokenAmount = newAmount;
-}
+// export const updateTokenAmount = (newAmount: number) => {
+//     tokenAmount = newAmount;
+// }
 
-export const updateQueryChanged = () => {
-    console.log("Instant update - query changed")
-    queryChanged = true;
-}
+// export const updateQueryChanged = () => {
+//     console.log("Instant update - query changed")
+//     queryChanged = true;
+// }
 
 export const calculatePrices = (tokenPrices: Prices, takerFees: ExchangeFees, amount: number): Prices => {
     const calculatedPrices: Prices = {};
