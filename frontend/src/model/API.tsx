@@ -1,8 +1,8 @@
 import { Filter } from "./FIlter";
 import { io } from "socket.io-client";
 
-//export const socket = io('https://annual-kerrill-quartzlabs.koyeb.app/')
-export const socket = io('http://localhost:443')
+export const socket = io('https://annual-kerrill-quartzlabs.koyeb.app/')
+//export const socket = io('http://localhost:443')
 
 export interface PriceQuery {
     inputToken: string;
