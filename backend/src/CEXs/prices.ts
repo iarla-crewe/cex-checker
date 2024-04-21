@@ -1,6 +1,4 @@
-import { emitPrices } from "../emit.js";
-import { ExchangeFees, Prices } from "../types.js";
-import WebSocket from 'ws';
+import { ExchangeFees } from "../types.js";
 
 export let exchangeTakerFees: ExchangeFees = {
     binance: 0.001,

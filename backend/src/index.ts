@@ -1,12 +1,12 @@
 import express from 'express';
 import http from 'http'
 import { Server } from "socket.io";
-import { currentPrices, emitPrices, resetPriceResponse } from './emit.js';
+import { calculatePrices, currentPrices, isNewReponse, resetPriceResponse } from './emit.js';
 import { openBinanceWs } from './CEXs/binance.js';
 import { openKrakenWs } from './CEXs/kraken.js';
 import { openBybitWs } from './CEXs/bybit.js';
 import WebSocket from 'ws';
-import { getBaseToken } from './utils/baseToken.js';
+import { getBaseToken, tokensFlipped } from './utils/baseToken.js';
 import { CexList, PriceQuery, TokenPair } from './types.js';
 
 const app = express();
@@ -37,8 +37,18 @@ let params: PriceQuery = {
     cexList: cexList
 }
 
-export let previousTokenPair: TokenPair;
-export let previousImportToken: string;
+const defaultQueryData: PriceQuery = {
+    inputToken: 'SOL',
+    outputToken: 'USDC',
+    inputAmount: 1,
+    cexList: {
+        binance: true,
+        kraken: true,
+        coinbase: false,
+        crypto_com: false,
+        bybit: true
+    }
+};
 
 //connection with the client
 io.on('connection', (socket) => {
@@ -46,6 +56,9 @@ io.on('connection', (socket) => {
     let binanceSocket: WebSocket;
     let krakenSocket: WebSocket;
     let bybitSocket: WebSocket;
+
+    let previousTokenPair: TokenPair;
+    let previousInputToken: string;
 
     let previousQueryData: PriceQuery = {
         inputToken: '',
@@ -63,52 +76,47 @@ io.on('connection', (socket) => {
     socket.on('get-price', ({ inputToken, outputToken, inputAmount, cexList }: PriceQuery) => {
         const currentQueryData: PriceQuery = { inputToken, outputToken, inputAmount, cexList };
 
-        let currentTokenPair: TokenPair = {
-            quote: "",
-            base: ""
-        };
+        let currentTokenPair: TokenPair = { quote: "", base: "" };
 
         try { currentTokenPair = getBaseToken(inputToken, outputToken); }
-        catch (error) { 
-            console.log("Base token getting error: ", error)
-            io.emit('error', { error }) 
-        }
+        catch (error) {  io.emit('error', { error }) }
         let queryChanged = false;
 
         // Check if the current query is not the same as the previous one
         if (JSON.stringify(currentQueryData) !== JSON.stringify(previousQueryData)) {
 
             //check if tokens are different regardless of order
+            //TODO: change so that it also checks to see if the currentTokenPair is the default && the
             if (JSON.stringify(currentTokenPair) !== JSON.stringify(previousTokenPair)) {
                 //set currentPrices to undefined
-                resetPriceResponse()
+                if (previousTokenPair !== undefined) resetPriceResponse()
+            
                 //close old websockets
                 if (binanceSocket) binanceSocket.close()
                 if (krakenSocket) krakenSocket.close()
                 if (bybitSocket) bybitSocket.close()
 
-                //updateTokenAmount(inputAmount)
-
                 //open new ws connection with the new tokenPair
-                //TODO: only open based on the CEX list
                 binanceSocket = openBinanceWs(currentTokenPair.quote, currentTokenPair.base)
                 krakenSocket = openKrakenWs(currentTokenPair.quote, currentTokenPair.base)
                 bybitSocket = openBybitWs(currentTokenPair.quote, currentTokenPair.base)
 
                 previousTokenPair = currentTokenPair;
-                //let prices = getExchangePrices(binanceSocket, krakenSocket, bybitSocket)
             } 
             //checks if new input amount is different to old one  or check if querys inputtoken == previous output token && query outputtoke == previous input token
             if (currentQueryData.inputAmount != previousQueryData.inputAmount || tokensFlipped(previousQueryData, currentQueryData)) {
-                //updateQueryChanged()
                 queryChanged = true
-                //updateTokenAmount(inputAmount)
                 previousTokenPair = currentTokenPair;
-                previousImportToken = currentQueryData.inputToken
+                previousInputToken = currentQueryData.inputToken
             }
             previousQueryData = currentQueryData;
         }
-        emitPrices(currentPrices, inputAmount, queryChanged)
+        let prices = calculatePrices(currentPrices, inputAmount, inputToken, currentTokenPair)
+        let response = isNewReponse(queryChanged)
+        if (response)  {
+            console.log("Emitting new reponse:", prices)
+            socket.emit('get-price', { prices: prices });
+        }
     })
 
     socket.on('disconnect', () => { 
@@ -120,11 +128,3 @@ io.on('connection', (socket) => {
 server.listen(pricePort, () => {
     console.log(`Server running at http://localhost:${pricePort}`);
 })
-
-
-const tokensFlipped = (previousQuery: PriceQuery, newQuery: PriceQuery) => {
-    if (previousQuery.inputToken == newQuery.outputToken && previousQuery.outputToken == newQuery.inputToken) {
-        return true
-    }
-    return false
-}

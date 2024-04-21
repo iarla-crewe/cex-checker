@@ -1,6 +1,5 @@
 import { exchangeTakerFees } from "./CEXs/prices.js";
-import { io, previousImportToken, previousTokenPair } from "./index.js";
-import { ExchangeFees, Prices, TokenPair } from "./types.js";
+import { Prices, TokenPair } from "./types.js";
 
 let lastEmitTime: number = 0; // Initialize the last emission time
 
@@ -12,62 +11,52 @@ export let currentPrices: Prices = {
     bybit: undefined
 };
 
+let previousPrices: Prices = {
+    binance: undefined,
+    kraken: undefined,
+    coinbase: undefined,
+    crypto_com: undefined,
+    bybit: undefined
+};
+
 // export let queryChanged = false;
 
-export const emitPrices = (newPrices: Prices, amount: number, queryChanged: boolean) => { 
+export const isNewReponse = (queryChanged: boolean) => { 
     let isChanged = false;
 
     //check if new prices are different to old ones
-    if (newPrices.binance !== undefined && newPrices.binance !== currentPrices.binance) {
-        currentPrices.binance = newPrices.binance;
+    if (previousPrices.binance !== undefined && previousPrices.binance !== currentPrices.binance) {
+        currentPrices.binance = previousPrices.binance;
         isChanged = true;
         console.log("New Binance price")
     }
-    if (newPrices.kraken !== undefined && newPrices.kraken !== currentPrices.kraken) {
-        currentPrices.kraken = newPrices.kraken;
+    if (previousPrices.kraken !== undefined && previousPrices.kraken !== currentPrices.kraken) {
+        currentPrices.kraken = previousPrices.kraken;
         isChanged = true;
         console.log("New Kraken price")
     }
-    if (newPrices.bybit !== undefined && newPrices.bybit !== currentPrices.bybit) {
-        currentPrices.bybit = newPrices.bybit;
+    if (previousPrices.bybit !== undefined && previousPrices.bybit !== currentPrices.bybit) {
+        currentPrices.bybit = previousPrices.bybit;
         isChanged = true;
         console.log("New ByBit price")
     }
 
     //check that at least one currentPrice is different to the previous prices
     if (isChanged || queryChanged) {
-        // Check if it's been at least 5 seconds since the last emission or if queryChanged is true
-        // const currentTime = Date.now();
-        // if (currentTime - lastEmitTime >= 5000 || queryChanged) {
-        //     // Update the last emission time
-        //     lastEmitTime = currentTime;
-            let pricesToEmit = calculatePrices(currentPrices, exchangeTakerFees, amount)
-            console.log("Emiting price:", pricesToEmit);
-            io.emit('get-price', {prices: pricesToEmit})
-            // queryChanged = false;
-            return
-        }
-    // } 
+        previousPrices = currentPrices
+        return true;
+    }
+    return false
 }
-// export let tokenAmount = 1;
 
-// export const updateTokenAmount = (newAmount: number) => {
-//     tokenAmount = newAmount;
-// }
-
-// export const updateQueryChanged = () => {
-//     console.log("Instant update - query changed")
-//     queryChanged = true;
-// }
-
-export const calculatePrices = (tokenPrices: Prices, takerFees: ExchangeFees, amount: number): Prices => {
+export const calculatePrices = (tokenPrices: Prices, amount: number, inputToken: string, tokenPair: TokenPair): Prices => {
     const calculatedPrices: Prices = {};
-    let inputIsQuote = checkIfInputIsQuote(previousTokenPair, previousImportToken)
+    let inputIsQuote = checkIfInputIsQuote(tokenPair, inputToken)
     
     for (const exchange in tokenPrices) {
         if (tokenPrices.hasOwnProperty(exchange)) {
             const tokenPrice = tokenPrices[exchange];
-            const takerFee = takerFees[exchange];
+            const takerFee = exchangeTakerFees[exchange];
 
             // Check if both token price and taker fee are defined for the current exchange
             if (typeof tokenPrice === 'number' && typeof takerFee === 'number') {

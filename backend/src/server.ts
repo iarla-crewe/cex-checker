@@ -26,14 +26,3 @@ app.post('/get-best-price', (req: Request, res: Response) => {
 app.listen(APIport, () => {
     console.log(`Server running at http://localhost:${APIport}`);
 });
-
-
-
-//get price data (websocket) done
-
-//get fee data (database) done
-
-//calculate estimated output done
-
-//Send output to client continously via (socket.io)
-

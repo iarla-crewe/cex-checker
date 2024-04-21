@@ -1,5 +1,5 @@
 import WebSocket from "ws";
-import { emitPrices } from "../emit.js";
+import { isNewReponse } from "../emit.js";
 import { binancePrice } from "./binance.js";
 import { krakenPrice } from "./kraken.js";
 import * as crypto from 'crypto';

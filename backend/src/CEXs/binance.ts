@@ -34,7 +34,7 @@ export const openBinanceWs = (quoteToken: string, baseToken: string) => {
 
     binanceSocket.onmessage = ({ data }: any) => {
         let priceObject = JSON.parse(data)
-        currentPrices.binance = parseFloat(priceObject.p)
+        if (!Number.isNaN(parseFloat(priceObject.p))) currentPrices.binance = parseFloat(priceObject.p)
         console.log("new binance price: ", currentPrices.binance)
     };
     
