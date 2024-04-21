@@ -13,7 +13,7 @@ const app = express();
 
 const server = http.createServer(app)
 
-const pricePort = 443;
+const pricePort = process.env.PORT || 443;
 const feesPort = 3001;
 
 export const io = new Server(server, {
@@ -109,6 +109,11 @@ io.on('connection', (socket) => {
         }
         emitPrices(currentPrices)
     })
+
+    socket.on('disconnect', () => { 
+        //close the websockets
+        console.log('Client disconnected') 
+      }) 
 })
 
 server.listen(pricePort, () => {
