@@ -17,7 +17,7 @@ export default function Home() {
       binance: true,
       kraken: true,
       coinbase: false,
-      crypto_com: false,
+      crypto_com: true,
       bybit: true
     }
   });

@@ -8,6 +8,7 @@ import { openBybitWs } from './CEXs/bybit.js';
 import WebSocket from 'ws';
 import { getBaseToken, tokensFlipped } from './utils/baseToken.js';
 import { CexList, PriceQuery, TokenPair } from './types.js';
+import { openCrypto_comWs } from './CEXs/crypto-com.js';
 
 const app = express();
 
@@ -54,8 +55,9 @@ const defaultQueryData: PriceQuery = {
 io.on('connection', (socket) => {
     console.log("Connection")
     let binanceSocket: WebSocket;
-    let krakenSocket: WebSocket;
     let bybitSocket: WebSocket;
+    let crypto_comSocket: WebSocket;
+    let krakenSocket: WebSocket;
 
     let previousTokenPair: TokenPair;
     let previousInputToken: string;
@@ -93,13 +95,15 @@ io.on('connection', (socket) => {
             
                 //close old websockets
                 if (binanceSocket) binanceSocket.close()
-                if (krakenSocket) krakenSocket.close()
                 if (bybitSocket) bybitSocket.close()
+                if (crypto_comSocket) crypto_comSocket.close()
+                if (krakenSocket) krakenSocket.close()
 
                 //open new ws connection with the new tokenPair
                 binanceSocket = openBinanceWs(currentTokenPair.quote, currentTokenPair.base)
-                krakenSocket = openKrakenWs(currentTokenPair.quote, currentTokenPair.base)
                 bybitSocket = openBybitWs(currentTokenPair.quote, currentTokenPair.base)
+                crypto_comSocket = openCrypto_comWs(currentTokenPair.quote, currentTokenPair.base)
+                krakenSocket = openKrakenWs(currentTokenPair.quote, currentTokenPair.base)
 
                 previousTokenPair = currentTokenPair;
             } 
