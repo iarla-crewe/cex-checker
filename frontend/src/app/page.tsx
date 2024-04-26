@@ -71,10 +71,10 @@ export default function Home() {
           handleSetIsSelling={setIsSelling}
         />
 
-        {/* { <SelectFilter 
+        { <SelectFilter 
           handleUpdate={handleQueryUpdate}
           defaultFilter={queryData.filter}  
-        /> } */}
+        /> }
         
         <Results 
           responseData={responseData} 

@@ -35,6 +35,11 @@ export const isNewReponse = (queryChanged: boolean) => {
         pricesChanged = true;
         console.log("New ByBit price")
     }
+    if (previousPrices.coinbase !== undefined && previousPrices.coinbase !== currentPrices.coinbase) {
+        currentPrices.coinbase = previousPrices.coinbase;
+        pricesChanged = true;
+        console.log("New Coinbase price")
+    }
     if (previousPrices.crypto_com !== undefined && previousPrices.crypto_com !== currentPrices.crypto_com) {
         currentPrices.crypto_com = previousPrices.crypto_com;
         pricesChanged = true;
