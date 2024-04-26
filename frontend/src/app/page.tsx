@@ -25,10 +25,7 @@ export default function Home() {
 
   useEffect(() => {
     // Function to handle "get-price" events
-    const handleGetPrice = (response: any) => {
-      console.log(response);
-      setResponseData(response.prices);
-    }
+    const handleGetPrice = (response: any) => setResponseData(response.prices);
 
     const fetchPriceData = () => {
       getPriceData(queryData);
@@ -74,10 +71,10 @@ export default function Home() {
           handleSetIsSelling={setIsSelling}
         />
 
-        { <SelectFilter 
+        {/* { <SelectFilter 
           handleUpdate={handleQueryUpdate}
           defaultFilter={queryData.filter}  
-        /> }
+        /> } */}
         
         <Results 
           responseData={responseData} 
