@@ -2,8 +2,6 @@
 // Import necessary modules
 // const express = require('express');
 import express, { Request, Response } from 'express';
-import http from 'http'
-import { Server } from "socket.io";
 
 // Create an Express application
 const app = express();

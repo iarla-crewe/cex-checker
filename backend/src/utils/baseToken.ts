@@ -4,6 +4,7 @@ import { PriceQuery, TokenPair } from "../types.js";
 const baseTokens: { [key: string]: number } = {
     "usdc": 1,
     "usdt": 1,
+    "usd": 1,
     "eur": 2,
     "btc": 3,
     "eth": 4,

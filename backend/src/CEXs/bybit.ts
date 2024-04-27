@@ -27,7 +27,7 @@ export const openBybitWs = (quoteToken: string, baseToken: string) => {
         let priceObject = JSON.parse(data)
         try {
             currentPrices.bybit = parseFloat(priceObject.data[0].p)
-            console.log("new bybit price: ", currentPrices.bybit)
+            //console.log("new bybit price: ", currentPrices.bybit)
         } catch (error) {
             console.log("Bybit data object does not contain a price")
         }

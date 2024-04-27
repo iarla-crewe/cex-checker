@@ -22,28 +22,38 @@ let previousPrices: Prices = {
 // export let queryChanged = false;
 
 export const isNewReponse = (queryChanged: boolean) => { 
-    let isChanged = false;
-
+    let pricesChanged = false
+    
     //check if new prices are different to old ones
     if (previousPrices.binance !== undefined && previousPrices.binance !== currentPrices.binance) {
         currentPrices.binance = previousPrices.binance;
-        isChanged = true;
+        pricesChanged = true;
         console.log("New Binance price")
-    }
-    if (previousPrices.kraken !== undefined && previousPrices.kraken !== currentPrices.kraken) {
-        currentPrices.kraken = previousPrices.kraken;
-        isChanged = true;
-        console.log("New Kraken price")
     }
     if (previousPrices.bybit !== undefined && previousPrices.bybit !== currentPrices.bybit) {
         currentPrices.bybit = previousPrices.bybit;
-        isChanged = true;
+        pricesChanged = true;
         console.log("New ByBit price")
+    }
+    if (previousPrices.coinbase !== undefined && previousPrices.coinbase !== currentPrices.coinbase) {
+        currentPrices.coinbase = previousPrices.coinbase;
+        pricesChanged = true;
+        console.log("New Coinbase price")
+    }
+    if (previousPrices.crypto_com !== undefined && previousPrices.crypto_com !== currentPrices.crypto_com) {
+        currentPrices.crypto_com = previousPrices.crypto_com;
+        pricesChanged = true;
+        console.log("New Crypto.com price")
+    }
+    if (previousPrices.kraken !== undefined && previousPrices.kraken !== currentPrices.kraken) {
+        currentPrices.kraken = previousPrices.kraken;
+        pricesChanged = true;
+        console.log("New Kraken price")
     }
 
     //check that at least one currentPrice is different to the previous prices
-    if (isChanged || queryChanged) {
-        previousPrices = currentPrices
+    if (pricesChanged || queryChanged) {
+        previousPrices = { ...currentPrices };        
         return true;
     }
     return false
