@@ -6,6 +6,7 @@ import SelectFilter from "@/components/SelectFilter";
 import Results from "@/components/Results/Results";
 import { useEffect, useState } from "react";
 import { ResponseData, PriceQuery, UpdatePriceQuery, getPriceData, socket } from "@/model/API";
+import Header from "@/components/Header";
 
 export default function Home() {
   const [responseData, setResponseData] = useState<ResponseData>({});
@@ -62,6 +63,8 @@ export default function Home() {
   return (
     <main className={styles["main"]}>
       <div className={styles["container"]}>
+        <Header />
+
         <TradeInfo 
           defaultInputToken={queryData.inputToken} 
           defaultOutputToken={queryData.outputToken} 

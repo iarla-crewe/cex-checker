@@ -1,0 +1,11 @@
+.header-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.quartz-logo {
+    justify-content: center;
+}

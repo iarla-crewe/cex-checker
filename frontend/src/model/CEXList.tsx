@@ -27,7 +27,7 @@ export const CEXList: CEX[] = [
         logoSrc: "/kraken.svg", 
         brandColor: "#7132F5", 
         textColor: "white", 
-        borderColor: "", 
+        borderColor: "white", 
         website: "https://pro.kraken.com/app/trade/sol-usdt",
         withdrawFee: "1 USDC"
     },
@@ -47,7 +47,7 @@ export const CEXList: CEX[] = [
         logoSrc: "/coinbase.svg", 
         brandColor: "#004af7", 
         textColor: "white", 
-        borderColor: "", 
+        borderColor: "white", 
         website: "https://www.coinbase.com/advanced-trade/spot/SOL-USD",
         withdrawFee: ""
     },
@@ -57,7 +57,7 @@ export const CEXList: CEX[] = [
         logoSrc: "/crypto_com.svg", 
         brandColor: "#032f69", 
         textColor: "white", 
-        borderColor: "", 
+        borderColor: "white", 
         website: "https://crypto.com/exchange/trade/SOL_USDT",
         withdrawFee: ""
     },
