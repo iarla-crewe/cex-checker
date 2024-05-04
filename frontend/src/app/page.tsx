@@ -5,23 +5,27 @@ import TradeInfo from "@/components/TradeInfo/TradeInfo";
 import SelectFilter from "@/components/SelectFilter";
 import Results from "@/components/Results/Results";
 import { useEffect, useState } from "react";
-import { ResponseData, PriceQuery, UpdatePriceQuery, getPriceData, socket } from "@/model/API";
+import { ResponseData, PriceQuery, UpdatePriceQuery, getPriceData, socket, getFeeData } from "@/model/API";
+import { CEXList, setFeeData } from "@/model/CEXList";
 
 export default function Home() {
   const [responseData, setResponseData] = useState<ResponseData>({});
   const [queryData, setQueryData] = useState<PriceQuery>({
-    inputToken: 'SOL',
-    outputToken: 'USDC',
+    inputToken: 'sol',
+    outputToken: 'usdc',
     amount: 1,
     filter: {
       binance: true,
       kraken: true,
-      coinbase: false,
+      coinbase: true,
       crypto_com: true,
       bybit: true
     }
   });
   const [isSelling, setIsSelling] = useState(true);
+  const [depositFees, setDepositFees] = useState('');
+  const [withdrawalFees, setWithdrawalFees] = useState('');
+
 
   useEffect(() => {
     // Function to handle "get-price" events
@@ -31,8 +35,18 @@ export default function Home() {
       getPriceData(queryData);
     };
 
+    const fetchFeeData = async () => {
+      let [depositFees, withdrawalFees] = await getFeeData(queryData.inputToken, queryData.outputToken)
+      setDepositFees(depositFees)
+      setWithdrawalFees(withdrawalFees)
+      setFeeData(CEXList, withdrawalFees, queryData.outputToken)
+    };
+
     // Initial call to getPriceData with queryData
     fetchPriceData();
+
+    //initial call to getFeeData with queryData tokens
+    fetchFeeData();
 
     // Add listener for "get-price" events
     socket.on("get-price", handleGetPrice);

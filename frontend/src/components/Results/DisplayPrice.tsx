@@ -19,7 +19,7 @@ export default function DisplayPrice(props: DisplayPriceProps) {
                 <p className={styles["price"]}>
                     {price}
                 </p>
-                <p className={styles["price-withdrawal"]}>+{withdrawFee} withdrawal fee</p>
+                <p className={styles["price-withdrawal"]}>+{withdrawFee} {currency} withdrawal fee</p>
             </div>
         );
     }
