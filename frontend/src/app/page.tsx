@@ -40,7 +40,7 @@ export default function Home() {
       let [depositFees, withdrawalFees] = await getFeeData(queryData.inputToken, queryData.outputToken)
       setDepositFees(depositFees)
       setWithdrawalFees(withdrawalFees)
-      setFeeData(CEXList, withdrawalFees, queryData.outputToken)
+      setFeeData(withdrawalFees, queryData.outputToken)
     };
 
     // Initial call to getPriceData with queryData

@@ -4,12 +4,21 @@ import styles from "./Results.module.css";
 interface DisplayPriceProps {
     price: number | undefined;
     currency: string;
-    withdrawFee: string;
+    withdrawFee: number | undefined;
     textColor: string;
 }
 
 export default function DisplayPrice(props: DisplayPriceProps) {
     const { price, currency, withdrawFee, textColor } = props;
+
+    let withdrawFeeText = "";
+    if (withdrawFee === 0) {
+        withdrawFeeText = `+ network gas fees`
+    } else if (withdrawFee === undefined) {
+        withdrawFeeText = `+ withdrawal fee (loading...)`
+    } else {
+        withdrawFeeText = `+ ${withdrawFee} ${currency} withdrawal fee`
+    }
 
     if(price != undefined) {
         return (
@@ -19,7 +28,7 @@ export default function DisplayPrice(props: DisplayPriceProps) {
                 <p className={styles["price"]}>
                     {price}
                 </p>
-                <p className={styles["price-withdrawal"]}>+{withdrawFee} {currency} withdrawal fee</p>
+                <p className={styles["price-withdrawal"]}>{withdrawFeeText}</p>
             </div>
         );
     }

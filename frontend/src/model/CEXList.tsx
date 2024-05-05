@@ -6,7 +6,7 @@ export interface CEX {
     textColor: string;
     borderColor: string;
     website: string;
-    withdrawFee: string;
+    withdrawFee?: number;
     price?: number;
 }
 
@@ -19,7 +19,6 @@ export const CEXList: CEX[] = [
         textColor: "black", 
         borderColor: "", 
         website: "https://www.binance.com/en/trade/SOL_USDT?_from=markets&type=spot",
-        withdrawFee: "4 USDC"
     },
     {
         name: "kraken", 
@@ -28,8 +27,7 @@ export const CEXList: CEX[] = [
         brandColor: "#7132F5", 
         textColor: "white", 
         borderColor: "white", 
-        website: "https://pro.kraken.com/app/trade/sol-usdt",
-        withdrawFee: "1 USDC"
+        website: "https://pro.kraken.com/app/trade/sol-usdt"
     },
     {
         name: "bybit", 
@@ -38,8 +36,7 @@ export const CEXList: CEX[] = [
         brandColor: "#17181e", 
         textColor: "white", 
         borderColor: "#f7a600", 
-        website: "https://www.bybit.com/en/trade/spot/SOL/USDC",
-        withdrawFee: "1 USDC"
+        website: "https://www.bybit.com/en/trade/spot/SOL/USDC"
     },
     {
         name: "coinbase", 
@@ -49,7 +46,7 @@ export const CEXList: CEX[] = [
         textColor: "white", 
         borderColor: "white", 
         website: "https://www.coinbase.com/advanced-trade/spot/SOL-USD",
-        withdrawFee: ""
+        withdrawFee: 0
     },
     {
         name: "crypto_com", 
@@ -58,27 +55,22 @@ export const CEXList: CEX[] = [
         brandColor: "#032f69", 
         textColor: "white", 
         borderColor: "white", 
-        website: "https://crypto.com/exchange/trade/SOL_USDT",
-        withdrawFee: ""
+        website: "https://crypto.com/exchange/trade/SOL_USDT"
     },
 ]
 
 
-export function setFeeData(cexList: CEX[], withdrawalFees: any, token: string) {
+export function setFeeData(withdrawalFees: any, token: string) {
     const combinedWithdrawalFees = withdrawalFees.combinedWithdrawalFees;
 
-    for (let cex of cexList) {
+    for (let cex of CEXList) {
+        if (cex.withdrawFee === 0) continue;
+
         //@ts-ignore
-        let matchingObject = combinedWithdrawalFees.find(obj => obj.exchange_name == cex.name && obj.token == token)
+        let matchingObject = combinedWithdrawalFees.find(obj => obj.exchange_name == cex.name && obj.token == token);
         if (matchingObject) {
-            cex.withdrawFee = trimZeros(matchingObject.fee);
+            const roundedNumber = parseFloat(matchingObject.fee).toFixed(10)
+            cex.withdrawFee = parseFloat(roundedNumber);
         }
     }
-}
-
-function trimZeros(numberString: string) {
-    const number = parseFloat(numberString);
-    const trimmedNumberString = parseFloat(number.toFixed(10)).toString(); // Set maximum precision
-
-    return trimmedNumberString;
 }
