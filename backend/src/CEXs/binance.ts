@@ -7,7 +7,7 @@ let binanceDepoistFee = {
     sol: 0
 }
 let binanceWithdrawFee = {
-    usdc: 4
+    usdc: 1
 }
 
 let binanceSocket: WebSocket | null = null;

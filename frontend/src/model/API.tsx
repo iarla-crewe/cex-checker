@@ -30,3 +30,27 @@ export interface ResponseData {
 export function getPriceData({ inputToken, outputToken, amount, filter }: PriceQuery) {
     socket.emit('get-price', { inputToken, outputToken, inputAmount: amount, cexList: filter })
 }
+
+export async function getFeeData(tokenA: string, tokenB: string) {
+
+    let depositFees = await fetch('/api/deposit-fee', {
+        method: 'POST',
+        body: JSON.stringify({
+            tokenA: tokenA,
+            tokenB: tokenB
+        })
+    })
+
+    let withdrawalFees = await fetch('/api/withdrawal-fee', {
+        method: 'POST',
+        body: JSON.stringify({
+            tokenA: tokenA,
+            tokenB: tokenB
+        })
+    })
+
+    let depositFeeObj = await depositFees.json()
+    let withdrawalFeeObj = await withdrawalFees.json()
+
+    return [depositFeeObj, withdrawalFeeObj]
+}

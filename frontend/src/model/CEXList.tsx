@@ -62,3 +62,23 @@ export const CEXList: CEX[] = [
         withdrawFee: ""
     },
 ]
+
+
+export function setFeeData(cexList: CEX[], withdrawalFees: any, token: string) {
+    const combinedWithdrawalFees = withdrawalFees.combinedWithdrawalFees;
+
+    for (let cex of cexList) {
+        //@ts-ignore
+        let matchingObject = combinedWithdrawalFees.find(obj => obj.exchange_name == cex.name && obj.token == token)
+        if (matchingObject) {
+            cex.withdrawFee = trimZeros(matchingObject.fee);
+        }
+    }
+}
+
+function trimZeros(numberString: string) {
+    const number = parseFloat(numberString);
+    const trimmedNumberString = parseFloat(number.toFixed(10)).toString(); // Set maximum precision
+
+    return trimmedNumberString;
+}
