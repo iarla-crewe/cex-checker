@@ -1,59 +1,25 @@
 import { exchangeTakerFees } from "./CEXs/prices.js";
+import { PreviousPrices, TokenPairPrices } from "./index.js";
 import { Prices, TokenPair } from "./types.js";
 
-let lastEmitTime: number = 0; // Initialize the last emission time
+const exchanges = ['binance', 'bybit', 'coinbase', 'crypto_com', 'kraken'];
 
-export let currentPrices: Prices = {
-    binance: undefined,
-    kraken: undefined,
-    coinbase: undefined,
-    crypto_com: undefined,
-    bybit: undefined
-};
+export const isNewReponse = (queryChanged: boolean, tokenPairString: string) => {
+    let currentPrices = TokenPairPrices[tokenPairString];
+    let previousPrices = PreviousPrices[tokenPairString]
 
-let previousPrices: Prices = {
-    binance: undefined,
-    kraken: undefined,
-    coinbase: undefined,
-    crypto_com: undefined,
-    bybit: undefined
-};
-
-// export let queryChanged = false;
-
-export const isNewReponse = (queryChanged: boolean) => { 
     let pricesChanged = false
-    
-    //check if new prices are different to old ones
-    if (previousPrices.binance !== undefined && previousPrices.binance !== currentPrices.binance) {
-        currentPrices.binance = previousPrices.binance;
-        pricesChanged = true;
-        console.log("New Binance price")
-    }
-    if (previousPrices.bybit !== undefined && previousPrices.bybit !== currentPrices.bybit) {
-        currentPrices.bybit = previousPrices.bybit;
-        pricesChanged = true;
-        console.log("New ByBit price")
-    }
-    if (previousPrices.coinbase !== undefined && previousPrices.coinbase !== currentPrices.coinbase) {
-        currentPrices.coinbase = previousPrices.coinbase;
-        pricesChanged = true;
-        console.log("New Coinbase price")
-    }
-    if (previousPrices.crypto_com !== undefined && previousPrices.crypto_com !== currentPrices.crypto_com) {
-        currentPrices.crypto_com = previousPrices.crypto_com;
-        pricesChanged = true;
-        console.log("New Crypto.com price")
-    }
-    if (previousPrices.kraken !== undefined && previousPrices.kraken !== currentPrices.kraken) {
-        currentPrices.kraken = previousPrices.kraken;
-        pricesChanged = true;
-        console.log("New Kraken price")
+
+    // //check if new prices are different to old ones
+    for (const exchange of exchanges) {
+        if (currentPrices[exchange] !== undefined && previousPrices[exchange] !== currentPrices[exchange]) {
+            console.log(`New ${exchange} price, old price: ${previousPrices[exchange]}, new price: ${currentPrices[exchange]}`);
+            previousPrices[exchange] = currentPrices[exchange];
+            pricesChanged = true;
+        }
     }
 
-    //check that at least one currentPrice is different to the previous prices
     if (pricesChanged || queryChanged) {
-        previousPrices = { ...currentPrices };        
         return true;
     }
     return false
@@ -61,8 +27,8 @@ export const isNewReponse = (queryChanged: boolean) => {
 
 export const calculatePrices = (tokenPrices: Prices, amount: number, inputToken: string, tokenPair: TokenPair): Prices => {
     const calculatedPrices: Prices = {};
-    let inputIsQuote = checkIfInputIsQuote(tokenPair, inputToken)
-    
+    let inputIsBase = checkIfInputIsBase(tokenPair, inputToken)
+
     for (const exchange in tokenPrices) {
         if (tokenPrices.hasOwnProperty(exchange)) {
             const tokenPrice = tokenPrices[exchange];
@@ -70,7 +36,7 @@ export const calculatePrices = (tokenPrices: Prices, amount: number, inputToken:
 
             // Check if both token price and taker fee are defined for the current exchange
             if (typeof tokenPrice === 'number' && typeof takerFee === 'number') {
-                let price = calculateOutputAmount(amount, tokenPrice, inputIsQuote)
+                let price = calculateOutputAmount(amount, tokenPrice, inputIsBase)
                 price = price * (1 - takerFee);
                 calculatedPrices[exchange] = parseFloat(price.toFixed(5));
             } else {
@@ -82,7 +48,9 @@ export const calculatePrices = (tokenPrices: Prices, amount: number, inputToken:
     return calculatedPrices;
 }
 
-export const resetPriceResponse = () => {
+export const resetPriceResponse = (tokenPairString: string) => {
+    let currentPrices = TokenPairPrices[tokenPairString]
+
     currentPrices.binance = undefined
     currentPrices.bybit = undefined
     currentPrices.coinbase = undefined
@@ -90,12 +58,12 @@ export const resetPriceResponse = () => {
     currentPrices.kraken = undefined
 }
 
-const calculateOutputAmount = (tokenAmount: number, tokenPrice: number, inputIsQuote: boolean) => {
-    if (inputIsQuote) return tokenAmount * tokenPrice
+const calculateOutputAmount = (tokenAmount: number, tokenPrice: number, inputIsBase: boolean) => {
+    if (inputIsBase) return tokenAmount * tokenPrice
     return tokenAmount / tokenPrice
 }
 
-const checkIfInputIsQuote = (tokenPair: TokenPair, inputToken: string) => {
-    if (inputToken.toLowerCase() == tokenPair.quote) return true;
+const checkIfInputIsBase = (tokenPair: TokenPair, inputToken: string) => {
+    if (inputToken.toLowerCase() == tokenPair.base) return true;
     return false
 }

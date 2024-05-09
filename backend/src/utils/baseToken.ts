@@ -1,7 +1,7 @@
 import { PriceQuery, TokenPair } from "../types.js";
 
 //find the basetoken for between input token and output token
-const baseTokens: { [key: string]: number } = {
+const quoteTokens: { [key: string]: number } = {
     "usdc": 1,
     "usdt": 1,
     "usd": 1,
@@ -13,41 +13,41 @@ const baseTokens: { [key: string]: number } = {
 export const getBaseToken = (input: string, output: string) => {
     input = input.toLowerCase()
     output = output.toLowerCase()
-    let quoteToken: string = "";
     let baseToken: string = "";
+    let quoteToken: string = "";
 
-    if (baseTokens.hasOwnProperty(input) && !baseTokens.hasOwnProperty(output)) {
-        quoteToken = output
-        baseToken = input
-    }
-    if (!baseTokens.hasOwnProperty(input) && baseTokens.hasOwnProperty(output)) {
+    if (quoteTokens.hasOwnProperty(input) && !quoteTokens.hasOwnProperty(output)) {
         quoteToken = input
         baseToken = output
     }
+    if (!quoteTokens.hasOwnProperty(input) && quoteTokens.hasOwnProperty(output)) {
+        baseToken = input
+        quoteToken = output
+    }
 
-    if (baseTokens.hasOwnProperty(input) && baseTokens.hasOwnProperty(output)) {
-        const inputTokenValue = baseTokens[input];
-        const outputTokenValue = baseTokens[output];
+    if (quoteTokens.hasOwnProperty(input) && quoteTokens.hasOwnProperty(output)) {
+        const inputTokenValue = quoteTokens[input];
+        const outputTokenValue = quoteTokens[output];
 
         if (inputTokenValue < outputTokenValue) {
-            quoteToken = output
-            baseToken = input
-        } else if (outputTokenValue < inputTokenValue) {
             quoteToken = input
             baseToken = output
+        } else if (outputTokenValue < inputTokenValue) {
+            baseToken = input
+            quoteToken = output
         } else {
             quoteToken = output
             baseToken = input
         }
     }
 
-    if (!baseTokens.hasOwnProperty(input) && !baseTokens.hasOwnProperty(output)) {
+    if (!quoteTokens.hasOwnProperty(input) && !quoteTokens.hasOwnProperty(output)) {
         throw Error("No base token")
     }
 
     let tokenPair: TokenPair = {
+        base: baseToken,
         quote: quoteToken,
-        base: baseToken
     }
 
     return tokenPair
