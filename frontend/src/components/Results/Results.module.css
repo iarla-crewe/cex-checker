@@ -13,6 +13,7 @@
 }
 
 .cex-card {
+    position: relative;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -21,6 +22,34 @@
     border-radius: var(--card-border-radius);
     padding: 20px 50px;
     margin-bottom: 20px;
+
+    background-color: var(--brand-color);
+    border: var(--cex-border);
+}
+
+.cex-card .cex-logo {
+    transition: transform 0.1s ease-out;
+}
+
+.cex-card:hover .cex-logo {
+    transform: scale(1.1)
+}
+
+.cex-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--hover-color);
+    opacity: 0;
+    transition: opacity 0.1s ease-out;
+    border-radius: var(--card-border-radius);
+}
+
+.cex-card:hover::before {
+    opacity: 1;
 }
 
 .price-info {

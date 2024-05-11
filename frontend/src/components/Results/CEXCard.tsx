@@ -16,10 +16,16 @@ export default function CEXCard(props: CEXCardProps) {
     const { cex, currency } = props;
 
     const borderColor = (cex.borderColor != "") ? cex.borderColor : cex.brandColor;
-    const border = "1.5px solid " + borderColor;
+    const hoverColor = (cex.textColor == "white") ? "rgba(255, 255, 255, 0.08)" : "rgba(0, 0, 0, 0.08)";
+
+    const cssVariables = {
+        '--brand-color': cex.brandColor,
+        '--cex-border': "1.5px solid " + borderColor,
+        '--hover-color': hoverColor
+    } as React.CSSProperties;
 
     return (
-        <div className={styles["cex-card"]} style={{backgroundColor: cex.brandColor, border: border}}>
+        <div className={styles["cex-card"]} style={cssVariables}>
             <div className={styles["cex-logo-wrapper"]}>
                 <Image 
                     className={styles["cex-logo"]}
