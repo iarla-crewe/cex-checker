@@ -55,6 +55,8 @@ export default function SelectCurrency(props: SelectCurrencyProps) {
                         <DropdownMenuRadioItem value="sol">SOL</DropdownMenuRadioItem>
                         <DropdownMenuRadioItem value="usdc">USDC</DropdownMenuRadioItem>
                         <DropdownMenuRadioItem value="btc">BTC</DropdownMenuRadioItem>
+                        <DropdownMenuRadioItem value="usdt">USDT</DropdownMenuRadioItem>
+                        <DropdownMenuRadioItem value="eth">ETH</DropdownMenuRadioItem>
                     </DropdownMenuRadioGroup>
                 </DropdownMenuContent>
             </DropdownMenu>

@@ -11,7 +11,7 @@ export const openCrypto_comWs = (baseToken: string, quoteToken: string) => {
             "id": 1,
             "method": "subscribe",
             "params": {
-              "channels": [`trade.${baseToken.toUpperCase()}${quoteToken.toUpperCase()}-PERP`]
+              "channels": [`trade.${baseToken.toUpperCase()}_${quoteToken.toUpperCase()}`]
             }
           }))
         console.log("Connecting with crypto.com for pair: ", baseToken.toUpperCase(), quoteToken.toUpperCase())
@@ -24,12 +24,18 @@ export const openCrypto_comWs = (baseToken: string, quoteToken: string) => {
                 "id": priceObject.id,
                 "method": "public/respond-heartbeat"
             }))
+        } else if (priceObject.message == 'Unknown symbol') {
+            console.log("crypto.com does not support that token pair ", priceObject)
+            //do something to notify the client
+        } else if (priceObject.result == undefined) {
+            //do something to notify the client
+            console.log("crypto.com does not support that token pair ", priceObject)
         } else {
             try {
                 TokenPairPrices[`${baseToken}/${quoteToken}`].crypto_com = parseFloat(priceObject.result.data[0].p)
-                //console.log("new crypto.com price: ", currentPrices.crypto_com)
+                //console.log("new crypto.com price: ", priceObject.result.data[0].p)
             } catch (error) {
-                console.log("crypto.com data object does not contain a price")
+                console.log("crypto.com data object does not contain a price:", priceObject, "error: ", error)
             }
         }
     };
