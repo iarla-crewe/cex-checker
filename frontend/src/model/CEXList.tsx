@@ -21,15 +21,6 @@ export const CEXList: CEX[] = [
         website: "https://www.binance.com/en/trade/SOL_USDT?_from=markets&type=spot",
     },
     {
-        name: "kraken", 
-        displayName: "Kraken", 
-        logoSrc: "/kraken.svg", 
-        brandColor: "#7132F5", 
-        textColor: "white", 
-        borderColor: "white", 
-        website: "https://pro.kraken.com/app/trade/sol-usdt"
-    },
-    {
         name: "bybit", 
         displayName: "ByBit", 
         logoSrc: "/bybit.svg", 
@@ -56,6 +47,15 @@ export const CEXList: CEX[] = [
         textColor: "white", 
         borderColor: "white", 
         website: "https://crypto.com/exchange/trade/SOL_USDT"
+    },
+    {
+        name: "kraken", 
+        displayName: "Kraken", 
+        logoSrc: "/kraken.svg", 
+        brandColor: "#7132F5", 
+        textColor: "white", 
+        borderColor: "white", 
+        website: "https://pro.kraken.com/app/trade/sol-usdt"
     },
 ]
 

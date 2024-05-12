@@ -1,10 +1,10 @@
 export interface Filter {
     [exchange: string]: boolean;
     binance: boolean;
-    kraken: boolean;
+    bybit: boolean; 
     coinbase: boolean;
     crypto_com: boolean;
-    bybit: boolean;
+    kraken: boolean;
 }
 
 export type FilterOptionValue = [string, boolean]

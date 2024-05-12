@@ -17,15 +17,13 @@ export default function Home() {
     amount: 1,
     filter: {
       binance: true,
-      kraken: true,
+      bybit: true,
       coinbase: true,
       crypto_com: true,
-      bybit: true
+      kraken: true
     }
   });
   const [isSelling, setIsSelling] = useState(true);
-  const [depositFees, setDepositFees] = useState('');
-  const [withdrawalFees, setWithdrawalFees] = useState('');
 
 
   useEffect(() => {
@@ -38,8 +36,6 @@ export default function Home() {
 
     const fetchFeeData = async () => {
       let [depositFees, withdrawalFees] = await getFeeData(queryData.inputToken, queryData.outputToken)
-      setDepositFees(depositFees)
-      setWithdrawalFees(withdrawalFees)
       setFeeData(withdrawalFees, queryData.outputToken)
     };
 
@@ -88,10 +84,10 @@ export default function Home() {
           handleSetIsSelling={setIsSelling}
         />
 
-        { <SelectFilter 
+        <SelectFilter 
           handleUpdate={handleQueryUpdate}
           defaultFilter={queryData.filter}  
-        /> }
+        />
         
         <Results 
           responseData={responseData} 

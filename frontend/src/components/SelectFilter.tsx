@@ -3,6 +3,7 @@ import styles from "./SelectFilter.module.css";
 import { Filter, FilterOptionValue } from "@/model/FIlter";
 import FilterOption from "./FilterOption";
 import { useState } from "react";
+import Image from "next/image";
 
 interface SelectFilterProps {
     handleUpdate: (data: UpdatePriceQuery) => void;
@@ -11,7 +12,7 @@ interface SelectFilterProps {
 
 export default function SelectFilter(props: SelectFilterProps) {
     const { handleUpdate, defaultFilter } = props;
-    const filter = convertFilterToList(defaultFilter); 
+    const filter = convertFilterToList(defaultFilter);
 
     const updateFilter = (value: FilterOptionValue) => {
         const index = filter.findIndex(([val]) => val === value[0]);
@@ -35,7 +36,14 @@ export default function SelectFilter(props: SelectFilterProps) {
     }
 
     return (
-        <div className={styles["select-filters"]}>
+        <div className={styles["select-filter"]}>
+            <Image
+                src="/filter_icon.svg"
+                alt="CEX Filter"
+                height={30}
+                width={30}
+                style={{paddingRight: 15}}
+            />
             {filter.map(([cex, enabled], _) => (
                 <FilterOption 
                     key={cex}
@@ -56,8 +64,4 @@ function convertFilterToList(filter: Filter) {
         else disabledList.push([cex, enabled]);
     });
     return enabledList.concat(disabledList);
-}
-
-function convertListToFilter(filterObject: Filter, filterList: FilterOptionValue[]) {
-    
 }
