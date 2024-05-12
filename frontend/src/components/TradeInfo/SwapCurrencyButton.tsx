@@ -16,6 +16,7 @@ export default function SwapCurrencyButton(props: SwapCurrencyButtonProps) {
                 width={17}
                 height={17}
                 style={{fill: "white"}}
+                className={styles["swap-currency-icon"]}
             />
         </button>
     )

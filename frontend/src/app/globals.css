@@ -103,20 +103,33 @@
 
   @media screen and (max-width: 1020px) {
     :root {
-      --size-input: 30.8px;
+      --size-input: 31px;
       --size-price: 30px;
       --size-price-heading: 17.5px;
       --size-price-withdrawal: 12.6px;
       --size-pair-na: 15px;
-      --size-price-subheading: 9.5px;
+      --size-price-subheading: 11px;
       --size-p: 19.8px;
       --size-small: 15.8px;
     }
   }
 
+  @media screen and (max-width: 845px) {
+    :root {
+      --size-input: 27px;
+      --size-price: 27px;
+      --size-price-heading: 15.8px;
+      --size-price-withdrawal: 11.3px;
+      --size-pair-na: 13.5px;
+      --size-price-subheading: 10px;
+      --size-p: 17.8px;
+      --size-small: 14.2px;
+    }
+  }
+
   /*
   Breakpoint 1: 1020px
-  Breakpoint 2: 865px
+  Breakpoint 2: 845px
   Breakpoint 3: 480px
   */
   

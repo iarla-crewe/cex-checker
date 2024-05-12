@@ -31,10 +31,12 @@ export default function SelectCurrency(props: SelectCurrencyProps) {
             <DropdownMenuTrigger asChild>
                 <button className={styles["select-currency"]}>
                     <p>{selected.toUpperCase()}</p>
-                    <Image
-                        src="down_arrow.svg"
-                        
-                    />
+                    <Image 
+                        src="/down_arrow.svg"
+                        alt="Select"
+                        width={12}
+                        height={12}
+                    /> 
                 </button>
             </DropdownMenuTrigger>
             <DropdownMenuContent>

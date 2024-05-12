@@ -11,7 +11,7 @@
 }
 
 .select-currency{
-    min-width: 130px;
+    min-width: 120px;
 }
 
 .swap-currency-button{
@@ -20,13 +20,17 @@
 }
 
 @media screen and (max-width: 1020px) {
-    /* TODO: These aren't updating for some reason */
     .trade-info {
         gap: 15px;
         padding: 20px 20px;
     }
 
     .select-currency{
-        min-width: 115px;
+        min-width: 112px;
+    }
+
+    .swap-currency-icon{
+        width: 15.3px;
+        height: 15.3px;
     }
 }
