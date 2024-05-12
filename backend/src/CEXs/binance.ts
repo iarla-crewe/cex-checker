@@ -8,6 +8,7 @@ export const openBinanceWs = (baseToken: string, quoteToken: string) => {
     const binanceSocket = new WebSocket(binanceWebSocketUrl);
 
     let isLoading = true;
+    let foundPrice = false;
 
     binanceSocket.onopen = () => {
         binanceSocket.send(JSON.stringify({
@@ -22,7 +23,7 @@ export const openBinanceWs = (baseToken: string, quoteToken: string) => {
 
         setTimeout(() => {
             isLoading = false;
-            TokenPairPrices[`${baseToken}/${quoteToken}`].binance = PairStatus.NoPairFound
+            if (!foundPrice) TokenPairPrices[`${baseToken}/${quoteToken}`].binance = PairStatus.NoPairFound
         }, 30000);
     }
 
@@ -34,6 +35,7 @@ export const openBinanceWs = (baseToken: string, quoteToken: string) => {
         } else {
             if (!Number.isNaN(parseFloat(priceObject.p))) {
                 TokenPairPrices[`${baseToken}/${quoteToken}`].binance = parseFloat(priceObject.p)
+                foundPrice = true;
             } else {
                 TokenPairPrices[`${baseToken}/${quoteToken}`].binance = PairStatus.Loading
             }
