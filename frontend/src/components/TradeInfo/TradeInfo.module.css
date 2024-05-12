@@ -4,7 +4,7 @@
     justify-content: space-between;
     align-items: center;
     gap: 25px;
-    padding: 30px 30px;
+    padding: 20px 30px;
     border-radius: var(--card-border-radius);
     border: var(--card-border);
     margin-bottom: 50px;
@@ -12,7 +12,7 @@
 
 @media screen and (max-width: 1040px) {
     .trade-info {
-        font-size: 20px;
+        font-size: var(--size-small);
         gap: 15px;
         padding: 30px 40px;
     }

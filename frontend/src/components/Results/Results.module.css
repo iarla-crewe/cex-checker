@@ -20,7 +20,7 @@
     min-height: 130px;
 
     border-radius: var(--card-border-radius);
-    padding: 20px 50px;
+    padding: 15px 50px;
     margin-bottom: 20px;
 
     background-color: var(--brand-color);
@@ -60,30 +60,30 @@
 }
 
 .price-heading {
-    font-size: 22px;
+    font-size: 19.4px;
     opacity: var(--light-text-opacity);
     margin: 0px;
 }
 
 .price-subheading {
-    font-size: 12px;
+    font-size: 10.6px;
     opacity: var(--light-text-opacity);
     margin: 0px 0px 10px 0px;
 }
 
 .price {
-    font-size: 38px;
+    font-size: 33.4px;
     margin: 0px 0px 10px 0px;
 }
 
 .price-withdrawal {
-    font-size: 16px;
+    font-size: 14px;
     opacity: var(--light-text-opacity);
     margin: 0px;
 }
 
 .token-pair-na {
-    font-size: 18px;
+    font-size: 16.7px;
     margin: 0px;
 }
 
