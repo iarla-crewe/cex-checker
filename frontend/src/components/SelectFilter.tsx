@@ -7,19 +7,17 @@ import Image from "next/image";
 
 interface SelectFilterProps {
     handleUpdate: (data: UpdatePriceQuery) => void;
-    defaultFilter: Filter
+    filter: FilterOptionValue[]
 }
 
 export default function SelectFilter(props: SelectFilterProps) {
-    const { handleUpdate, defaultFilter } = props;
-    const filter = convertFilterToList(defaultFilter);
+    const { handleUpdate, filter } = props;
 
     const updateFilter = (value: FilterOptionValue) => {
         const index = filter.findIndex(([val]) => val === value[0]);
 
         if (index !== -1) {
             let newFilter = filter;
-
             newFilter[index] = value;
             newFilter.sort((a, b) => {
                 if (a[1] === b[1]) return 0;
@@ -27,11 +25,7 @@ export default function SelectFilter(props: SelectFilterProps) {
                 return 1;
             });
 
-            let newFilterObj = defaultFilter;
-            newFilter.forEach(([cex, enabled]) => {
-                newFilterObj[cex] = enabled;
-            });
-            handleUpdate({filter: newFilterObj});
+            handleUpdate({filter: newFilter});
         }
     }
 
@@ -54,14 +48,4 @@ export default function SelectFilter(props: SelectFilterProps) {
             ))}
         </div>
     );
-}
-
-function convertFilterToList(filter: Filter) {
-    let enabledList: FilterOptionValue[] = [];
-    let disabledList: FilterOptionValue[] = [];
-    Object.entries(filter).map(([cex, enabled]) => {
-        if (enabled) enabledList.push([cex, enabled]);
-        else disabledList.push([cex, enabled]);
-    });
-    return enabledList.concat(disabledList);
 }

@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import Header from "@/components/Header";
 import { ResponseData, PriceQuery, UpdatePriceQuery, getPriceData, socket, getFeeData } from "@/model/API";
 import { setFeeData } from "@/model/CEXList";
+import { listToFilter, filterToList, Filter } from "@/model/FIlter";
 
 export default function Home() {
   const [responseData, setResponseData] = useState<ResponseData>({});
@@ -15,13 +16,13 @@ export default function Home() {
     inputToken: 'sol',
     outputToken: 'usdc',
     amount: 1,
-    filter: {
+    filter: filterToList({
       binance: true,
       bybit: true,
       coinbase: true,
       crypto_com: true,
       kraken: true
-    }
+    })
   });
   const [isSelling, setIsSelling] = useState(true);
 
@@ -86,14 +87,14 @@ export default function Home() {
 
         <SelectFilter 
           handleUpdate={handleQueryUpdate}
-          defaultFilter={queryData.filter}  
+          filter={queryData.filter}  
         />
         
         <Results 
           responseData={responseData} 
           currency={queryData.outputToken} 
           isSelling={isSelling} 
-          filter={queryData.filter}
+          filter={listToFilter(queryData.filter)}
         />
       </div>
     </main>
