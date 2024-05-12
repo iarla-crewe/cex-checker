@@ -10,6 +10,7 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { useEffect, useState } from "react";
+import { currencies } from "@/model/SupportedCurrencies";
 
 interface SelectCurrencyProps {
     defaultValue: string;
@@ -18,49 +19,29 @@ interface SelectCurrencyProps {
 
 export default function SelectCurrency(props: SelectCurrencyProps) {
     const { defaultValue, onClickHandler } = props;
-    const [position, setPosition] = useState(defaultValue)
+    const [ selected, setSelected ] = useState(defaultValue)
 
-    useEffect(() => {
-        setPosition(defaultValue)
-    }, [defaultValue])
-
-    const handleSetPosition = (token: string) => {
+    const handleSetSelected = (token: string) => {
         onClickHandler(token);
-        setPosition(token)
+        setSelected(token);
     }
 
     return (
-        <>
-        <button className={styles["select-currency"]}> {/* TODO: Add onClick={onClickHandler} */}
-            <p>{defaultValue}</p>
-            {/* TODO: Add in select functionality 
-            <Image 
-                src="/down_arrow.svg"
-                alt="Select"
-                width={12}
-                height={12}
-            /> 
-            */}
-        </button>
-         
-        <div className={styles["select-currency"]}>
         <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                    <Button variant="outline">{position}</Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent className="w-56">
-                    <DropdownMenuLabel>Choose Output Token</DropdownMenuLabel>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuRadioGroup value={position} onValueChange={handleSetPosition}>
-                        <DropdownMenuRadioItem value="sol">SOL</DropdownMenuRadioItem>
-                        <DropdownMenuRadioItem value="usdc">USDC</DropdownMenuRadioItem>
-                        <DropdownMenuRadioItem value="btc">BTC</DropdownMenuRadioItem>
-                        <DropdownMenuRadioItem value="usdt">USDT</DropdownMenuRadioItem>
-                        <DropdownMenuRadioItem value="eth">ETH</DropdownMenuRadioItem>
-                    </DropdownMenuRadioGroup>
-                </DropdownMenuContent>
-            </DropdownMenu>
-        </div>
-    </>
+            <DropdownMenuTrigger asChild>
+                <button className={styles["select-currency"]}>
+                    <p>{selected.toUpperCase()}</p>
+                </button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent>
+                <DropdownMenuLabel>Choose Token</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuRadioGroup value={selected} onValueChange={handleSetSelected}>
+                    {currencies.map((currency, index) => (
+                        <DropdownMenuRadioItem value={currency}>{currency.toUpperCase()}</DropdownMenuRadioItem>
+                    ))}
+                </DropdownMenuRadioGroup>
+            </DropdownMenuContent>
+        </DropdownMenu>
     )
 }
