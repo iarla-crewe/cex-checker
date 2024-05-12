@@ -1,24 +1,27 @@
-import { CEX, CEXList } from "@/model/CEXList";
+import { CEX, CEXList, setExchangeLink } from "@/model/CEXList";
 import styles from "./Results.module.css";
 import CEXCardWrapper from "./CEXCardWrapper";
 import { PairStatus, ResponseData } from "@/model/API";
 import { Filter } from "@/model/FIlter";
+import { TokenPair } from "@/lib/utils";
 
 interface ResultsProps {
     responseData: ResponseData;
     currency: string;
     isSelling: boolean;
     filter: Filter;
+    tokenPair: TokenPair;
 }
 
 export default function Results(props: ResultsProps) {
-    const { responseData, currency, isSelling, filter } = props;
+    const { responseData, currency, isSelling, filter, tokenPair } = props;
 
     let filteredCEXList = CEXList.filter(cex => filter[cex.name] === true);
 
     let pricedCEXList = filteredCEXList.map((cex) => {
         let price: number | PairStatus = PairStatus.Loading;
         //if (responseData !== undefined) price = responseData[cex.name];
+        setExchangeLink(tokenPair, cex)
         price = responseData[cex.name];
         return { ...cex, price };
     });

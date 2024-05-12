@@ -1,3 +1,4 @@
+import { TokenPair } from "@/lib/utils";
 import { PairStatus } from "./API";
 
 export interface CEX {
@@ -7,7 +8,9 @@ export interface CEX {
     brandColor: string;
     textColor: string;
     borderColor: string;
-    website: string;
+    templateUrl: string;
+    website?: string
+    capStyle: string;
     withdrawFee?: number;
     price: number | PairStatus;
 }
@@ -20,7 +23,8 @@ export const CEXList: CEX[] = [
         brandColor: "#F1B90C", 
         textColor: "black", 
         borderColor: "", 
-        website: "https://www.binance.com/en/trade/SOL_USDT?_from=markets&type=spot",
+        templateUrl: "https://www.binance.com/en/trade/™_†?_from=markets&type=spot",
+        capStyle: "UPPER",
         price: PairStatus.Loading
     },
     {
@@ -30,7 +34,8 @@ export const CEXList: CEX[] = [
         brandColor: "#7132F5", 
         textColor: "white", 
         borderColor: "white", 
-        website: "https://pro.kraken.com/app/trade/sol-usdt",
+        templateUrl: "https://pro.kraken.com/app/trade/™-†",
+        capStyle: "LOWER",
         price: PairStatus.Loading,
     },
     {
@@ -40,7 +45,8 @@ export const CEXList: CEX[] = [
         brandColor: "#17181e", 
         textColor: "white", 
         borderColor: "#f7a600", 
-        website: "https://www.bybit.com/en/trade/spot/SOL/USDC",
+        templateUrl: "https://www.bybit.com/en/trade/spot/™/†",
+        capStyle: "UPPER",
         price: PairStatus.Loading
     },
     {
@@ -50,7 +56,8 @@ export const CEXList: CEX[] = [
         brandColor: "#004af7", 
         textColor: "white", 
         borderColor: "white", 
-        website: "https://www.coinbase.com/advanced-trade/spot/SOL-USD",
+        templateUrl: "https://www.coinbase.com/advanced-trade/spot/™-†",
+        capStyle: "UPPER",
         withdrawFee: 0,
         price: PairStatus.Loading
     },
@@ -61,7 +68,8 @@ export const CEXList: CEX[] = [
         brandColor: "#032f69", 
         textColor: "white", 
         borderColor: "white", 
-        website: "https://crypto.com/exchange/trade/SOL_USDT",
+        templateUrl: "https://crypto.com/exchange/trade/™_†",
+        capStyle: "UPPER",
         price: PairStatus.Loading
     },
 ]
@@ -81,3 +89,26 @@ export function setFeeData(withdrawalFees: any, token: string) {
         }
     }
 }
+
+export function setExchangeLink(tokenPair: TokenPair, cex: CEX) {
+    let link = cex.templateUrl
+    let base = tokenPair.base
+    let quote = tokenPair.quote
+
+    if (cex.name === "coinbase") {
+        if (tokenPair.base == "usdc") base = "usd"
+        if (tokenPair.quote == "usdc") quote = "usd"
+    }
+ 
+    if (cex.capStyle === "UPPER") {
+        link = link
+            .replace("™", base.toUpperCase())
+            .replace("†", quote.toUpperCase());
+    }
+    else if (cex.capStyle == "LOWER") {
+        link = link
+            .replace("™", base.toLowerCase())
+            .replace("†", quote.toLowerCase());
+    }
+    cex.website = link;
+}  

@@ -10,7 +10,7 @@ const quoteTokens: { [key: string]: number } = {
     "eth": 4,
 }
 
-export const getBaseToken = (input: string, output: string) => {
+export const getTokenPair = (input: string, output: string) => {
     input = input.toLowerCase()
     output = output.toLowerCase()
     let baseToken: string = "";

@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import { ResponseData, PriceQuery, UpdatePriceQuery, getPriceData, socket, getFeeData, initializeRespobseObject } from "@/model/API";
 import { CEXList, setFeeData } from "@/model/CEXList";
 import Header from "@/components/Header";
+import { TokenPair, getTokenPair } from "@/lib/utils";
 
 export default function Home() {
   const [responseData, setResponseData] = useState<ResponseData>(initializeRespobseObject());
@@ -26,6 +27,10 @@ export default function Home() {
   const [isSelling, setIsSelling] = useState(true);
   const [depositFees, setDepositFees] = useState('');
   const [withdrawalFees, setWithdrawalFees] = useState('');
+  const [tokenPair, setTokenPair] = useState<TokenPair>({
+      base: queryData.inputToken,
+      quote: queryData.outputToken
+  });
 
 
   useEffect(() => {
@@ -67,6 +72,8 @@ export default function Home() {
     if (data.amount === undefined) data.amount = queryData.amount;
     if (data.filter === undefined) data.filter = queryData.filter;
 
+    setTokenPair(getTokenPair(data.inputToken, data.outputToken));
+
     setQueryData({
       inputToken: data.inputToken,outputToken: data.outputToken, amount: data.amount, filter: data.filter
     })
@@ -98,6 +105,7 @@ export default function Home() {
           currency={queryData.outputToken} 
           isSelling={isSelling} 
           filter={queryData.filter}
+          tokenPair={tokenPair}
         />
       </div>
     </main>

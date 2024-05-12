@@ -2,7 +2,7 @@ import express from 'express';
 import http from 'http'
 import { Server } from "socket.io";
 import { calculatePrices, isNewReponse, resetPriceResponse } from './emit.js';
-import { getBaseToken, tokensFlipped } from './utils/baseToken.js';
+import { getTokenPair, tokensFlipped } from './utils/tokenPair.js';
 import { ConnectionsNumber as NumberConnections, PriceQuery, TokenPair, TokenPairConnections as TradingPairConnections, TradingPairPrices } from './types.js';
 import { addOneConnection, minusOneConnection, openExchangeWsConnections } from './utils/connections.js';
 
@@ -49,7 +49,7 @@ io.on('connection', (socket) => {
     socket.on('get-price', ({ inputToken, outputToken, inputAmount, cexList }: PriceQuery) => {
         const currentQueryData: PriceQuery = { inputToken, outputToken, inputAmount, cexList };
 
-        try { currentTokenPair = getBaseToken(inputToken, outputToken); }
+        try { currentTokenPair = getTokenPair(inputToken, outputToken); }
         catch (error) { io.emit('error', { error }) }
         let queryChanged = false;
 
