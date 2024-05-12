@@ -2,12 +2,12 @@ import { PriceQuery, TokenPair } from "../types.js";
 
 //find the basetoken for between input token and output token
 const quoteTokens: { [key: string]: number } = {
-    "usdc": 1,
     "usdt": 1,
-    "usd": 1,
-    "eur": 2,
-    "btc": 3,
-    "eth": 4,
+    "usdc": 1,
+    "usd": 3,
+    "eur": 4,
+    "btc": 5,
+    "eth": 6,
 }
 
 export const getTokenPair = (input: string, output: string) => {
