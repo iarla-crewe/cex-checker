@@ -6,9 +6,10 @@ import SelectFilter from "@/components/SelectFilter";
 import Results from "@/components/Results/Results";
 import { useEffect, useState } from "react";
 import { ResponseData, PriceQuery, UpdatePriceQuery, getPriceData, socket, getFeeData, initializeRespobseObject } from "@/model/API";
-import { CEXList, setFeeData } from "@/model/CEXList";
+import { setFeeData } from "@/model/CEXList";
 import Header from "@/components/Header";
 import { TokenPair, getTokenPair } from "@/lib/utils";
+import { listToFilter, filterToList, Filter } from "@/model/Filter";
 
 export default function Home() {
   const [responseData, setResponseData] = useState<ResponseData>(initializeRespobseObject());
@@ -16,17 +17,15 @@ export default function Home() {
     inputToken: 'sol',
     outputToken: 'usdc',
     amount: 1,
-    filter: {
+    filter: filterToList({
       binance: true,
-      kraken: true,
+      bybit: true,
       coinbase: true,
       crypto_com: true,
-      bybit: true
-    }
+      kraken: true
+    })
   });
   const [isSelling, setIsSelling] = useState(true);
-  const [depositFees, setDepositFees] = useState('');
-  const [withdrawalFees, setWithdrawalFees] = useState('');
   const [tokenPair, setTokenPair] = useState<TokenPair>({
       base: queryData.inputToken,
       quote: queryData.outputToken
@@ -43,8 +42,6 @@ export default function Home() {
 
     const fetchFeeData = async () => {
       let [depositFees, withdrawalFees] = await getFeeData(queryData.inputToken, queryData.outputToken)
-      setDepositFees(depositFees)
-      setWithdrawalFees(withdrawalFees)
       setFeeData(withdrawalFees, queryData.outputToken)
     };
 
@@ -95,17 +92,17 @@ export default function Home() {
           handleSetIsSelling={setIsSelling}
         />
 
-        { <SelectFilter 
+        <SelectFilter 
           handleUpdate={handleQueryUpdate}
-          defaultFilter={queryData.filter}  
-        /> }
+          filter={queryData.filter}  
+        />
         
         <Results 
           responseData={responseData} 
           currency={queryData.outputToken} 
           isSelling={isSelling} 
-          filter={queryData.filter}
           tokenPair={tokenPair}
+          filter={listToFilter(queryData.filter)}
         />
       </div>
     </main>

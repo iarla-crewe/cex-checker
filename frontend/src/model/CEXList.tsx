@@ -28,17 +28,6 @@ export const CEXList: CEX[] = [
         price: PairStatus.Loading
     },
     {
-        name: "kraken", 
-        displayName: "Kraken", 
-        logoSrc: "/kraken.svg", 
-        brandColor: "#7132F5", 
-        textColor: "white", 
-        borderColor: "white", 
-        templateUrl: "https://pro.kraken.com/app/trade/™-†",
-        capStyle: "LOWER",
-        price: PairStatus.Loading,
-    },
-    {
         name: "bybit", 
         displayName: "ByBit", 
         logoSrc: "/bybit.svg", 
@@ -72,7 +61,27 @@ export const CEXList: CEX[] = [
         capStyle: "UPPER",
         price: PairStatus.Loading
     },
+    {
+        name: "kraken", 
+        displayName: "Kraken", 
+        logoSrc: "/kraken.svg", 
+        brandColor: "#7132F5", 
+        textColor: "white", 
+        borderColor: "white", 
+        templateUrl: "https://pro.kraken.com/app/trade/™-†",
+        capStyle: "LOWER",
+        price: PairStatus.Loading,
+    },
 ]
+
+
+export function getCEXDisplayName(name: string) {
+    // Returns input if no matching CEX found
+    for (const cex of CEXList) {
+        if (cex.name === name) return cex.displayName;
+    }
+    return name;
+}
 
 
 export function setFeeData(withdrawalFees: any, token: string) {
