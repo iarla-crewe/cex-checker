@@ -27,15 +27,15 @@
     border: var(--cex-border);
 }
 
-.cex-card .cex-logo {
+.cex-card-loaded .cex-logo {
     transition: transform 0.1s ease-out;
 }
 
-.cex-card:hover .cex-logo {
+.cex-card-loaded:hover .cex-logo {
     transform: scale(1.1)
 }
 
-.cex-card::before {
+.cex-card-loaded::before {
     content: "";
     position: absolute;
     top: 0;
@@ -48,7 +48,7 @@
     border-radius: var(--card-border-radius);
 }
 
-.cex-card:hover::before {
+.cex-card-loaded:hover::before {
     opacity: 1;
 }
 
@@ -79,6 +79,11 @@
 .price-withdrawal {
     font-size: 16px;
     opacity: var(--light-text-opacity);
+    margin: 0px;
+}
+
+.token-pair-na {
+    font-size: 18px;
     margin: 0px;
 }
 
