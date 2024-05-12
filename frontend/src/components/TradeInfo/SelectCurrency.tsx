@@ -21,10 +21,9 @@ export default function SelectCurrency(props: SelectCurrencyProps) {
     const { defaultValue, onClickHandler } = props;
     const [ selected, setSelected ] = useState(defaultValue)
 
-    const handleSetSelected = (token: string) => {
-        onClickHandler(token);
-        setSelected(token);
-    }
+    useEffect(() => {
+        setSelected(defaultValue)
+    }, [defaultValue])
 
     return (
         <DropdownMenu>
@@ -36,8 +35,8 @@ export default function SelectCurrency(props: SelectCurrencyProps) {
             <DropdownMenuContent>
                 <DropdownMenuLabel>Choose Token</DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuRadioGroup value={selected} onValueChange={handleSetSelected}>
-                    {currencies.map((currency, index) => (
+                <DropdownMenuRadioGroup value={selected} onValueChange={onClickHandler}>
+                    {currencies.map((currency, _) => (
                         <DropdownMenuRadioItem value={currency}>{currency.toUpperCase()}</DropdownMenuRadioItem>
                     ))}
                 </DropdownMenuRadioGroup>
