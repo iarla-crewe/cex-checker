@@ -36,8 +36,8 @@ export default function SelectCurrency(props: SelectCurrencyProps) {
                 <DropdownMenuLabel>Choose Token</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuRadioGroup value={selected} onValueChange={onClickHandler}>
-                    {currencies.map((currency, _) => (
-                        <DropdownMenuRadioItem value={currency}>{currency.toUpperCase()}</DropdownMenuRadioItem>
+                    {currencies.map((currency, index) => (
+                        <DropdownMenuRadioItem key={index} value={currency}>{currency.toUpperCase()}</DropdownMenuRadioItem>
                     ))}
                 </DropdownMenuRadioGroup>
             </DropdownMenuContent>
