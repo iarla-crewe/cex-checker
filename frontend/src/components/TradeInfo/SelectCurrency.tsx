@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { useEffect, useState } from "react";
 import { currencies } from "@/model/SupportedCurrencies";
+import Image from "next/image";
 
 interface SelectCurrencyProps {
     defaultValue: string;
@@ -30,6 +31,10 @@ export default function SelectCurrency(props: SelectCurrencyProps) {
             <DropdownMenuTrigger asChild>
                 <button className={styles["select-currency"]}>
                     <p>{selected.toUpperCase()}</p>
+                    <Image
+                        src="down_arrow.svg"
+                        
+                    />
                 </button>
             </DropdownMenuTrigger>
             <DropdownMenuContent>

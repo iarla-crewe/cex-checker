@@ -10,14 +10,6 @@
     margin-bottom: 50px;
 }
 
-@media screen and (max-width: 1040px) {
-    .trade-info {
-        font-size: var(--size-small);
-        gap: 15px;
-        padding: 30px 40px;
-    }
-}
-
 .select-currency{
     min-width: 130px;
 }
@@ -25,4 +17,16 @@
 .swap-currency-button{
     padding: 13px;
     border-radius: 100%;
+}
+
+@media screen and (max-width: 1020px) {
+    /* TODO: These aren't updating for some reason */
+    .trade-info {
+        gap: 15px;
+        padding: 20px 20px;
+    }
+
+    .select-currency{
+        min-width: 115px;
+    }
 }
