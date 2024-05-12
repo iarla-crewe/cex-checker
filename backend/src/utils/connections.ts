@@ -4,7 +4,7 @@ import { openBybitWs } from "../CEXs/bybit.js";
 import { openCoinbaseWs } from "../CEXs/coinbase.js";
 import { openCrypto_comWs } from "../CEXs/crypto-com.js";
 import { openKrakenWs } from "../CEXs/kraken.js";
-import { TokenPair, WsConnections } from "../types.js";
+import { PairStatus, TokenPair, WsConnections } from "../types.js";
 
 export const initializeObject = () => {
     return {
@@ -13,6 +13,16 @@ export const initializeObject = () => {
         coinbase: undefined,
         crypto_com: undefined,
         bybit: undefined
+    }
+}
+
+export const initializePriceObject = () => {
+    return {
+        binance: PairStatus.Loading,
+        kraken: PairStatus.Loading,
+        coinbase: PairStatus.Loading,
+        crypto_com: PairStatus.Loading,
+        bybit: PairStatus.Loading
     }
 }
 
@@ -61,7 +71,7 @@ export const openExchangeWsConnections = (currentTokenPair: TokenPair) => {
         //store the connections
         TokenPairConnections[tokenPairString] = wsExchanges;
 
-        TokenPairPrices[tokenPairString] = initializeObject()
-        PreviousPrices[tokenPairString] = initializeObject()
+        TokenPairPrices[tokenPairString] = initializePriceObject()
+        PreviousPrices[tokenPairString] = initializePriceObject()
     }
 }

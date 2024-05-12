@@ -1,6 +1,7 @@
 import { exchangeTakerFees } from "./CEXs/prices.js";
 import { PreviousPrices, TokenPairPrices } from "./index.js";
 import { Prices, TokenPair } from "./types.js";
+import { initializePriceObject } from "./utils/connections.js";
 
 const exchanges = ['binance', 'bybit', 'coinbase', 'crypto_com', 'kraken'];
 
@@ -26,7 +27,7 @@ export const isNewReponse = (queryChanged: boolean, tokenPairString: string) => 
 }
 
 export const calculatePrices = (tokenPrices: Prices, amount: number, inputToken: string, tokenPair: TokenPair): Prices => {
-    const calculatedPrices: Prices = {};
+    const calculatedPrices: Prices = initializePriceObject();
     let inputIsBase = checkIfInputIsBase(tokenPair, inputToken)
 
     for (const exchange in tokenPrices) {
@@ -40,7 +41,7 @@ export const calculatePrices = (tokenPrices: Prices, amount: number, inputToken:
                 price = price * (1 - takerFee);
                 calculatedPrices[exchange] = parseFloat(price.toFixed(5));
             } else {
-                calculatedPrices[exchange] = undefined
+                calculatedPrices[exchange] = tokenPrice // tokenprice is either Not found or Loading
             }
         }
     }
@@ -50,12 +51,7 @@ export const calculatePrices = (tokenPrices: Prices, amount: number, inputToken:
 
 export const resetPriceResponse = (tokenPairString: string) => {
     let currentPrices = TokenPairPrices[tokenPairString]
-
-    currentPrices.binance = undefined
-    currentPrices.bybit = undefined
-    currentPrices.coinbase = undefined
-    currentPrices.crypto_com = undefined
-    currentPrices.kraken = undefined
+    currentPrices = initializePriceObject()
 }
 
 const calculateOutputAmount = (tokenAmount: number, tokenPrice: number, inputIsBase: boolean) => {

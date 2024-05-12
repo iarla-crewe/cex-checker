@@ -1,7 +1,7 @@
 import { CEX, CEXList } from "@/model/CEXList";
 import styles from "./Results.module.css";
 import CEXCardWrapper from "./CEXCardWrapper";
-import { ResponseData } from "@/model/API";
+import { PairStatus, ResponseData } from "@/model/API";
 import { Filter } from "@/model/FIlter";
 
 interface ResultsProps {
@@ -17,9 +17,10 @@ export default function Results(props: ResultsProps) {
     let filteredCEXList = CEXList.filter(cex => filter[cex.name] === true);
 
     let pricedCEXList = filteredCEXList.map((cex) => {
-        let price = undefined;
-        if (responseData !== undefined) price = responseData[cex.name];
-        return {...cex, price};
+        let price: number | PairStatus = PairStatus.Loading;
+        //if (responseData !== undefined) price = responseData[cex.name];
+        price = responseData[cex.name];
+        return { ...cex, price };
     });
 
     pricedCEXList.sort((a, b) => sortCEXList(a, b, isSelling));
@@ -36,15 +37,25 @@ export default function Results(props: ResultsProps) {
 }
 
 function sortCEXList(a: CEX, b: CEX, sortHighLow: boolean): number {
-    if (a.price == undefined && b.price == undefined) {
+    if (a.price === PairStatus.Loading && b.price === PairStatus.Loading) {
         return 0; // Both are loading, maintain original order
-    } else if (a.price == undefined) {
-        return 1; // A is loading, place last
-    } else if (b.price == undefined) {
-        return -1; // B is loading, place first
-    } else {
-        // Sort all loaded values
-        if (sortHighLow) return b.price - a.price;
-        else return a.price - b.price;
     }
+    if (a.price === PairStatus.NoPairFound && b.price === PairStatus.NoPairFound) {
+        return 0; // Both are not found, maintain original order
+    }
+    if (a.price === PairStatus.Loading && b.price === PairStatus.NoPairFound) {
+        return -1; // A is loading, place first
+    }
+    if (a.price === PairStatus.NoPairFound && b.price === PairStatus.Loading) {
+        return 1; // B is loading, place first
+    }
+    if (a.price === PairStatus.Loading || a.price === PairStatus.NoPairFound) {
+        return 1; // A is loading or not found, place last
+    }
+    if (b.price === PairStatus.Loading || b.price === PairStatus.NoPairFound) {
+        return -1; // B is loading or not found, place first
+    }
+
+    // Sort all loaded values
+    return sortHighLow ? b.price - a.price : a.price - b.price;
 }

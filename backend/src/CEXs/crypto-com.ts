@@ -1,5 +1,6 @@
 import WebSocket from "ws";
 import { TokenPairPrices } from "../index.js";
+import { PairStatus } from "../types.js";
 
 export const openCrypto_comWs = (baseToken: string, quoteToken: string) => {
     const crypto_comWebSocketUrl = 'wss://stream.crypto.com/v2/market';
@@ -25,15 +26,12 @@ export const openCrypto_comWs = (baseToken: string, quoteToken: string) => {
                 "method": "public/respond-heartbeat"
             }))
         } else if (priceObject.message == 'Unknown symbol') {
-            console.log("crypto.com does not support that token pair ", priceObject)
-            //do something to notify the client
+            TokenPairPrices[`${baseToken}/${quoteToken}`].crypto_com = PairStatus.NoPairFound
         } else if (priceObject.result == undefined) {
-            //do something to notify the client
-            console.log("crypto.com does not support that token pair ", priceObject)
+            TokenPairPrices[`${baseToken}/${quoteToken}`].crypto_com = PairStatus.NoPairFound
         } else {
             try {
                 TokenPairPrices[`${baseToken}/${quoteToken}`].crypto_com = parseFloat(priceObject.result.data[0].p)
-                //console.log("new crypto.com price: ", priceObject.result.data[0].p)
             } catch (error) {
                 console.log("crypto.com data object does not contain a price:", priceObject, "error: ", error)
             }

@@ -1,6 +1,7 @@
 import WebSocket from 'ws';
 import dotenv from 'dotenv';
 import { TokenPairPrices } from '../index.js';
+import { PairStatus } from '../types.js';
 dotenv.config();
 
 export const openKrakenWs = (baseToken: string, quoteToken: string) => {
@@ -18,11 +19,17 @@ export const openKrakenWs = (baseToken: string, quoteToken: string) => {
     krakenSocket.on('message', function incoming(wsMsg) {
         let priceObject = JSON.parse(wsMsg.toString())
 
-        if (wsMsg.toString() != '{"event":"heartbeat"}' && priceObject.event != "systemStatus" && priceObject.event != "subscriptionStatus") {
-            // Iterate through each nested array
-            for (const innerArray of priceObject[1]) {
-                // Access the first element (price) of the inner array
-                TokenPairPrices[`${baseToken}/${quoteToken}`].kraken = parseFloat(innerArray[0])
+        if (priceObject.status === 'error') {
+            if (priceObject.errorMessage.includes("Currency pair not supported")) {
+                TokenPairPrices[`${baseToken}/${quoteToken}`].kraken = PairStatus.NoPairFound
+            }
+        } else {
+            if (wsMsg.toString() != '{"event":"heartbeat"}' && priceObject.event != "systemStatus" && priceObject.event != "subscriptionStatus") {
+                // Iterate through each nested array
+                for (const innerArray of priceObject[1]) {
+                    // Access the first element (price) of the inner array
+                    TokenPairPrices[`${baseToken}/${quoteToken}`].kraken = parseFloat(innerArray[0])
+                }
             }
         }
     });

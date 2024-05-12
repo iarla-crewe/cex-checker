@@ -1,12 +1,17 @@
 import WebSocket from "ws";
 
 export type Prices = {
-    [exchange: string]: number | undefined;
-    binance?: number;
-    kraken?: number;
-    coinbase?: number;
-    crypto_com?: number;
-    bybit?: number;
+    [exchange: string]: number | PairStatus;
+    binance: number | PairStatus;
+    kraken: number | PairStatus;
+    coinbase: number | PairStatus;
+    crypto_com: number | PairStatus;
+    bybit: number | PairStatus;
+}
+
+export enum PairStatus {
+    NoPairFound = "No Pair Found",
+    Loading = "Loading"
 }
 
 export type CexList = {

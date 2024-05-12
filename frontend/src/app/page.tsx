@@ -6,11 +6,11 @@ import SelectFilter from "@/components/SelectFilter";
 import Results from "@/components/Results/Results";
 import { useEffect, useState } from "react";
 import Header from "@/components/Header";
-import { ResponseData, PriceQuery, UpdatePriceQuery, getPriceData, socket, getFeeData } from "@/model/API";
+import { ResponseData, PriceQuery, UpdatePriceQuery, getPriceData, socket, getFeeData, initializeRespobseObject } from "@/model/API";
 import { CEXList, setFeeData } from "@/model/CEXList";
 
 export default function Home() {
-  const [responseData, setResponseData] = useState<ResponseData>({});
+  const [responseData, setResponseData] = useState<ResponseData>(initializeRespobseObject());
   const [queryData, setQueryData] = useState<PriceQuery>({
     inputToken: 'sol',
     outputToken: 'usdc',
@@ -70,7 +70,7 @@ export default function Home() {
     setQueryData({
       inputToken: data.inputToken,outputToken: data.outputToken, amount: data.amount, filter: data.filter
     })
-    setResponseData({})
+    setResponseData(initializeRespobseObject())
   }
 
 

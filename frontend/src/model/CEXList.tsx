@@ -1,3 +1,5 @@
+import { PairStatus } from "./API";
+
 export interface CEX {
     name: string;
     displayName: string;
@@ -7,7 +9,7 @@ export interface CEX {
     borderColor: string;
     website: string;
     withdrawFee: string;
-    price?: number;
+    price: number | PairStatus;
 }
 
 export const CEXList: CEX[] = [
@@ -19,7 +21,8 @@ export const CEXList: CEX[] = [
         textColor: "black", 
         borderColor: "", 
         website: "https://www.binance.com/en/trade/SOL_USDT?_from=markets&type=spot",
-        withdrawFee: "4 USDC"
+        withdrawFee: "4 USDC",
+        price: PairStatus.Loading
     },
     {
         name: "kraken", 
@@ -29,7 +32,8 @@ export const CEXList: CEX[] = [
         textColor: "white", 
         borderColor: "white", 
         website: "https://pro.kraken.com/app/trade/sol-usdt",
-        withdrawFee: "1 USDC"
+        withdrawFee: "1 USDC",
+        price: PairStatus.Loading,
     },
     {
         name: "bybit", 
@@ -39,7 +43,8 @@ export const CEXList: CEX[] = [
         textColor: "white", 
         borderColor: "#f7a600", 
         website: "https://www.bybit.com/en/trade/spot/SOL/USDC",
-        withdrawFee: "1 USDC"
+        withdrawFee: "1 USDC",
+        price: PairStatus.Loading
     },
     {
         name: "coinbase", 
@@ -49,7 +54,8 @@ export const CEXList: CEX[] = [
         textColor: "white", 
         borderColor: "white", 
         website: "https://www.coinbase.com/advanced-trade/spot/SOL-USD",
-        withdrawFee: ""
+        withdrawFee: "",
+        price: PairStatus.Loading
     },
     {
         name: "crypto_com", 
@@ -59,7 +65,8 @@ export const CEXList: CEX[] = [
         textColor: "white", 
         borderColor: "white", 
         website: "https://crypto.com/exchange/trade/SOL_USDT",
-        withdrawFee: ""
+        withdrawFee: "",
+        price: PairStatus.Loading
     },
 ]
 

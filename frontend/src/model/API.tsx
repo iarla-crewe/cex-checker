@@ -18,13 +18,18 @@ export interface UpdatePriceQuery {
     filter?: Filter;
 }
 
-export interface ResponseData {
-    [exchange: string]: number | undefined;
-    binance?: number;
-    bybit?: number;
-    coinbase?: number;
-    crypto_com?: number;
-    kraken?: number;
+export type ResponseData = {
+    [exchange: string]: number | PairStatus;
+    binance: number | PairStatus;
+    kraken: number | PairStatus;
+    coinbase: number | PairStatus;
+    crypto_com: number | PairStatus;
+    bybit: number | PairStatus;
+}
+
+export enum PairStatus {
+    NoPairFound = "No Pair Found",
+    Loading = "Loading"
 }
 
 export function getPriceData({ inputToken, outputToken, amount, filter }: PriceQuery) {
@@ -53,4 +58,14 @@ export async function getFeeData(tokenA: string, tokenB: string) {
     let withdrawalFeeObj = await withdrawalFees.json()
 
     return [depositFeeObj, withdrawalFeeObj]
+}
+
+export const initializeRespobseObject = () => {
+    return {
+        binance: PairStatus.Loading,
+        kraken: PairStatus.Loading,
+        coinbase: PairStatus.Loading,
+        crypto_com: PairStatus.Loading,
+        bybit: PairStatus.Loading
+    }
 }
