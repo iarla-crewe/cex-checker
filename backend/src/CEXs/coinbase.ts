@@ -1,15 +1,7 @@
 import WebSocket from "ws";
-import { currentPrices } from "../emit.js";
+import { TokenPairPrices } from "../index.js";
 
-let coinbaseDepoistFee = {
-    sol: 0,
-    usdc: 0
-}
-let coinbaseWithdrawFee = {
-    usdc: 0.9
-}
-
-export const openCoinbaseWs = (quoteToken: string, baseToken: string) => {
+export const openCoinbaseWs = (baseToken: string, quoteToken: string) => {
     const coinbaseWebSocketUrl = 'wss://ws-feed.exchange.coinbase.com';
 
     const coinbaseSocket = new WebSocket(coinbaseWebSocketUrl);
@@ -18,7 +10,7 @@ export const openCoinbaseWs = (quoteToken: string, baseToken: string) => {
         coinbaseSocket.send(JSON.stringify({
             "type": "subscribe",
             "product_ids": [
-                "SOL-USD"
+                `${baseToken.toUpperCase()}-${quoteToken.toUpperCase()}`
             ],
             "channels": [
                 "level2",
@@ -26,7 +18,7 @@ export const openCoinbaseWs = (quoteToken: string, baseToken: string) => {
                 {
                     "name": "ticker",
                     "product_ids": [
-                        "SOL-USD",
+                        `${baseToken.toUpperCase()}-${quoteToken.toUpperCase()}`,
                     ]
                 }
             ]
@@ -38,7 +30,7 @@ export const openCoinbaseWs = (quoteToken: string, baseToken: string) => {
         let priceObject = JSON.parse(data)
         try {
             let price = parseFloat(priceObject.price)
-            if (!Number.isNaN(price)) currentPrices.coinbase = price
+            if (!Number.isNaN(price)) TokenPairPrices[`${baseToken}/${quoteToken}`].coinbase = price
         } catch (error) {
             console.log("Coinbase data object does not contain a price")
         }

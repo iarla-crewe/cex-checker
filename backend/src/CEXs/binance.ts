@@ -1,21 +1,10 @@
 import WebSocket from "ws";
-import { currentPrices } from "../emit.js";
+import { TokenPairPrices } from "../index.js";
 
-export let binancePrice: string;
-
-let binanceDepoistFee = {
-    sol: 0
-}
-let binanceWithdrawFee = {
-    usdc: 1
-}
-
-let binanceSocket: WebSocket | null = null;
-
-export const openBinanceWs = (quoteToken: string, baseToken: string) => {
+export const openBinanceWs = (baseToken: string, quoteToken: string) => {
 
 
-    const binanceWebSocketUrl = `wss://stream.binance.com:9443/ws/${quoteToken + baseToken}@trade`;
+    const binanceWebSocketUrl = `wss://stream.binance.com:9443/ws/${baseToken + quoteToken}@trade`;
 
     const binanceSocket = new WebSocket(binanceWebSocketUrl);
     
@@ -24,7 +13,7 @@ export const openBinanceWs = (quoteToken: string, baseToken: string) => {
             "method": "SUBSCRIBE",
             "params":
             [
-            `${quoteToken + baseToken}@trade`,
+            `${baseToken + quoteToken}@trade`,
             ],
             "id": 1
             }))
@@ -34,8 +23,7 @@ export const openBinanceWs = (quoteToken: string, baseToken: string) => {
 
     binanceSocket.onmessage = ({ data }: any) => {
         let priceObject = JSON.parse(data)
-        if (!Number.isNaN(parseFloat(priceObject.p))) currentPrices.binance = parseFloat(priceObject.p)
-        //console.log("new binance price: ", currentPrices.binance)
+        if (!Number.isNaN(parseFloat(priceObject.p))) TokenPairPrices[`${baseToken}/${quoteToken}`].binance = parseFloat(priceObject.p)
     };
     
     binanceSocket.on('close', (code: number, reason: string) => {

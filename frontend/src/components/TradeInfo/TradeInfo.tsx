@@ -29,16 +29,12 @@ export default function TradeInfo(props: TradeInfoProps) {
         handleSetIsSelling(!isSelling);
     }
 
-    const handleInputToken = () => {
-        const value = "WIF";
-
+    const handleInputToken = (value: string) => {
         setInputToken(value);
         handleUpdate({inputToken: value});
     }
 
-    const handleOutputToken = () => {
-        const value = "WIF";
-
+    const handleOutputToken = (value: string) => {
         setOutputToken(value);
         handleUpdate({outputToken: value});
     }

@@ -5,9 +5,9 @@ import TradeInfo from "@/components/TradeInfo/TradeInfo";
 import SelectFilter from "@/components/SelectFilter";
 import Results from "@/components/Results/Results";
 import { useEffect, useState } from "react";
-import { ResponseData, PriceQuery, UpdatePriceQuery, getPriceData, socket, getFeeData } from "@/model/API";
-import { CEXList, setFeeData } from "@/model/CEXList";
 import Header from "@/components/Header";
+import { ResponseData, PriceQuery, UpdatePriceQuery, getPriceData, socket, getFeeData } from "@/model/API";
+import { setFeeData } from "@/model/CEXList";
 
 export default function Home() {
   const [responseData, setResponseData] = useState<ResponseData>({});

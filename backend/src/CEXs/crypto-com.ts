@@ -1,15 +1,7 @@
 import WebSocket from "ws";
-import { currentPrices } from "../emit.js";
+import { TokenPairPrices } from "../index.js";
 
-let crypto_comDepoistFee = {
-    sol: 0,
-    usdc: 0
-}
-let crypto_comWithdrawFee = {
-    usdc: 0.9
-}
-
-export const openCrypto_comWs = (quoteToken: string, baseToken: string) => {
+export const openCrypto_comWs = (baseToken: string, quoteToken: string) => {
     const crypto_comWebSocketUrl = 'wss://stream.crypto.com/v2/market';
 
     const crypto_comSocket = new WebSocket(crypto_comWebSocketUrl);
@@ -19,10 +11,10 @@ export const openCrypto_comWs = (quoteToken: string, baseToken: string) => {
             "id": 1,
             "method": "subscribe",
             "params": {
-              "channels": ["trade.SOLUSD-PERP"]
+              "channels": [`trade.${baseToken.toUpperCase()}_${quoteToken.toUpperCase()}`]
             }
           }))
-        console.log("Connecting with crypto.com")
+        console.log("Connecting with crypto.com for pair: ", baseToken.toUpperCase(), quoteToken.toUpperCase())
     }
 
     crypto_comSocket.onmessage = ({ data }: any) => {
@@ -32,12 +24,18 @@ export const openCrypto_comWs = (quoteToken: string, baseToken: string) => {
                 "id": priceObject.id,
                 "method": "public/respond-heartbeat"
             }))
+        } else if (priceObject.message == 'Unknown symbol') {
+            console.log("crypto.com does not support that token pair ", priceObject)
+            //do something to notify the client
+        } else if (priceObject.result == undefined) {
+            //do something to notify the client
+            console.log("crypto.com does not support that token pair ", priceObject)
         } else {
             try {
-                currentPrices.crypto_com = parseFloat(priceObject.result.data[0].p)
-                //console.log("new crypto.com price: ", currentPrices.crypto_com)
+                TokenPairPrices[`${baseToken}/${quoteToken}`].crypto_com = parseFloat(priceObject.result.data[0].p)
+                //console.log("new crypto.com price: ", priceObject.result.data[0].p)
             } catch (error) {
-                console.log("crypto.com data object does not contain a price")
+                console.log("crypto.com data object does not contain a price:", priceObject, "error: ", error)
             }
         }
     };
