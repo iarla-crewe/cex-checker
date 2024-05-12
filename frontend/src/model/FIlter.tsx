@@ -6,3 +6,5 @@ export interface Filter {
     crypto_com: boolean;
     bybit: boolean;
 }
+
+export type FilterOptionValue = [string, boolean]
