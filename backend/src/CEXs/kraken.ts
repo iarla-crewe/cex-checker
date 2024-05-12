@@ -1,30 +1,13 @@
 import WebSocket from 'ws';
-import { currentPrices } from '../emit.js';
 import dotenv from 'dotenv';
+import { TokenPairPrices } from '../index.js';
+import { PairStatus } from '../types.js';
 dotenv.config();
 
-export let krakenPrice: string;
-
-let krakenDepoistFee = {
-    sol: 0
-}
-let krakenWithdrawFee = {
-    usdc: 1
-}
-
-//example code: https://support.kraken.com/hc/en-us/articles/4413834730260-Example-code-for-NodeJs-REST-and-WebSocket-API
-
-export const openKrakenWs =  (quoteToken: string, baseToken: string) => {
-
-    //TODO: UPDATE WITH OUR KEYS
-    let apiPublicKey = process.env.KRAKEN_PUBLIC
-    let apiPrivateKey = process.env.KRAKEN_PRIVATE
-
-    //convert usdc into usd or usdt
-    baseToken = baseToken.slice(0, -1) + "t";
+export const openKrakenWs = (baseToken: string, quoteToken: string) => {
 
     let publicWebSocketURL = "wss://ws.kraken.com/";
-    let publicWebSocketSubscriptionMsg = `{ "event":"subscribe", "subscription":{"name":"trade"},"pair":["${quoteToken.toUpperCase()}/${baseToken.toUpperCase()}"] }`;
+    let publicWebSocketSubscriptionMsg = `{ "event":"subscribe", "subscription":{"name":"trade"},"pair":["${baseToken.toUpperCase()}/${quoteToken.toUpperCase()}"] }`;
 
     const krakenSocket = new WebSocket(publicWebSocketURL);
 
@@ -36,12 +19,17 @@ export const openKrakenWs =  (quoteToken: string, baseToken: string) => {
     krakenSocket.on('message', function incoming(wsMsg) {
         let priceObject = JSON.parse(wsMsg.toString())
 
-        if (wsMsg.toString() != '{"event":"heartbeat"}' && priceObject.event != "systemStatus" && priceObject.event != "subscriptionStatus") {
-            // Iterate through each nested array
-            for (const innerArray of priceObject[1]) {
-                // Access the first element (price) of the inner array
-                currentPrices.kraken = parseFloat(innerArray[0])
-                console.log("new kraken price: ", currentPrices.kraken)
+        if (priceObject.status === 'error') {
+            if (priceObject.errorMessage.includes("Currency pair not supported")) {
+                TokenPairPrices[`${baseToken}/${quoteToken}`].kraken = PairStatus.NoPairFound
+            }
+        } else {
+            if (wsMsg.toString() != '{"event":"heartbeat"}' && priceObject.event != "systemStatus" && priceObject.event != "subscriptionStatus") {
+                // Iterate through each nested array
+                for (const innerArray of priceObject[1]) {
+                    // Access the first element (price) of the inner array
+                    TokenPairPrices[`${baseToken}/${quoteToken}`].kraken = parseFloat(innerArray[0])
+                }
             }
         }
     });

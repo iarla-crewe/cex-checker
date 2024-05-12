@@ -1,35 +1,33 @@
 import WebSocket from "ws";
-import { currentPrices } from "../emit.js";
+import { TokenPairPrices } from "../index.js";
+import { PairStatus } from "../types.js";
 
-export let bybitPrice: string;
-
-let bybitDepoistFee = {
-    sol: 0
-}
-let bybitWithdrawFee = {
-    usdc: 1
-}
-
-export const openBybitWs = (quoteToken: string, baseToken: string) => {
+export const openBybitWs = (baseToken: string, quoteToken: string) => {
     const bybitWebSocketUrl = 'wss://stream.bybit.com/v5/public/spot';
 
     const bybitSocket = new WebSocket(bybitWebSocketUrl);
 
     bybitSocket.onopen = () => {
-        bybitSocket.send(JSON.stringify({ 
-            "op": "subscribe", 
-            "args": [`publicTrade.${(quoteToken + baseToken).toUpperCase()}`] 
+        bybitSocket.send(JSON.stringify({
+            "op": "subscribe",
+            "args": [`publicTrade.${(baseToken + quoteToken).toUpperCase()}`]
         }))
         console.log("Connecting with bybit")
     }
 
     bybitSocket.onmessage = ({ data }: any) => {
         let priceObject = JSON.parse(data)
-        try {
-            currentPrices.bybit = parseFloat(priceObject.data[0].p)
-            //console.log("new bybit price: ", currentPrices.bybit)
-        } catch (error) {
-            console.log("Bybit data object does not contain a price")
+
+        if (priceObject.success === false) {
+            if (priceObject.ret_msg.includes("Invalid symbol")) {
+                TokenPairPrices[`${baseToken}/${quoteToken}`].bybit = PairStatus.NoPairFound
+            }
+        } else {
+            try {
+                TokenPairPrices[`${baseToken}/${quoteToken}`].bybit = parseFloat(priceObject.data[0].p)
+            } catch (error) {
+                console.log("Bybit data object does not contain a price")
+            }
         }
     };
 

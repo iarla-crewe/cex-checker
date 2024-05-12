@@ -1,8 +1,9 @@
 import React from "react";
 import styles from "./Results.module.css";
+import { PairStatus } from "@/model/API";
 
 interface DisplayPriceProps {
-    price: number | undefined;
+    price: number | PairStatus;
     currency: string;
     withdrawFee: number | undefined;
     textColor: string;
@@ -19,8 +20,7 @@ export default function DisplayPrice(props: DisplayPriceProps) {
     } else {
         withdrawFeeText = `+ ${withdrawFee} ${currency} withdrawal fee`
     }
-
-    if(price != undefined) {
+    if (typeof price === 'number') {
         return (
             <div className={styles["price-info"]} style={{color: textColor}}>
                 <p className={styles["price-heading"]}>Expected {currency}</p>
@@ -29,6 +29,14 @@ export default function DisplayPrice(props: DisplayPriceProps) {
                     {price}
                 </p>
                 <p className={styles["price-withdrawal"]}>{withdrawFeeText}</p>
+            </div>
+        );
+    } 
+    
+    if (price == PairStatus.NoPairFound) {
+        return (
+            <div className={styles["price-info"]} style={{color: textColor}}>
+                <p className={styles["price-heading"]}>Token Pair was not found</p>
             </div>
         );
     }
