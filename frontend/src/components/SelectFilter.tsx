@@ -1,6 +1,6 @@
 import { UpdatePriceQuery } from "@/model/API";
 import styles from "./SelectFilter.module.css";
-import { FilterObj, FilterOptionValue } from "@/model/Filter";
+import { FilterObj, FilterOptionValue } from "@/model/FilterData";
 import FilterOption from "./FilterOption";
 import { useState } from "react";
 import Image from "next/image";

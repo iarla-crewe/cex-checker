@@ -2,7 +2,7 @@ import { CEX, CEXList, setExchangeLink } from "@/model/CEXList";
 import styles from "./Results.module.css";
 import CEXCardWrapper from "./CEXCardWrapper";
 import { PairStatus, ResponseData } from "@/model/API";
-import { FilterObj } from "@/model/Filter";
+import { FilterObj } from "@/model/FilterData";
 import { TokenPair } from "@/lib/utils";
 
 interface ResultsProps {

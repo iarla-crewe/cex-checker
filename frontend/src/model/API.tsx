@@ -1,4 +1,4 @@
-import { FilterOptionValue, listToFilter } from "./Filter";
+import { FilterOptionValue, listToFilter } from "./FilterData";
 import { io } from "socket.io-client";
 
 export const socket = io('https://cex-checker-8mqk8.ondigitalocean.app/')

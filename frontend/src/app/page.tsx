@@ -9,7 +9,7 @@ import { ResponseData, PriceQuery, UpdatePriceQuery, getPriceData, socket, getFe
 import { setFeeData } from "@/model/CEXList";
 import Header from "@/components/Header";
 import { TokenPair, getTokenPair } from "@/lib/utils";
-import { listToFilter, filterToList, FilterObj } from "@/model/Filter";
+import { listToFilter, filterToList, FilterObj } from "@/model/FilterData";
 
 export default function Home() {
   const [responseData, setResponseData] = useState<ResponseData>(initializeRespobseObject());
