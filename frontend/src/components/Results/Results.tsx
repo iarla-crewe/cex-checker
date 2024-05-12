@@ -2,14 +2,14 @@ import { CEX, CEXList, setExchangeLink } from "@/model/CEXList";
 import styles from "./Results.module.css";
 import CEXCardWrapper from "./CEXCardWrapper";
 import { PairStatus, ResponseData } from "@/model/API";
-import { Filter } from "@/model/Filter";
+import { FilterObj } from "@/model/Filter";
 import { TokenPair } from "@/lib/utils";
 
 interface ResultsProps {
     responseData: ResponseData;
     currency: string;
     isSelling: boolean;
-    filter: Filter;
+    filter: FilterObj;
     tokenPair: TokenPair;
 }
 

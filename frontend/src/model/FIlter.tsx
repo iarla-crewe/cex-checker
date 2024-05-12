@@ -1,4 +1,4 @@
-export interface Filter {
+export interface FilterObj {
     [exchange: string]: boolean;
     binance: boolean;
     bybit: boolean; 
@@ -9,7 +9,7 @@ export interface Filter {
 
 export type FilterOptionValue = [string, boolean]
 
-export function filterToList(filterObject: Filter) {
+export function filterToList(filterObject: FilterObj) {
     let enabledList: FilterOptionValue[] = [];
     let disabledList: FilterOptionValue[] = [];
     Object.entries(filterObject).map(([cex, enabled]) => {
@@ -20,7 +20,7 @@ export function filterToList(filterObject: Filter) {
 }
 
 export function listToFilter(filterList: FilterOptionValue[]) {
-    const filterObj: Filter = {
+    const filterObj: FilterObj = {
         binance: false,
         bybit: false,
         coinbase: false,
