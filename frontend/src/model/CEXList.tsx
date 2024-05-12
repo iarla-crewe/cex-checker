@@ -60,6 +60,15 @@ export const CEXList: CEX[] = [
 ]
 
 
+export function getCEXDisplayName(name: string) {
+    // Returns input if no matching CEX found
+    for (const cex of CEXList) {
+        if (cex.name === name) return cex.displayName;
+    }
+    return name;
+}
+
+
 export function setFeeData(withdrawalFees: any, token: string) {
     const combinedWithdrawalFees = withdrawalFees.combinedWithdrawalFees;
 

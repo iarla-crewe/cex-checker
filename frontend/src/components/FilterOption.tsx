@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { getCEXDisplayName } from "@/model/CEXList";
 
 interface FilterOptionProps {
     name: string;
@@ -17,7 +18,7 @@ export default function FilterOption(props: FilterOptionProps) {
             setEnabled(!enabled);
             onUpdate(!enabled);
         }}>
-            <p>{name} {enabledDisplay}</p>
+            <p>{getCEXDisplayName(name)} {enabledDisplay}</p>
         </button>
     )
 }
