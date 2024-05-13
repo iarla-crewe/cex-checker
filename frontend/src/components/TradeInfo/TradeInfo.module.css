@@ -34,3 +34,15 @@
         height: 15.3px;
     }
 }
+
+@media screen and (max-width: 845px) {
+    .trade-info {
+        flex-direction: column;
+        justify-content: center;
+        gap: 5px;
+    }
+
+    .input-amount {
+        text-align: center;
+    }
+}

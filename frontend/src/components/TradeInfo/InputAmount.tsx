@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from 'react';
+import styles from "./TradeInfo.module.css";
 
 interface InputAmountProps {
     defaultValue: number;
@@ -48,7 +49,15 @@ export default function InputAmount(props: InputAmountProps) {
     // If changing type, change css in globals.css
 
     return (
-        <input type="number" value={inputValue} onChange={handleChange} onKeyDown={handleKeyDown} maxLength={9} placeholder={placeholder}/>
+        <input 
+            type="number" 
+            className={styles["input-amount"]}
+            value={inputValue} 
+            onChange={handleChange} 
+            onKeyDown={handleKeyDown} 
+            maxLength={9} 
+            placeholder={placeholder}
+        />
     );
 }
 
