@@ -3,11 +3,19 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 25px;
+    gap: var(--trade-info-gap);
     padding: 20px 30px;
     border-radius: var(--card-border-radius);
     border: var(--card-border);
     margin-bottom: 50px;
+}
+
+.currencies {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--trade-info-gap);
 }
 
 .select-currency{
@@ -21,7 +29,6 @@
 
 @media screen and (max-width: 1020px) {
     .trade-info {
-        gap: 15px;
         padding: 20px 20px;
     }
 
@@ -39,10 +46,28 @@
     .trade-info {
         flex-direction: column;
         justify-content: center;
-        gap: 5px;
+        margin-bottom: 30px;
     }
 
     .input-amount {
         text-align: center;
+    }
+}
+
+@media screen and (max-width: 420px) {
+    .currencies {
+        flex-direction: column;
+        justify-content: center;
+        gap: 15px;
+    }
+
+    .currencies-text {
+        margin: 0px;
+    }
+
+    .trade-info{
+        border-radius: 0;
+        border: 0;
+        border-bottom: var(--card-border);
     }
 }

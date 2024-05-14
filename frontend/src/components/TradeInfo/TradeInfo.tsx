@@ -65,11 +65,18 @@ export default function TradeInfo(props: TradeInfoProps) {
     return (
         <div className={styles["trade-info"]}>
             <BuySellButton isSelling={isSelling} onClickHandler={swapBuySell}/>
+
             <InputAmount defaultValue={defaultAmount} updateAmount={handleAmount}/>
-            <SelectCurrency defaultValue={inputToken} onClickHandler={handleInputToken}/>
-            <p>{text}</p>
-            <SelectCurrency defaultValue={outputToken} onClickHandler={handleOutputToken}/>
-            <SwapCurrencyButton onClickHandler={handleSwap}/>
+
+            <div className={styles["currencies"]}>
+                <SelectCurrency defaultValue={inputToken} onClickHandler={handleInputToken}/>
+
+                <p className={styles["currencies-text"]}>{text}</p>
+                
+                <SelectCurrency defaultValue={outputToken} onClickHandler={handleOutputToken}/>
+
+                <SwapCurrencyButton onClickHandler={handleSwap}/>
+            </div>
         </div>
     );
 }

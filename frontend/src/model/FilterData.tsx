@@ -9,14 +9,23 @@ export interface FilterObj {
 
 export type FilterOptionValue = [string, boolean]
 
+// TODO: Add sorting back in (currenly doesn't work on mobile)
+// export function filterToList(filterObject: FilterObj) {
+//     let enabledList: FilterOptionValue[] = [];
+//     let disabledList: FilterOptionValue[] = [];
+//     Object.entries(filterObject).map(([cex, enabled]) => {
+//         if (enabled) enabledList.push([cex, enabled]);
+//         else disabledList.push([cex, enabled]);
+//     });
+//     return enabledList.concat(disabledList);
+// }
+
 export function filterToList(filterObject: FilterObj) {
-    let enabledList: FilterOptionValue[] = [];
-    let disabledList: FilterOptionValue[] = [];
+    let filterList: FilterOptionValue[] = [];
     Object.entries(filterObject).map(([cex, enabled]) => {
-        if (enabled) enabledList.push([cex, enabled]);
-        else disabledList.push([cex, enabled]);
+        filterList.push([cex, enabled]);
     });
-    return enabledList.concat(disabledList);
+    return filterList;
 }
 
 export function listToFilter(filterList: FilterOptionValue[]) {

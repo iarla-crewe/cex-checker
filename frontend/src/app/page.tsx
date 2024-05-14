@@ -91,12 +91,16 @@ export default function Home() {
           handleUpdate={handleQueryUpdate}
           handleSetIsSelling={setIsSelling}
         />
+      </div>
 
+      <div className={styles["container"]}>
         <SelectFilter 
           handleUpdate={handleQueryUpdate}
           filter={queryData.filter}  
         />
-        
+      </div>
+
+      <div className={styles["container"]}>
         <Results 
           responseData={responseData} 
           currency={queryData.outputToken} 

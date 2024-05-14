@@ -2,6 +2,7 @@
     list-style-type: none;
     margin: 0px;
     padding: 0px;
+    width: 100%;
 }
 
 .cex-list li {
@@ -117,12 +118,12 @@
 
 @media screen and (max-width: 845px) {
     .cex-logo-wrapper {
-        width: 180px;
-        height: 28.8px;
+        width: 160px;
+        height: 25.6px;
     }
 
     .open-link-icon {
-        width: 28.3px;
-        height: 28.3px;
+        width: 25.2px;
+        height: 25.2px;
     }
 }
