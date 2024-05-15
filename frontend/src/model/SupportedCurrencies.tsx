@@ -3,5 +3,6 @@ export const currencies = [
     "usdc",
     "btc",
     "usdt",
-    "eth"
+    "eth",
+    "bnb"
 ]

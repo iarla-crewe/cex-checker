@@ -1,4 +1,5 @@
 import Image from "next/image";
+import styles from "./Results.module.css";
 
 interface OpenLinkSVGProps {
     textColor: string
@@ -20,6 +21,7 @@ export default function OpenLinkSVG(props: OpenLinkSVGProps) {
                 alt={altText}
                 width={width}
                 height={height}
+                className={styles["open-link-icon"]}
             />
         )
     } else {

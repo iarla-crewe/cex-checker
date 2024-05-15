@@ -4,22 +4,14 @@
     justify-content: space-between;
     align-items: center;
     gap: 25px;
-    padding: 30px 30px;
+    padding: 20px 30px;
     border-radius: var(--card-border-radius);
     border: var(--card-border);
     margin-bottom: 50px;
 }
 
-@media screen and (max-width: 1040px) {
-    .trade-info {
-        font-size: 20px;
-        gap: 15px;
-        padding: 30px 40px;
-    }
-}
-
 .select-currency{
-    min-width: 130px;
+    min-width: 120px;
 }
 
 .swap-currency-button{
@@ -53,7 +45,7 @@
 .DropdownMenuRadioItem {
     /*border: 1px solid #ccc;  Default border */
     font-size: 20px;
-    padding-left: 12%;
+    padding-left: 15%;
 }
   
   /* Hover styles */
@@ -169,4 +161,19 @@
     opacity: 1;
     transform: translateX(0);
   }
+}
+@media screen and (max-width: 1020px) {
+    .trade-info {
+        gap: 15px;
+        padding: 20px 20px;
+    }
+
+    .select-currency{
+        min-width: 112px;
+    }
+
+    .swap-currency-icon{
+        width: 15.3px;
+        height: 15.3px;
+    }
 }
