@@ -1,15 +1,10 @@
 import express from 'express';
 import http from 'http'
 import { Server } from "socket.io";
-import { calculatePrices, currentPrices, isNewReponse, resetPriceResponse } from './emit.js';
-import { openBinanceWs } from './CEXs/binance.js';
-import { openKrakenWs } from './CEXs/kraken.js';
-import { openBybitWs } from './CEXs/bybit.js';
-import WebSocket from 'ws';
-import { getBaseToken, tokensFlipped } from './utils/baseToken.js';
-import { CexList, PriceQuery, TokenPair } from './types.js';
-import { openCrypto_comWs } from './CEXs/crypto-com.js';
-import { openCoinbaseWs } from './CEXs/coinbase.js';
+import { calculatePrices, isNewReponse, resetPriceResponse } from './emit.js';
+import { getTokenPair, tokensFlipped } from './utils/tokenPair.js';
+import { ConnectionsNumber as NumberConnections, PriceQuery, TokenPair, TokenPairConnections as TradingPairConnections, TradingPairPrices } from './types.js';
+import { addOneConnection, minusOneConnection, openExchangeWsConnections } from './utils/connections.js';
 
 const app = express();
 
@@ -24,43 +19,15 @@ export const io = new Server(server, {
     },
 })
 
-let cexList: CexList = {
-    binance: true,
-    kraken: true,
-    coinbase: true,
-    crypto_com: true,
-    bybit: true,
-}
+export let TokenPairConnections: TradingPairConnections = {}
+export let ConnectionsNumber: NumberConnections = {}
+export let TokenPairPrices: TradingPairPrices = {}
+export let PreviousPrices: TradingPairPrices = {}
 
-let params: PriceQuery = {
-    inputToken: 'sol',
-    outputToken: 'usdc',
-    inputAmount: 1,
-    cexList: cexList
-}
-
-const defaultQueryData: PriceQuery = {
-    inputToken: 'SOL',
-    outputToken: 'USDC',
-    inputAmount: 1,
-    cexList: {
-        binance: true,
-        kraken: true,
-        coinbase: false,
-        crypto_com: false,
-        bybit: true
-    }
-};
 
 //connection with the client
 io.on('connection', (socket) => {
     console.log("Connection")
-    let binanceSocket: WebSocket;
-    let bybitSocket: WebSocket;
-    let coinbaseSocket: WebSocket;
-    let crypto_comSocket: WebSocket;
-    let krakenSocket: WebSocket;
-
     let previousTokenPair: TokenPair;
     let previousInputToken: string;
 
@@ -77,60 +44,59 @@ io.on('connection', (socket) => {
         }
     }; // Variable to store previous query data
 
+    let currentTokenPair: TokenPair = { base: "", quote: "" };
+
     socket.on('get-price', ({ inputToken, outputToken, inputAmount, cexList }: PriceQuery) => {
         const currentQueryData: PriceQuery = { inputToken, outputToken, inputAmount, cexList };
 
-        let currentTokenPair: TokenPair = { quote: "", base: "" };
-
-        try { currentTokenPair = getBaseToken(inputToken, outputToken); }
-        catch (error) {  io.emit('error', { error }) }
+        try { currentTokenPair = getTokenPair(inputToken, outputToken); }
+        catch (error) { io.emit('error', { error }) }
         let queryChanged = false;
+
+        const tokenPairString: string = `${currentTokenPair.base}/${currentTokenPair.quote}`;
 
         // Check if the current query is not the same as the previous one
         if (JSON.stringify(currentQueryData) !== JSON.stringify(previousQueryData)) {
 
-            //check if tokens are different regardless of order
-            //TODO: change so that it also checks to see if the currentTokenPair is the default && the
+            //check if tokens pairs are different
             if (JSON.stringify(currentTokenPair) !== JSON.stringify(previousTokenPair)) {
-                //set currentPrices to undefined
-                if (previousTokenPair !== undefined) resetPriceResponse()
-            
-                //close old websockets
-                if (binanceSocket) binanceSocket.close()
-                if (bybitSocket) bybitSocket.close()
-                if (coinbaseSocket) coinbaseSocket.close()
-                if (crypto_comSocket) crypto_comSocket.close()
-                if (krakenSocket) krakenSocket.close()
 
-                //open new ws connection with the new tokenPair
-                binanceSocket = openBinanceWs(currentTokenPair.quote, currentTokenPair.base)
-                bybitSocket = openBybitWs(currentTokenPair.quote, currentTokenPair.base)
-                coinbaseSocket = openCoinbaseWs(currentTokenPair.quote, currentTokenPair.base)
-                crypto_comSocket = openCrypto_comWs(currentTokenPair.quote, currentTokenPair.base)
-                krakenSocket = openKrakenWs(currentTokenPair.quote, currentTokenPair.base)
+                if (previousTokenPair !== undefined) {
+                    const previousPairString: string = `${previousTokenPair.base}/${previousTokenPair.quote}`;
+                    minusOneConnection(previousPairString);
+                    resetPriceResponse(previousPairString)
+                }
+
+                addOneConnection(tokenPairString);
+
+                //If no ws connection for this tokenpair is made already, open new ws connection with the new tokenPair
+                openExchangeWsConnections(currentTokenPair)
 
                 previousTokenPair = currentTokenPair;
-            } 
-            //checks if new input amount is different to old one  or check if querys inputtoken == previous output token && query outputtoke == previous input token
+                console.log("Token Connections: ", ConnectionsNumber)
+
+            }
+            //checks if new input amount is different to old one  or if tokens got flipped
             if (currentQueryData.inputAmount != previousQueryData.inputAmount || tokensFlipped(previousQueryData, currentQueryData)) {
                 queryChanged = true
                 previousTokenPair = currentTokenPair;
                 previousInputToken = currentQueryData.inputToken
             }
-            previousQueryData = currentQueryData;
+            previousQueryData = { ...currentQueryData };
         }
-        let prices = calculatePrices(currentPrices, inputAmount, inputToken, currentTokenPair)
-        let response = isNewReponse(queryChanged)
-        if (response)  {
+        let prices = calculatePrices(TokenPairPrices[tokenPairString], inputAmount, inputToken, currentTokenPair)
+        let response = isNewReponse(queryChanged, tokenPairString)
+        if (response) {
             console.log("Emitting new reponse:", prices)
             socket.emit('get-price', { prices: prices });
         }
     })
 
-    socket.on('disconnect', () => { 
-        //close the websockets
-        console.log('Client disconnected') 
-      }) 
+    socket.on('disconnect', () => {
+        console.log('Client disconnected')
+        minusOneConnection(`${previousTokenPair.base}/${previousTokenPair.quote}`);
+        console.log("Token Connections: ", ConnectionsNumber)
+    })
 })
 
 server.listen(pricePort, () => {

@@ -1,15 +1,15 @@
 import WebSocket from "ws";
-import { currentPrices } from "../emit.js";
+import { TokenPairPrices } from "../index.js";
+import { PairStatus } from "../types.js";
 
-let coinbaseDepoistFee = {
-    sol: 0,
-    usdc: 0
-}
-let coinbaseWithdrawFee = {
-    usdc: 0.9
-}
+export const openCoinbaseWs = (baseTokenOriginal: string, quoteTokenOriginal: string) => {
+    let btFormatted = baseTokenOriginal
+    let qtFormatted = quoteTokenOriginal
 
-export const openCoinbaseWs = (quoteToken: string, baseToken: string) => {
+    //on coinbase usdc is the same as usd
+    if (baseTokenOriginal.toLowerCase() === 'usdc') btFormatted = 'usd'
+    if (quoteTokenOriginal.toLowerCase() === 'usdc') qtFormatted = 'usd'
+
     const coinbaseWebSocketUrl = 'wss://ws-feed.exchange.coinbase.com';
 
     const coinbaseSocket = new WebSocket(coinbaseWebSocketUrl);
@@ -18,7 +18,7 @@ export const openCoinbaseWs = (quoteToken: string, baseToken: string) => {
         coinbaseSocket.send(JSON.stringify({
             "type": "subscribe",
             "product_ids": [
-                "SOL-USD"
+                `${btFormatted.toUpperCase()}-${qtFormatted.toUpperCase()}`
             ],
             "channels": [
                 "level2",
@@ -26,7 +26,7 @@ export const openCoinbaseWs = (quoteToken: string, baseToken: string) => {
                 {
                     "name": "ticker",
                     "product_ids": [
-                        "SOL-USD",
+                        `${btFormatted.toUpperCase()}-${qtFormatted.toUpperCase()}`,
                     ]
                 }
             ]
@@ -36,11 +36,17 @@ export const openCoinbaseWs = (quoteToken: string, baseToken: string) => {
 
     coinbaseSocket.onmessage = ({ data }: any) => {
         let priceObject = JSON.parse(data)
-        try {
-            let price = parseFloat(priceObject.price)
-            if (!Number.isNaN(price)) currentPrices.coinbase = price
-        } catch (error) {
-            console.log("Coinbase data object does not contain a price")
+        if (priceObject.type == 'error') {
+            if (priceObject.reason.includes("not a valid product")) {
+                TokenPairPrices[`${baseTokenOriginal}/${quoteTokenOriginal}`].coinbase = PairStatus.NoPairFound
+            }
+        } else {
+            try {
+                let price = parseFloat(priceObject.price)
+                if (!Number.isNaN(price)) TokenPairPrices[`${baseTokenOriginal}/${quoteTokenOriginal}`].coinbase = price
+            } catch (error) {
+                console.log("Coinbase data object does not contain a price", error)
+            }
         }
     };
 

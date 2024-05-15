@@ -13,14 +13,43 @@
 }
 
 .cex-card {
+    position: relative;
     display: flex;
     justify-content: space-between;
     align-items: center;
     min-height: 130px;
 
     border-radius: var(--card-border-radius);
-    padding: 20px 50px;
+    padding: 15px 50px;
     margin-bottom: 20px;
+
+    background-color: var(--brand-color);
+    border: var(--cex-border);
+}
+
+.cex-card-loaded .cex-logo {
+    transition: transform 0.1s ease-out;
+}
+
+.cex-card-loaded:hover .cex-logo {
+    transform: scale(1.1)
+}
+
+.cex-card-loaded::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--hover-color);
+    opacity: 0;
+    transition: opacity 0.1s ease-out;
+    border-radius: var(--card-border-radius);
+}
+
+.cex-card-loaded:hover::before {
+    opacity: 1;
 }
 
 .price-info {
@@ -31,25 +60,30 @@
 }
 
 .price-heading {
-    font-size: 22px;
+    font-size: var(--size-price-heading);
     opacity: var(--light-text-opacity);
     margin: 0px;
 }
 
 .price-subheading {
-    font-size: 12px;
+    font-size: var(--size-price-subheading);
     opacity: var(--light-text-opacity);
     margin: 0px 0px 10px 0px;
 }
 
 .price {
-    font-size: 38px;
+    font-size: var(--size-price);
     margin: 0px 0px 10px 0px;
 }
 
 .price-withdrawal {
-    font-size: 16px;
+    font-size: var(--size-price-withdrawal);
     opacity: var(--light-text-opacity);
+    margin: 0px;
+}
+
+.token-pair-na {
+    font-size: var(--size-pair-na);
     margin: 0px;
 }
 
@@ -67,4 +101,28 @@
     display: 'flex';
     align-items: 'center';
     justify-content: 'center';
+}
+
+@media screen and (max-width: 1020px) {
+    .cex-logo-wrapper {
+        width: 225px;
+        height: 36px;
+    }
+
+    .open-link-icon {
+        width: 31.5px;
+        height: 31.5px;
+    }
+}
+
+@media screen and (max-width: 845px) {
+    .cex-logo-wrapper {
+        width: 180px;
+        height: 28.8px;
+    }
+
+    .open-link-icon {
+        width: 28.3px;
+        height: 28.3px;
+    }
 }

@@ -16,7 +16,7 @@ interface CEXCardWrapperProps {
 export default function CEXCardWrapper(props: CEXCardWrapperProps) {
     const { cex, currency } = props;
 
-    if (cex.price) {
+    if (typeof cex.price === 'number') {
         return (
             <a href={cex.website} target="_blank">
                 <CEXCard cex={cex} currency={currency}/>

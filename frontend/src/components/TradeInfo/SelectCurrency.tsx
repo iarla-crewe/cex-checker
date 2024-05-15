@@ -1,25 +1,52 @@
 import styles from "./TradeInfo.module.css"
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuLabel,
+    DropdownMenuRadioGroup,
+    DropdownMenuRadioItem,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+import { useEffect, useState } from "react";
+import { currencies } from "@/model/SupportedCurrencies";
 import Image from "next/image";
 
 interface SelectCurrencyProps {
     defaultValue: string;
-    onClickHandler: () => void;
+    onClickHandler: (value: string) => void;
 }
 
 export default function SelectCurrency(props: SelectCurrencyProps) {
     const { defaultValue, onClickHandler } = props;
+    const [ selected, setSelected ] = useState(defaultValue)
+
+    useEffect(() => {
+        setSelected(defaultValue)
+    }, [defaultValue])
 
     return (
-        <button className={styles["select-currency"]}> {/* TODO: Add onClick={onClickHandler} */}
-            <p>{defaultValue}</p>
-            {/* TODO: Add in select functionality 
-            <Image 
-                src="/down_arrow.svg"
-                alt="Select"
-                width={12}
-                height={12}
-            /> 
-            */}
-        </button>
+        <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+                <button className={styles["select-currency"]}>
+                    <p>{selected.toUpperCase()}</p>
+                    <Image 
+                        src="/down_arrow.svg"
+                        alt="Select"
+                        width={12}
+                        height={12}
+                    /> 
+                </button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className={styles["DropdownMenuContent"]}>
+                <DropdownMenuLabel>Choose Token</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuRadioGroup value={selected} onValueChange={onClickHandler}>
+                    {currencies.map((currency, index) => (
+                        <DropdownMenuRadioItem key={index} value={currency} className={styles["DropdownMenuRadioItem"]}>{currency.toUpperCase()}</DropdownMenuRadioItem>
+                    ))}
+                </DropdownMenuRadioGroup>
+            </DropdownMenuContent>
+        </DropdownMenu>
     )
 }

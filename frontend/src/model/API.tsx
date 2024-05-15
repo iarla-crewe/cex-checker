@@ -1,34 +1,40 @@
-import { Filter } from "./FIlter";
+import { FilterOptionValue, listToFilter } from "./FilterData";
 import { io } from "socket.io-client";
 
 export const socket = io('https://cex-checker-8mqk8.ondigitalocean.app/')
-//export const socket = io('http://localhost:443')
+// export const socket = io('http://localhost:443')
 
 export interface PriceQuery {
     inputToken: string;
     outputToken: string;
     amount: number;
-    filter: Filter;
+    filter: FilterOptionValue[];
 }
 
 export interface UpdatePriceQuery {
     inputToken?: string;
     outputToken?: string;
     amount?: number; 
-    filter?: Filter;
+    filter?: FilterOptionValue[];
 }
 
-export interface ResponseData {
-    [exchange: string]: number | undefined;
-    binance?: number;
-    bybit?: number;
-    coinbase?: number;
-    crypto_com?: number;
-    kraken?: number;
+export type ResponseData = {
+    [exchange: string]: number | PairStatus;
+    binance: number | PairStatus;
+    kraken: number | PairStatus;
+    coinbase: number | PairStatus;
+    crypto_com: number | PairStatus;
+    bybit: number | PairStatus;
 }
 
-export function getPriceData({ inputToken, outputToken, amount, filter }: PriceQuery) {
-    socket.emit('get-price', { inputToken, outputToken, inputAmount: amount, cexList: filter })
+export enum PairStatus {
+    NoPairFound = "No Pair Found",
+    Loading = "Loading"
+}
+
+export function getPriceData({ inputToken, outputToken, amount, filter: filterList }: PriceQuery) {
+    const filterObj = listToFilter(filterList);
+    socket.emit('get-price', { inputToken, outputToken, inputAmount: amount, cexList: filterObj })
 }
 
 export async function getFeeData(tokenA: string, tokenB: string) {
@@ -53,4 +59,14 @@ export async function getFeeData(tokenA: string, tokenB: string) {
     let withdrawalFeeObj = await withdrawalFees.json()
 
     return [depositFeeObj, withdrawalFeeObj]
+}
+
+export const initializeRespobseObject = () => {
+    return {
+        binance: PairStatus.Loading,
+        kraken: PairStatus.Loading,
+        coinbase: PairStatus.Loading,
+        crypto_com: PairStatus.Loading,
+        bybit: PairStatus.Loading
+    }
 }
