@@ -1,5 +1,4 @@
 import styles from "./TradeInfo.module.css"
-import { Button } from "@/components/ui/button"
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -32,12 +31,12 @@ export default function SelectCurrency(props: SelectCurrencyProps) {
                     <p>{selected.toUpperCase()}</p>
                 </button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent>
+            <DropdownMenuContent className={styles["DropdownMenuContent"]}>
                 <DropdownMenuLabel>Choose Token</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuRadioGroup value={selected} onValueChange={onClickHandler}>
                     {currencies.map((currency, index) => (
-                        <DropdownMenuRadioItem key={index} value={currency}>{currency.toUpperCase()}</DropdownMenuRadioItem>
+                        <DropdownMenuRadioItem key={index} value={currency} className={styles["DropdownMenuRadioItem"]}>{currency.toUpperCase()}</DropdownMenuRadioItem>
                     ))}
                 </DropdownMenuRadioGroup>
             </DropdownMenuContent>

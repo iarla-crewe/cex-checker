@@ -1,169 +1,84 @@
-@tailwind base;
-  @tailwind components;
-  @tailwind utilities;
+:root {
+  --max-width: 940px;
+  --font-mono: ui-monospace, Menlo, Monaco, "Cascadia Mono", "Segoe UI Mono",
+    "Roboto Mono", "Oxygen Mono", "Ubuntu Monospace", "Source Code Pro",
+    "Fira Mono", "Droid Sans Mono", "Courier New", monospace;
 
-  @layer base {
-    :root {
-      --background: 0 0% 100%;
-      --foreground: 222.2 84% 4.9%;
+  --text: #FFFFFF;
+  --background: #0B111D;
+  --primary: #2780A6;
+  --secondary: #1E6584;
+  --secondary-hover: #16516B;
+  --background-hover: #102637;
 
-      --card: 0 0% 100%;
-      --card-foreground: 222.2 84% 4.9%;
+  --light-text-opacity: 0.9;
+  --card-border: 2px solid var(--primary);
+  --button-border-radius: 16px;
+  --card-border-radius: 30px;
+}
 
-      --popover: 0 0% 100%;
-      --popover-foreground: 222.2 84% 4.9%;
+html,
+body {
+  max-width: 100vw;
+  overflow-x: hidden;
+}
 
-      --primary: 222.2 47.4% 11.2%;
-      --primary-foreground: 210 40% 98%;
+body {
+  background-color: var(--background);
+  color: var(--text);
+  font-weight: 250;
+  font-size: 25px;
+}
 
-      --secondary: 210 40% 96.1%;
-      --secondary-foreground: 222.2 47.4% 11.2%;
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+       -webkit-appearance: none;
+        margin: 0;
+}
 
-      --muted: 210 40% 96.1%;
-      --muted-foreground: 215.4 16.3% 46.9%;
+input[type=number] {
+    -moz-appearance: textfield;
+    appearance: textfield;
+}
 
-      --accent: 210 40% 96.1%;
-      --accent-foreground: 222.2 47.4% 11.2%;
+input {
+  background-color: var(--background);
+  border: 0px solid;
+  color: var(--white);
+  font-size: 45px;
+  text-align: right;
+  width: 100%;
+}
 
-      --destructive: 0 84.2% 60.2%;
-      --destructive-foreground: 210 40% 98%;
-
-      --border: 214.3 31.8% 91.4%;
-      --input: 214.3 31.8% 91.4%;
-      --ring: 222.2 84% 4.9%;
-
-      --radius: 0.5rem;
-
-      
-    }
-
-    .dark {
-      --background: 222.2 84% 4.9%;
-      --foreground: 210 40% 98%;
-
-      --card: 222.2 84% 4.9%;
-      --card-foreground: 210 40% 98%;
-
-      --popover: 222.2 84% 4.9%;
-      --popover-foreground: 210 40% 98%;
-
-      --primary: 210 40% 98%;
-      --primary-foreground: 222.2 47.4% 11.2%;
-
-      --secondary: 217.2 32.6% 17.5%;
-      --secondary-foreground: 210 40% 98%;
-
-      --muted: 217.2 32.6% 17.5%;
-      --muted-foreground: 215 20.2% 65.1%;
-
-      --accent: 217.2 32.6% 17.5%;
-      --accent-foreground: 210 40% 98%;
-
-      --destructive: 0 62.8% 30.6%;
-      --destructive-foreground: 210 40% 98%;
-
-      --border: 217.2 32.6% 17.5%;
-      --input: 217.2 32.6% 17.5%;
-      --ring: 212.7 26.8% 83.9%;
-    }
-
-    :root {
-      --max-width: 940px;
-      --font-mono: ui-monospace, Menlo, Monaco, "Cascadia Mono", "Segoe UI Mono",
-        "Roboto Mono", "Oxygen Mono", "Ubuntu Monospace", "Source Code Pro",
-        "Fira Mono", "Droid Sans Mono", "Courier New", monospace;
-    
-      --text: #FFFFFF;
-      --background: #0B111D;
-      --primary: #2780A6;
-      --secondary: #1E6584;
-      --secondary-hover: #16516B;
-      --background-hover: #102637;
-
-      --size-p: 25px;
-      --size-small: 20px;
-    
-      --light-text-opacity: 0.9;
-      --card-border-colorless: 2px solid;
-      --card-border: var(--card-border-colorless) var(--primary);
-      --button-border-radius: 16px;
-      --card-border-radius: 30px;
-      --button-max-height: 52px;
-    }
-    
-    html,
-    body {
-      max-width: 100vw;
-      overflow-x: hidden;
-    }
-    
-    body {
-      background-color: var(--background);
-      color: var(--text);
-      font-weight: 250;
-      font-size: var(--size-p);
-    }
-    
-    input::-webkit-outer-spin-button,
-    input::-webkit-inner-spin-button {
-           -webkit-appearance: none;
-            margin: 0;
-    }
-    
-    input[type=number] {
-        -moz-appearance: textfield;
-        appearance: textfield;
-    }
-    
-    input {
-      background-color: var(--background);
-      border: 0px solid;
-      color: var(--white);
-      font-size: 45px;
-      text-align: right;
-      width: 100%;
-    }
-    
-    @media screen and (max-width: 1040px) {
-      input {
-        font-size: 35px;
-      }
-    }
-    
-    input:focus {
-      outline: none !important;
-    }
-    
-    button {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 0px 20px;
-      gap: 15px;
-      border-radius: var(--button-border-radius);
-      border: var(--card-border);
-      background-color: var(--background);
-      color: var(--text);
-      cursor: pointer;
-      font-size: var(--size-small);
-      max-height: var(--button-max-height);
-    }
-    
-    button:hover {
-      background-color: var(--background-hover);
-    }
-    
-    button:active {
-      background-color: var(--secondary);
-    }
-    
+@media screen and (max-width: 1040px) {
+  input {
+    font-size: 35px;
   }
+}
 
-  @layer base {
-    * {
-      @apply border-border;
-    }
-    body {
-      @apply bg-background text-foreground;
-    }
-  }
+input:focus {
+  outline: none !important;
+}
+
+button {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0px 20px;
+  gap: 15px;
+  border-radius: var(--button-border-radius);
+  border: var(--card-border);
+  background-color: var(--background);
+  color: var(--text);
+  cursor: pointer;
+  font-size: 20px;
+  max-height: 52px;
+}
+
+button:hover {
+  background-color: var(--background-hover);
+}
+
+button:active {
+  background-color: var(--secondary);
+}
