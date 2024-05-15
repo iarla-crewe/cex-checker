@@ -39,7 +39,7 @@ export default function SelectFilter(props: SelectFilterProps) {
         />
     )
 
-    const filterSlice = 2;
+    const filterSlices = [2, 4];
 
     return (
         <div className={styles["select-filter"]}>
@@ -51,10 +51,15 @@ export default function SelectFilter(props: SelectFilterProps) {
                 className={styles["filter-icon"]}
             />
             <div className={styles["inner-filters"]}>
-                {filter.slice(0, filterSlice).map(([cex, enabled], _) => filterOption(cex, enabled))}
+                {filter.slice(0, filterSlices[0]).map(([cex, enabled], _) => filterOption(cex, enabled))}
             </div>
-            <div className={styles["inner-filters"]}>
-                {filter.slice(filterSlice).map(([cex, enabled], _) => filterOption(cex, enabled))}
+            <div className={styles["inner-filters-wrap-mobile"]}>
+                <div className={styles["inner-filters"]}>
+                    {filter.slice(filterSlices[0], filterSlices[1]).map(([cex, enabled], _) => filterOption(cex, enabled))}
+                </div>
+                <div className={styles["inner-filters"]}>
+                    {filter.slice(filterSlices[1]).map(([cex, enabled], _) => filterOption(cex, enabled))}
+                </div>
             </div>
         </div>
     );
