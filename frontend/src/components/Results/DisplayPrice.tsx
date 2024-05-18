@@ -14,23 +14,21 @@ interface DisplayPriceProps {
 export default function DisplayPrice(props: DisplayPriceProps) {
     const { price, outputToken, isSelling, feeCurrency, withdrawFee, textColor } = props;
 
-    let withdrawFeeText = "";
+    let withdrawFeeText = (isSelling) ? "-" : "+";
     if (withdrawFee === 0) {
-        withdrawFeeText = `+ network gas fees`
+        withdrawFeeText += ` network gas fees`
     } else if (withdrawFee === undefined) {
-        withdrawFeeText = `+ withdrawal fee (loading...)`
+        withdrawFeeText += `withdrawal fee (loading...)`
     } else {
-        withdrawFeeText = `+ ${withdrawFee} ${feeCurrency.toUpperCase()} withdrawal fee`
+        withdrawFeeText += `${withdrawFee} ${feeCurrency.toUpperCase()} withdrawal fee`
     }
 
-    let priceText = "Output in"
-    if (!isSelling) {
-        priceText = "Price in"
-    }
+    let priceHeading = (isSelling) ? `${outputToken.toUpperCase()} received` : `Price in ${outputToken.toUpperCase()}`
+    
     if (typeof price === 'number') {
         return (
             <div className={styles["price-info"]} style={{color: textColor}}>
-                <p className={styles["price-heading"]}>{priceText} {outputToken.toUpperCase()}</p>
+                <p className={styles["price-heading"]}>{priceHeading}</p>
                 <p className={styles["price-subheading"]}>(after maker/taker fees)</p>
                 <p className={styles["price"]}>
                     {price}
