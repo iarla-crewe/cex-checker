@@ -7,14 +7,15 @@ import { TokenPair } from "@/lib/utils";
 
 interface ResultsProps {
     responseData: ResponseData;
-    currency: string;
+    outputToken: string;
+    feeCurrency: string;
     isSelling: boolean;
     filter: FilterObj;
     tokenPair: TokenPair;
 }
 
 export default function Results(props: ResultsProps) {
-    const { responseData, currency, isSelling, filter, tokenPair } = props;
+    const { responseData, outputToken, feeCurrency, isSelling, filter, tokenPair } = props;
 
     let filteredCEXList = CEXList.filter(cex => filter[cex.name] === true);
 
@@ -32,7 +33,7 @@ export default function Results(props: ResultsProps) {
         <ul className={styles["cex-list"]}>
             {pricedCEXList.map((cex, index) => (
                 <li key={index}>
-                    <CEXCardWrapper cex={cex} currency={currency}/>
+                    <CEXCardWrapper cex={cex} outputToken={outputToken} feeCurrency={feeCurrency} isSelling={isSelling}/>
                 </li>
             ))}
         </ul>

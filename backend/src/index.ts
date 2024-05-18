@@ -94,8 +94,11 @@ io.on('connection', (socket) => {
 
     socket.on('disconnect', () => {
         console.log('Client disconnected')
-        minusOneConnection(`${previousTokenPair.base}/${previousTokenPair.quote}`);
-        console.log("Token Connections: ", ConnectionsNumber)
+        try {
+            if (previousTokenPair != undefined) minusOneConnection(`${previousTokenPair.base}/${previousTokenPair.quote}`);
+        } catch (error) {
+            console.log("Disconnection: ", error)
+        }
     })
 })
 
