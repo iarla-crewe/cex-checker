@@ -134,7 +134,11 @@
   @media screen and (max-width: 420px) {
     :root {
       --size-input: 31px;
-      --size-price: 24.3px;
+      --size-price: 25px;
+      --size-price-heading: 15.7px;
+      --size-price-withdrawal: 11.4px;
+      --size-pair-na: 13.5px;
+      --size-price-subheading: 10px;
       --size-p: 16px;
       --size-small: 12.8px;
     }

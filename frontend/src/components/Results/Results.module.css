@@ -75,12 +75,12 @@
 .price-subheading {
     font-size: var(--size-price-subheading);
     opacity: var(--light-text-opacity);
-    margin: 0px 0px 10px 0px;
+    margin: 0px 0px 0px 0px;
 }
 
 .price {
     font-size: var(--size-price);
-    margin: 0px 0px 10px 0px;
+    margin: 10px 0px;
 }
 
 .price-withdrawal {
@@ -150,6 +150,10 @@
 }
 
 @media screen and (max-width: 420px) {
+    .price {
+        margin: 15px 0px;
+    }
+
     .cex-card {
         grid-template-columns: 1fr;
         padding: 30px;

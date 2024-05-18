@@ -25,7 +25,7 @@ export default function Home() {
       kraken: true
     })
   });
-  const [isSelling, setIsSelling] = useState(true);
+  const [isSelling, setIsSelling] = useState(false);
   const [tokenPair, setTokenPair] = useState<TokenPair>({
     base: queryData.inputToken,
     quote: queryData.outputToken
