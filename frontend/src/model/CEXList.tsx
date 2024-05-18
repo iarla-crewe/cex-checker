@@ -11,8 +11,12 @@ export interface CEX {
     templateUrl: string;
     website?: string
     capStyle: string;
-    withdrawFee?: number;
+    withdrawFees?: WithdrawalFees;
     price: number | PairStatus;
+}
+
+type WithdrawalFees = {
+    [token: string]: number | undefined;
 }
 
 export const CEXList: CEX[] = [
@@ -47,7 +51,10 @@ export const CEXList: CEX[] = [
         borderColor: "white", 
         templateUrl: "https://www.coinbase.com/advanced-trade/spot/™-†",
         capStyle: "UPPER",
-        withdrawFee: 0,
+        withdrawFees: {
+            tokenA: 0,
+            tokenB: 0
+        },
         price: PairStatus.Loading
     },
     {
@@ -83,21 +90,32 @@ export function getCEXDisplayName(name: string) {
     return name;
 }
 
-
-export function setFeeData(withdrawalFees: any, token: string) {
+export function setFeeData(withdrawalFees: any, tokenA: string, tokenB: string) {
     const combinedWithdrawalFees = withdrawalFees.combinedWithdrawalFees;
 
     for (let cex of CEXList) {
-        if (cex.withdrawFee === 0) continue;
+        //TokenA is the outputToken if selling, TokenB is the input token if selling
+        cex.withdrawFees = {
+            tokenA: 0,
+            tokenB: 0
+        }
 
         //@ts-ignore
-        let matchingObject = combinedWithdrawalFees.find(obj => obj.exchange_name == cex.name && obj.token == token);
+        let matchingObject = combinedWithdrawalFees.find(obj => obj.exchange_name == cex.name && obj.token == tokenA);
         if (matchingObject) {
             const roundedNumber = parseFloat(matchingObject.fee).toFixed(10)
-            cex.withdrawFee = parseFloat(roundedNumber);
+            cex.withdrawFees.tokenA = parseFloat(roundedNumber); //set wthdrawalfees.tokenA = rounded numberA , set wthdrawalfees.tokenB = rounded numberB
+        }
+
+        //@ts-ignore
+        matchingObject = combinedWithdrawalFees.find(obj => obj.exchange_name == cex.name && obj.token == tokenB);
+        if (matchingObject) {
+            const roundedNumber = parseFloat(matchingObject.fee).toFixed(10)
+            cex.withdrawFees.tokenB = parseFloat(roundedNumber); //set wthdrawalfees.tokenB = rounded numberB
         }
     }
 }
+
 
 export function setExchangeLink(tokenPair: TokenPair, cex: CEX) {
     let link = cex.templateUrl

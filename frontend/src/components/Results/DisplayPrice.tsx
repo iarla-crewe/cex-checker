@@ -4,13 +4,15 @@ import { PairStatus } from "@/model/API";
 
 interface DisplayPriceProps {
     price: number | PairStatus;
-    currency: string;
+    outputToken: string;
+    isSelling: boolean;
+    feeCurrency: string;
     withdrawFee: number | undefined;
     textColor: string;
 }
 
 export default function DisplayPrice(props: DisplayPriceProps) {
-    const { price, currency, withdrawFee, textColor } = props;
+    const { price, outputToken, isSelling, feeCurrency, withdrawFee, textColor } = props;
 
     let withdrawFeeText = "";
     if (withdrawFee === 0) {
@@ -18,12 +20,17 @@ export default function DisplayPrice(props: DisplayPriceProps) {
     } else if (withdrawFee === undefined) {
         withdrawFeeText = `+ withdrawal fee (loading...)`
     } else {
-        withdrawFeeText = `+ ${withdrawFee} ${currency.toUpperCase()} withdrawal fee`
+        withdrawFeeText = `+ ${withdrawFee} ${feeCurrency.toUpperCase()} withdrawal fee`
+    }
+
+    let priceText = "Output in"
+    if (!isSelling) {
+        priceText = "Price in"
     }
     if (typeof price === 'number') {
         return (
             <div className={styles["price-info"]} style={{color: textColor}}>
-                <p className={styles["price-heading"]}>Expected {currency.toUpperCase()}</p>
+                <p className={styles["price-heading"]}>{priceText} {outputToken.toUpperCase()}</p>
                 <p className={styles["price-subheading"]}>(after maker/taker fees)</p>
                 <p className={styles["price"]}>
                     {price}
