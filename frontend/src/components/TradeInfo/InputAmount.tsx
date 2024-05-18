@@ -11,7 +11,7 @@ interface InputAmountProps {
 export default function InputAmount(props: InputAmountProps) {
     const { defaultValue, updateAmount } = props;
 
-    const maxLength = 13;
+    const maxLength = 12;
     const emptyPlaceholder = "0.00";
 
     const [inputValue, setInputValue] = useState<string>('');
