@@ -42,7 +42,7 @@ export default function CEXCard(props: CEXCardProps) {
 
     return (
         <div className={cardClass} style={cssVariables}>
-            <div className={styles["cex-logo-wrapper"]}>
+            <div className={styles["cex-logo-wrapper"] + " " + styles["grid-item"]}>
                 <Image 
                     className={styles["cex-logo"]}
                     src={cex.logoSrc}
@@ -53,7 +53,9 @@ export default function CEXCard(props: CEXCardProps) {
                 />
             </div>
 
-            <DisplayPrice price={cex.price} outputToken={outputToken} isSelling={isSelling} feeCurrency={feeCurrency} withdrawFee={withdrawFee} textColor={cex.textColor}/>
+            <div className={styles["grid-item"]}>
+                <DisplayPrice price={cex.price} outputToken={outputToken} isSelling={isSelling} feeCurrency={feeCurrency} withdrawFee={withdrawFee} textColor={cex.textColor}/>
+            </div>
 
             <OpenLinkSVG textColor={cex.textColor} loaded={loaded}/>
         </div>

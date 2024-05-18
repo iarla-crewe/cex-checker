@@ -19,15 +19,27 @@ export default function SelectFilter(props: SelectFilterProps) {
         if (index !== -1) {
             let newFilter = filter;
             newFilter[index] = value;
-            newFilter.sort((a, b) => {
-                if (a[1] === b[1]) return 0;
-                if (a[1]) return -1;
-                return 1;
-            });
+            // TODO: Add sorting back in (currenly doesn't work on mobile)
+            // newFilter.sort((a, b) => {
+            //     if (a[1] === b[1]) return 0;
+            //     if (a[1]) return -1;
+            //     return 1;
+            // });
 
             handleUpdate({filter: newFilter});
         }
     }
+
+    const filterOption = (cex: string, enabled: boolean) => (
+        <FilterOption 
+            key={cex}
+            name={cex} 
+            defaultEnabled={enabled}
+            onUpdate={(value: boolean) => updateFilter([cex, value])}
+        />
+    )
+
+    const filterSlices = [2, 4];
 
     return (
         <div className={styles["select-filter"]}>
@@ -36,16 +48,19 @@ export default function SelectFilter(props: SelectFilterProps) {
                 alt="CEX Filter"
                 height={30}
                 width={30}
-                style={{paddingRight: 15}}
+                className={styles["filter-icon"]}
             />
-            {filter.map(([cex, enabled], _) => (
-                <FilterOption 
-                    key={cex}
-                    name={cex} 
-                    defaultEnabled={enabled}
-                    onUpdate={(value: boolean) => updateFilter([cex, value])}
-                />
-            ))}
+            <div className={styles["inner-filters"]}>
+                {filter.slice(0, filterSlices[0]).map(([cex, enabled], _) => filterOption(cex, enabled))}
+            </div>
+            <div className={styles["inner-filters-wrap-mobile"]}>
+                <div className={styles["inner-filters"]}>
+                    {filter.slice(filterSlices[0], filterSlices[1]).map(([cex, enabled], _) => filterOption(cex, enabled))}
+                </div>
+                <div className={styles["inner-filters"]}>
+                    {filter.slice(filterSlices[1]).map(([cex, enabled], _) => filterOption(cex, enabled))}
+                </div>
+            </div>
         </div>
     );
 }

@@ -16,17 +16,17 @@ export default function OpenLinkSVG(props: OpenLinkSVGProps) {
     
     if (loaded) {
         return (
-            <Image
-                src={svg_file}
-                alt={altText}
-                width={width}
-                height={height}
-                className={styles["open-link-icon"]}
-            />
+            <div className={styles["grid-item"]}>
+                <Image
+                    src={svg_file}
+                    alt={altText}
+                    width={width}
+                    height={height}
+                    className={styles["open-link-icon"]}
+                />
+            </div>
         )
     } else {
-        return (
-            <div style={{width: width, height: height}} />
-        )
+        return (<></>)
     }
 }

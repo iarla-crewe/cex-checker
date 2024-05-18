@@ -2,6 +2,7 @@
     list-style-type: none;
     margin: 0px;
     padding: 0px;
+    width: 100%;
 }
 
 .cex-list li {
@@ -12,9 +13,15 @@
     text-decoration: none;
 }
 
+.grid-item:nth-child(3) {
+    text-align: right;
+}
+
 .cex-card {
+    display: grid;
+    grid-template-columns: 2fr 4fr 0.5fr;
+
     position: relative;
-    display: flex;
     justify-content: space-between;
     align-items: center;
     min-height: 130px;
@@ -97,10 +104,9 @@
 }
 
 .loading-spinner-wrapper {
-    height: '100%';
-    display: 'flex';
-    align-items: 'center';
-    justify-content: 'center';
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 @media screen and (max-width: 1020px) {
@@ -117,12 +123,47 @@
 
 @media screen and (max-width: 845px) {
     .cex-logo-wrapper {
-        width: 180px;
-        height: 28.8px;
+        width: 160px;
+        height: auto;
     }
 
     .open-link-icon {
-        width: 28.3px;
-        height: 28.3px;
+        width: 25.2px;
+        height: 25.2px;
+    }
+
+    .cex-card {
+        grid-template-columns: 4fr 1fr;
+        padding: 40px;
+        row-gap: 35px;
+    }
+
+    .grid-item:nth-child(1),
+    .grid-item:nth-child(3) {
+        grid-row: 1;
+    }
+
+    .grid-item:nth-child(2) {
+        grid-row: 2;
+        grid-column: span 2;
+    }
+}
+
+@media screen and (max-width: 420px) {
+    .cex-card {
+        grid-template-columns: 1fr;
+        padding: 30px;
+        row-gap: 25px;
+    }
+
+    .cex-logo-wrapper {
+        text-align: center;
+        width: 100%;
+        height: 20px;
+    }
+
+    .grid-item:nth-child(3) {
+        grid-row: 3;
+        text-align: center;
     }
 }
