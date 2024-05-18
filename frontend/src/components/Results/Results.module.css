@@ -124,7 +124,7 @@
 @media screen and (max-width: 845px) {
     .cex-logo-wrapper {
         width: 160px;
-        height: 25.6px;
+        height: auto;
     }
 
     .open-link-icon {
@@ -135,6 +135,7 @@
     .cex-card {
         grid-template-columns: 4fr 1fr;
         padding: 40px;
+        row-gap: 35px;
     }
 
     .grid-item:nth-child(1),
@@ -151,8 +152,8 @@
 @media screen and (max-width: 420px) {
     .cex-card {
         grid-template-columns: 1fr;
-        row-gap: 25px;
         padding: 30px;
+        row-gap: 25px;
     }
 
     .cex-logo-wrapper {
