@@ -8,17 +8,31 @@ import DisplayPrice from "./DisplayPrice";
 
 interface CEXCardProps {
     cex: CEX;
-    currency: string;
+    outputToken: string,
+    feeCurrency: string;
+    isSelling: boolean;
+}
+
+export type Tokens = {
+    [token: string]: string;
 }
 
 export default function CEXCard(props: CEXCardProps) {
-    const { cex, currency } = props;
+    const { cex, outputToken,  feeCurrency, isSelling } = props;
     
     const loaded = (typeof cex.price === 'number')
     const cardClass = loaded ? styles["cex-card"] + " " + styles["cex-card-loaded"] : styles["cex-card"];
 
     const borderColor = (cex.borderColor != "") ? cex.borderColor : cex.brandColor;
     const hoverColor = (cex.textColor == "white") ? "rgba(255, 255, 255, 0.08)" : "rgba(0, 0, 0, 0.08)";
+
+    let withdrawFee;
+    if (isSelling) { 
+        withdrawFee = cex.withdrawFees?.tokenA 
+    }
+    else { 
+        withdrawFee = cex.withdrawFees?.tokenB
+    }
 
     const cssVariables = {
         '--brand-color': cex.brandColor,
@@ -40,7 +54,7 @@ export default function CEXCard(props: CEXCardProps) {
             </div>
 
             <div className={styles["grid-item"]}>
-                <DisplayPrice price={cex.price} currency={currency} withdrawFee={cex.withdrawFee} textColor={cex.textColor}/>
+                <DisplayPrice price={cex.price} outputToken={outputToken} isSelling={isSelling} feeCurrency={feeCurrency} withdrawFee={withdrawFee} textColor={cex.textColor}/>
             </div>
 
             <OpenLinkSVG textColor={cex.textColor} loaded={loaded}/>

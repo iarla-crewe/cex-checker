@@ -27,10 +27,10 @@ export default function Home() {
   });
   const [isSelling, setIsSelling] = useState(true);
   const [tokenPair, setTokenPair] = useState<TokenPair>({
-      base: queryData.inputToken,
-      quote: queryData.outputToken
+    base: queryData.inputToken,
+    quote: queryData.outputToken
   });
-
+  const [currency, setCurrency] = useState<string>(isSelling ? queryData.outputToken : queryData.inputToken);
 
   useEffect(() => {
     // Function to handle "get-price" events
@@ -42,7 +42,7 @@ export default function Home() {
 
     const fetchFeeData = async () => {
       let [depositFees, withdrawalFees] = await getFeeData(queryData.inputToken, queryData.outputToken)
-      setFeeData(withdrawalFees, queryData.outputToken)
+      setFeeData(withdrawalFees, queryData.outputToken, queryData.inputToken)
     };
 
     // Initial call to getPriceData with queryData
@@ -63,6 +63,11 @@ export default function Home() {
     };
   }, [queryData])
 
+
+  useEffect(() => {
+    setCurrency(isSelling ? queryData.outputToken : queryData.inputToken)
+  }, [isSelling, queryData])
+
   const handleQueryUpdate = (data: UpdatePriceQuery) => {
     if (data.inputToken === undefined) data.inputToken = queryData.inputToken;
     if (data.outputToken === undefined) data.outputToken = queryData.outputToken;
@@ -72,7 +77,7 @@ export default function Home() {
     setTokenPair(getTokenPair(data.inputToken, data.outputToken));
 
     setQueryData({
-      inputToken: data.inputToken,outputToken: data.outputToken, amount: data.amount, filter: data.filter
+      inputToken: data.inputToken, outputToken: data.outputToken, amount: data.amount, filter: data.filter
     })
     setResponseData(initializeRespobseObject())
   }
@@ -83,9 +88,9 @@ export default function Home() {
       <div className={styles["container"]}>
         <Header />
 
-        <TradeInfo 
-          defaultInputToken={queryData.inputToken} 
-          defaultOutputToken={queryData.outputToken} 
+        <TradeInfo
+          defaultInputToken={queryData.inputToken}
+          defaultOutputToken={queryData.outputToken}
           defaultAmount={queryData.amount}
           defaultIsSelling={isSelling}
           handleUpdate={handleQueryUpdate}
@@ -93,11 +98,16 @@ export default function Home() {
         />
       </div>
 
+<<<<<<< HEAD
       <div className={styles["container"]}>
         <SelectFilter 
+=======
+        <SelectFilter
+>>>>>>> staging
           handleUpdate={handleQueryUpdate}
-          filter={queryData.filter}  
+          filter={queryData.filter}
         />
+<<<<<<< HEAD
       </div>
 
       <div className={styles["container"]}>
@@ -105,6 +115,14 @@ export default function Home() {
           responseData={responseData} 
           currency={queryData.outputToken} 
           isSelling={isSelling} 
+=======
+
+        <Results
+          responseData={responseData}
+          outputToken={queryData.outputToken}
+          feeCurrency={currency}
+          isSelling={isSelling}
+>>>>>>> staging
           tokenPair={tokenPair}
           filter={listToFilter(queryData.filter)}
         />

@@ -38,16 +38,20 @@ export const addOneConnection = (tokenPairString: string) => {
 }
 
 export const minusOneConnection = (previousPairString: string) => {
-    ConnectionsNumber[previousPairString] -= 1;
-    if (ConnectionsNumber[previousPairString] <= 0) {
-        //close the websockets stored for that tokenpair
-        TokenPairConnections[previousPairString]?.binance?.close()
-        TokenPairConnections[previousPairString]?.bybit?.close()
-        TokenPairConnections[previousPairString]?.coinbase?.close()
-        TokenPairConnections[previousPairString]?.crypto_com?.close()
-        TokenPairConnections[previousPairString]?.kraken?.close()
-
-        TokenPairConnections[previousPairString] = undefined
+    try {
+        ConnectionsNumber[previousPairString] -= 1;
+        if (ConnectionsNumber[previousPairString] <= 0) {
+            //close the websockets stored for that tokenpair
+            TokenPairConnections[previousPairString]?.binance?.close()
+            TokenPairConnections[previousPairString]?.bybit?.close()
+            TokenPairConnections[previousPairString]?.coinbase?.close()
+            TokenPairConnections[previousPairString]?.crypto_com?.close()
+            TokenPairConnections[previousPairString]?.kraken?.close()
+    
+            TokenPairConnections[previousPairString] = undefined
+        }
+    } catch (error) {
+        console.log("minus connection error: ", error)
     }
 }
 
