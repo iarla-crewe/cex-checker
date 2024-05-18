@@ -20,6 +20,7 @@
     flex-direction: row;
     justify-content: center;
     align-items: center;
+    gap: 5px;
 }
 
 .filter-button-content {
@@ -34,7 +35,7 @@
 .filter-option {
     border: var(--filter-border);
     opacity: var(--filter-opacity);
-    min-height: 52px;
+    min-height: var(--button-max-height);
 }
 
 .close-filter {
@@ -59,11 +60,20 @@
     .filter-icon {
         padding-right: 0px;
     }
+
+    .close-filter-icon {
+        height: 22px;
+        width: auto;
+    }
 }
 
 @media screen and (max-width: 420px) {
     .inner-filters-wrap-mobile {
         flex-direction: column;
         gap: 10px;
+    }
+
+    .close-filter-icon {
+        height: 18px;
     }
 }

@@ -52,6 +52,7 @@ function CloseFilter(props: CloseFilterProps) {
                 alt="x"
                 height={25}
                 width={25}
+                className={styles["close-filter-icon"]}
             />
         </div>
     )

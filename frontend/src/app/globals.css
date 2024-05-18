@@ -105,6 +105,7 @@
 
   @media screen and (max-width: 1020px) {
     :root {
+      --button-max-height: 50px;
       --trade-info-gap: 20px;
 
       --size-input: 31px;
@@ -120,6 +121,8 @@
 
   @media screen and (max-width: 845px) {
     :root {
+      --button-max-height: 48px;
+
       --size-input: 39px;
       --size-price: 27px;
       --size-price-heading: 15.8px;
