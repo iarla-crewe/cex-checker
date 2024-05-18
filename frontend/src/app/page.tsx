@@ -98,31 +98,19 @@ export default function Home() {
         />
       </div>
 
-<<<<<<< HEAD
       <div className={styles["container"]}>
         <SelectFilter 
-=======
-        <SelectFilter
->>>>>>> staging
           handleUpdate={handleQueryUpdate}
           filter={queryData.filter}
         />
-<<<<<<< HEAD
       </div>
 
       <div className={styles["container"]}>
-        <Results 
-          responseData={responseData} 
-          currency={queryData.outputToken} 
-          isSelling={isSelling} 
-=======
-
         <Results
           responseData={responseData}
           outputToken={queryData.outputToken}
           feeCurrency={currency}
           isSelling={isSelling}
->>>>>>> staging
           tokenPair={tokenPair}
           filter={listToFilter(queryData.filter)}
         />

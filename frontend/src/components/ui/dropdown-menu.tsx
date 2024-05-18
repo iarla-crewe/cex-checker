@@ -126,7 +126,7 @@ const DropdownMenuRadioItem = React.forwardRef<
     )}
     {...props}
   >
-    <span style={{position: 'absolute', left: '0'}}>
+    <span style={{position: 'absolute', left: '10px'}}>
       <DropdownMenuPrimitive.ItemIndicator>
       <Check className="h-1 w-1" />
       </DropdownMenuPrimitive.ItemIndicator>
