@@ -4,10 +4,14 @@ import { TokenPairPrices } from '../index.js';
 import { PairStatus } from '../types.js';
 dotenv.config();
 
-export const openKrakenWs = (baseToken: string, quoteToken: string) => {
+export const openKrakenWs = (baseToken: string, quoteToken: string, flipped?: boolean) => {
 
     let publicWebSocketURL = "wss://ws.kraken.com/";
     let publicWebSocketSubscriptionMsg = `{ "event":"subscribe", "subscription":{"name":"trade"},"pair":["${baseToken.toUpperCase()}/${quoteToken.toUpperCase()}"] }`;
+
+    if (flipped == undefined) flipped = false;
+    let tokenPairString = `${baseToken}/${quoteToken}`
+    if (flipped) tokenPairString = `${quoteToken}/${baseToken}`
 
     const krakenSocket = new WebSocket(publicWebSocketURL);
 
@@ -20,15 +24,26 @@ export const openKrakenWs = (baseToken: string, quoteToken: string) => {
         let priceObject = JSON.parse(wsMsg.toString())
 
         if (priceObject.status === 'error') {
+            if ((baseToken == "eur" || quoteToken == "eur") && !flipped) {
+                //flip tokens and retry the connection.
+                console.log("Flipping kraken token pair")
+                //Must test if this gets stored as the current token pairs ws connetion
+                return openKrakenWs(quoteToken, baseToken, true)
+            }
+
             if (priceObject.errorMessage.includes("Currency pair not supported")) {
-                TokenPairPrices[`${baseToken}/${quoteToken}`].kraken = PairStatus.NoPairFound
+                TokenPairPrices[tokenPairString].kraken = PairStatus.NoPairFound
             }
         } else {
             if (wsMsg.toString() != '{"event":"heartbeat"}' && priceObject.event != "systemStatus" && priceObject.event != "subscriptionStatus") {
                 // Iterate through each nested array
                 for (const innerArray of priceObject[1]) {
                     // Access the first element (price) of the inner array
-                    TokenPairPrices[`${baseToken}/${quoteToken}`].kraken = parseFloat(innerArray[0])
+                    let price = parseFloat(innerArray[0])
+                    if (flipped) {
+                        price = 1 / price;
+                    }
+                    TokenPairPrices[tokenPairString].kraken = price
                 }
             }
         }

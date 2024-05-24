@@ -2,6 +2,7 @@ export const currencies = [
     "sol",
     "usdc",
     "usdt",
+    "eur",
     "btc",
     "eth",
     "bnb",
