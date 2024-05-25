@@ -6,13 +6,13 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Exchange Scout | Quartz",
-  description: "Find the lowest fees and best exchange prices for CEXs in real time",
+  description: "Find the lowest fees and best exchange prices for CEXs in real time, with Quartz's Exchange Scout",
   icons: {
     icon: "/favicon.ico"
   },
   openGraph: {
     title: "Exchange Scout | Quartz",
-    description: "Find the lowest fees and best exchange prices for CEXs in real time",
+    description: "Find the lowest fees and best exchange prices for CEXs in real time,  with Quartz's Exchange Scout",
     url: "https://app.quartzpay.io/",
     siteName: "Quartz",
     images: [
