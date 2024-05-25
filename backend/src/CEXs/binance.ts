@@ -2,13 +2,16 @@ import WebSocket from "ws";
 import { TokenPairPrices } from "../index.js";
 import { PairStatus } from "../types.js";
 
-export const openBinanceWs = (baseToken: string, quoteToken: string) => {
-     const binanceWebSocketUrl = `wss://stream.binance.com:9443/ws/${baseToken + quoteToken}@trade`;
+export const openBinanceWs = (baseToken: string, quoteToken: string, flipped?: boolean) => {
+    const binanceWebSocketUrl = `wss://stream.binance.com:9443/ws/${baseToken + quoteToken}@trade`;
 
     const binanceSocket = new WebSocket(binanceWebSocketUrl);
 
     let isLoading = true;
     let foundPrice = false;
+    if (flipped == undefined) flipped = false;
+    let tokenPairString = `${baseToken}/${quoteToken}`
+    if (flipped) tokenPairString = `${quoteToken}/${baseToken}`
 
     binanceSocket.onopen = () => {
         binanceSocket.send(JSON.stringify({
@@ -23,21 +26,41 @@ export const openBinanceWs = (baseToken: string, quoteToken: string) => {
 
         setTimeout(() => {
             isLoading = false;
-            if (!foundPrice) TokenPairPrices[`${baseToken}/${quoteToken}`].binance = PairStatus.NoPairFound
+            if ((baseToken == "eur" || quoteToken == "eur") && !flipped && !foundPrice) {
+                //flip tokens and retry the connection.
+                console.log("Flipping binance token pair")
+                console.log("Token pair string binance: ", tokenPairString)
+                return openBinanceWs(quoteToken, baseToken, true);
+            } else {
+                if (!foundPrice) {
+                    TokenPairPrices[tokenPairString].binance = PairStatus.NoPairFound
+                }
+            }
         }, 30000);
     }
 
     binanceSocket.onmessage = ({ data }: any) => {
         let priceObject = JSON.parse(data)
 
-        if (priceObject.s != `${baseToken.toUpperCase()+quoteToken.toUpperCase()}` && !isLoading) {
-            TokenPairPrices[`${baseToken}/${quoteToken}`].binance = PairStatus.NoPairFound
+        if (priceObject.s != `${baseToken.toUpperCase() + quoteToken.toUpperCase()}` && !isLoading) {
+
+            if ((baseToken == "eur" || quoteToken == "eur") && !flipped) {
+                //flip tokens and retry the connection.
+                console.log("Flipping binance token pair")
+                return openBinanceWs(quoteToken, baseToken, true);
+            } else {
+                TokenPairPrices[tokenPairString].binance = PairStatus.NoPairFound
+            }
         } else {
             if (!Number.isNaN(parseFloat(priceObject.p))) {
-                TokenPairPrices[`${baseToken}/${quoteToken}`].binance = parseFloat(priceObject.p)
+                let price = parseFloat(priceObject.p);
+                if (flipped) {
+                    price = 1 / price;
+                }
+                TokenPairPrices[tokenPairString].binance = price
                 foundPrice = true;
             } else {
-                TokenPairPrices[`${baseToken}/${quoteToken}`].binance = PairStatus.Loading
+                TokenPairPrices[tokenPairString].binance = PairStatus.Loading
             }
         }
     };

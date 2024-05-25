@@ -2,10 +2,14 @@ import WebSocket from "ws";
 import { TokenPairPrices } from "../index.js";
 import { PairStatus } from "../types.js";
 
-export const openBybitWs = (baseToken: string, quoteToken: string) => {
+export const openBybitWs = (baseToken: string, quoteToken: string, flipped?: boolean) => {
     const bybitWebSocketUrl = 'wss://stream.bybit.com/v5/public/spot';
 
     const bybitSocket = new WebSocket(bybitWebSocketUrl);
+
+    if (flipped == undefined) flipped = false;
+    let tokenPairString = `${baseToken}/${quoteToken}`
+    if (flipped) tokenPairString = `${quoteToken}/${baseToken}`
 
     bybitSocket.onopen = () => {
         bybitSocket.send(JSON.stringify({
@@ -19,12 +23,21 @@ export const openBybitWs = (baseToken: string, quoteToken: string) => {
         let priceObject = JSON.parse(data)
 
         if (priceObject.success === false) {
+            if ((baseToken == "eur" || quoteToken == "eur") && !flipped) {
+                //flip tokens and retry the connection.
+                console.log("Flipping bybit token pair")
+                return openBybitWs(quoteToken, baseToken, true)
+            }
             if (priceObject.ret_msg.includes("Invalid symbol")) {
-                TokenPairPrices[`${baseToken}/${quoteToken}`].bybit = PairStatus.NoPairFound
+                TokenPairPrices[tokenPairString].bybit = PairStatus.NoPairFound
             }
         } else {
             try {
-                TokenPairPrices[`${baseToken}/${quoteToken}`].bybit = parseFloat(priceObject.data[0].p)
+                let price = parseFloat(priceObject.data[0].p)
+                if (flipped) {
+                    price = 1 / price;
+                }
+                TokenPairPrices[tokenPairString].bybit = price
             } catch (error) {
                 console.log("Bybit data object does not contain a price")
             }
