@@ -6,9 +6,23 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Exchange Scout | Quartz",
-  description: "Compare CEXs for the best price and fees",
+  description: "Find the lowest fees and best exchange prices for CEXs in real time",
   icons: {
     icon: "/favicon.ico"
+  },
+  openGraph: {
+    title: "Exchange Scout | Quartz",
+    description: "Find the lowest fees and best exchange prices for CEXs in real time",
+    url: "https://app.quartzpay.io/",
+    siteName: "Quartz",
+    images: [
+      {
+        url: "https://uploads-ssl.webflow.com/65707af0f4af991289bbd432/6651dc3631f17b55708010fe_ExchangeScoutOpenGraph.jpg",
+        width: 1200,
+        height: 630
+      }
+    ],
+    type: "website"
   }
 };
 
