@@ -1,13 +1,13 @@
 export const currencies = [
-    "sol",
-    "usdc",
+    "sol", 
+    "usdc", 
     "usdt",
-    "eur",
+    "eur", 
     "btc",
     "eth",
-    "bnb",
-    "xrp",
-    "ton",
-    "doge",
-    "ada"
+    "xrp", 
+    "doge", 
+    "ada", 
+    "avax", 
+    "shib",
 ]
