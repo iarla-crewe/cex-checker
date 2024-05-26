@@ -4,6 +4,7 @@ import { FilterObj, FilterOptionValue } from "@/model/FilterData";
 import FilterOption from "./FilterOption";
 import { useState } from "react";
 import Image from "next/image";
+import { usePostHog } from 'posthog-js/react'
 
 interface SelectFilterProps {
     handleUpdate: (data: UpdatePriceQuery) => void;
@@ -12,6 +13,7 @@ interface SelectFilterProps {
 
 export default function SelectFilter(props: SelectFilterProps) {
     const { handleUpdate, filter } = props;
+    const posthog = usePostHog()
 
     const updateFilter = (value: FilterOptionValue) => {
         const index = filter.findIndex(([val]) => val === value[0]);
@@ -27,6 +29,7 @@ export default function SelectFilter(props: SelectFilterProps) {
             // });
 
             handleUpdate({filter: newFilter});
+            posthog?.capture('Changed Exchange Filter', { exchangeFilter: newFilter })
         }
     }
 

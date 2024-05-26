@@ -7,6 +7,7 @@ import styles from "./TradeInfo.module.css";
 import SwapCurrencyButton from "./SwapCurrencyButton";
 import { useState } from "react";
 import { UpdatePriceQuery } from "@/model/API";
+import { usePostHog } from 'posthog-js/react'
 
 interface TradeInfoProps {
     defaultInputToken: string,
@@ -23,10 +24,12 @@ export default function TradeInfo(props: TradeInfoProps) {
     const [isSelling, setIsSelling] = useState(defaultIsSelling);
     const [inputToken, setInputToken] = useState(defaultInputToken);
     const [outputToken, setOutputToken] = useState(defaultOutputToken);
-    
+    const posthog = usePostHog()
+
     const swapBuySell = () => {
         setIsSelling(!isSelling);
         handleSetIsSelling(!isSelling);
+        posthog?.capture('Clicked buy/sell button', { isSelling: isSelling })
     }
 
     const handleInputToken = (value: string) => {
@@ -37,6 +40,7 @@ export default function TradeInfo(props: TradeInfoProps) {
 
         setInputToken(value);
         handleUpdate({inputToken: value});
+        posthog?.capture('Choose new token', { tokenA: inputToken, tokenB: outputToken })
     }
 
     const handleOutputToken = (value: string) => {
@@ -47,6 +51,7 @@ export default function TradeInfo(props: TradeInfoProps) {
 
         setOutputToken(value);
         handleUpdate({outputToken: value});
+        posthog?.capture('Choose new token', { tokenA: inputToken, tokenB: outputToken })
     }
 
     const handleSwap = () => {
@@ -56,9 +61,13 @@ export default function TradeInfo(props: TradeInfoProps) {
         setInputToken(valueInput);
         setOutputToken(valueOutput);
         handleUpdate({inputToken: valueInput, outputToken: valueOutput});
+        posthog?.capture('Choose new token', { tokenA: inputToken, tokenB: outputToken })
     }
 
-    const handleAmount = (amount: number) => handleUpdate({amount: amount});
+    const handleAmount = (amount: number) => {
+        handleUpdate({amount: amount})
+        posthog?.capture('Changed Amount', { amount: amount })
+    };
 
     const text = (isSelling) ? "for" : "with";
 
