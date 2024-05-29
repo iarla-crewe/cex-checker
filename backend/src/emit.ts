@@ -3,7 +3,7 @@ import { PreviousPrices, TokenPairPrices } from "./index.js";
 import { Prices, TokenPair } from "./types.js";
 import { initializePriceObject } from "./utils/connections.js";
 
-const exchanges = ['binance', 'bybit', 'coinbase', 'crypto_com', 'kraken'];
+const exchanges = ['binance', 'bybit', 'coinbase', 'crypto_com', 'kraken', 'jupiter'];
 
 export const isNewReponse = (queryChanged: boolean, tokenPairString: string) => {
     let currentPrices = TokenPairPrices[tokenPairString];

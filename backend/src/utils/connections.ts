@@ -13,7 +13,8 @@ export const initializeObject = () => {
         kraken: undefined,
         coinbase: undefined,
         crypto_com: undefined,
-        bybit: undefined
+        bybit: undefined,
+        jupiter: undefined,
     }
 }
 

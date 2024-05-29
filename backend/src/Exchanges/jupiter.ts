@@ -16,14 +16,12 @@ export const openJupiterHttp = (baseToken: string, quoteToken: string) => {
         if (price != undefined) {
             //Store price in object
             TokenPairPrices[tokenPairString].jupiter = price
-            console.log("Jupiter Price!: ", price)
         } else {
             TokenPairPrices[tokenPairString].jupiter = PairStatus.NoPairFound;
-            console.log("Jupiter - No tokenpair found for: ", tokenPairString);
             //close loop
             clearInterval(intervalId);
         }
-    }, 5000);
+    }, 7500);
 
     const jupiterLoopObj: HttpLoopObj = {
         close: function (): void {
