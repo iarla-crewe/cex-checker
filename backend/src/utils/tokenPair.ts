@@ -42,7 +42,7 @@ export const getTokenPair = (input: string, output: string) => {
     }
 
     if (!quoteTokens.hasOwnProperty(input) && !quoteTokens.hasOwnProperty(output)) {
-        //neither is a base token
+        //neither is a quote token
         baseToken = input
         quoteToken = output
     }
