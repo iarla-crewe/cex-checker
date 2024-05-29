@@ -25,6 +25,7 @@ export type ResponseData = {
     coinbase: number | PairStatus;
     crypto_com: number | PairStatus;
     bybit: number | PairStatus;
+    jupiter: number | PairStatus;
 }
 
 export enum PairStatus {
@@ -67,6 +68,7 @@ export const initializeRespobseObject = () => {
         kraken: PairStatus.Loading,
         coinbase: PairStatus.Loading,
         crypto_com: PairStatus.Loading,
-        bybit: PairStatus.Loading
+        bybit: PairStatus.Loading,
+        jupiter: PairStatus.Loading,
     }
 }

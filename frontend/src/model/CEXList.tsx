@@ -79,6 +79,17 @@ export const CEXList: CEX[] = [
         capStyle: "LOWER",
         price: PairStatus.Loading,
     },
+    {
+        name: "jupiter", 
+        displayName: "Jupiter", 
+        logoSrc: "/jupiter.svg", 
+        brandColor: "#131B24", 
+        textColor: "white", 
+        borderColor: "#C7F283", 
+        templateUrl: "https://jup.ag/swap/™-†",
+        capStyle: "UPPER",
+        price: PairStatus.Loading,
+    },
 ]
 
 

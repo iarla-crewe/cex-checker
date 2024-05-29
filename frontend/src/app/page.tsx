@@ -15,14 +15,15 @@ export default function Home() {
   const [responseData, setResponseData] = useState<ResponseData>(initializeRespobseObject());
   const [queryData, setQueryData] = useState<PriceQuery>({
     inputToken: 'sol',
-    outputToken: 'usdc',
+    outputToken: 'usdt',
     amount: 1,
     filter: filterToList({
       binance: true,
       bybit: true,
       coinbase: true,
       crypto_com: true,
-      kraken: true
+      kraken: true,
+      jupiter: true,
     })
   });
   const [isSelling, setIsSelling] = useState(false);
