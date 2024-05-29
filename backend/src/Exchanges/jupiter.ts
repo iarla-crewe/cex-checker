@@ -13,10 +13,14 @@ export const openJupiterHttp = (baseToken: string, quoteToken: string) => {
     intervalId = setInterval(async () => {
         price = await getJupiterPriceData(baseToken, quoteToken);
 
-        if (price != undefined) {
+
+        if (baseToken == "eur" || quoteToken == "eur") {
+            TokenPairPrices[tokenPairString].jupiter = PairStatus.NoPairFound;
+            clearInterval(intervalId);  
+        } else if (price != undefined) {
             //Store price in object
             TokenPairPrices[tokenPairString].jupiter = price
-        } else {
+        }  else {
             TokenPairPrices[tokenPairString].jupiter = PairStatus.NoPairFound;
             //close loop
             clearInterval(intervalId);
