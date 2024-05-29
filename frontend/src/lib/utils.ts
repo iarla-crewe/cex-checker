@@ -46,7 +46,9 @@ export const getTokenPair = (input: string, output: string) => {
   }
 
   if (!quoteTokens.hasOwnProperty(input) && !quoteTokens.hasOwnProperty(output)) {
-      throw Error("No base token")
+    //neither is a quote token
+    baseToken = input
+    quoteToken = output
   }
 
   let tokenPair: TokenPair = {
