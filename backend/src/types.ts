@@ -7,6 +7,7 @@ export type Prices = {
     coinbase: number | PairStatus;
     crypto_com: number | PairStatus;
     bybit: number | PairStatus;
+    jupiter: number | PairStatus;
 }
 
 export enum PairStatus {
@@ -20,6 +21,7 @@ export type CexList = {
     coinbase: boolean,
     crypto_com: boolean,
     bybit: boolean,
+    jupiter: boolean,
 }
 
 export type ExchangeFees = {
@@ -29,6 +31,7 @@ export type ExchangeFees = {
     coinbase: number,
     crypto_com: number,
     bybit: number,
+    jupiter: number,
 }
 
 export type PriceQuery = {
@@ -47,19 +50,25 @@ export type ConnectionsNumber = {
     [key: string]: number;
 }
 
-export type WsConnections = {
-    [exchange: string]: WebSocket | undefined;
+export type ExConnections = {
+    [exchange: string]: WebSocket | HttpLoopObj | undefined;
     binance?: WebSocket,
     kraken?: WebSocket,
     coinbase?: WebSocket,
     crypto_com?: WebSocket,
     bybit?: WebSocket,
+    jupiter?: HttpLoopObj,
 }
 
 export type TokenPairConnections = {
-    [tokenPair: string]: WsConnections | undefined;
+    [tokenPair: string]: ExConnections | undefined;
 }
 
 export type TradingPairPrices = {
     [tokenPair: string]: Prices
+}
+
+export interface HttpLoopObj {
+    // Method to handle Http Loop close event
+    close(): void;
 }

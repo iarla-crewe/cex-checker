@@ -40,7 +40,8 @@ io.on('connection', (socket) => {
             kraken: false,
             coinbase: false,
             crypto_com: false,
-            bybit: false
+            bybit: false,
+            jupiter: false,
         }
     }; // Variable to store previous query data
 

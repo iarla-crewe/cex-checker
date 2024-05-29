@@ -1,4 +1,4 @@
-import { exchangeTakerFees } from "./CEXs/prices.js";
+import { exchangeTakerFees } from "./Exchanges/prices.js";
 import { PreviousPrices, TokenPairPrices } from "./index.js";
 import { Prices, TokenPair } from "./types.js";
 import { initializePriceObject } from "./utils/connections.js";

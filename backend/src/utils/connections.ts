@@ -1,10 +1,11 @@
 import { ConnectionsNumber, PreviousPrices, TokenPairConnections, TokenPairPrices } from "../index.js";
-import { openBinanceWs } from "../CEXs/binance.js";
-import { openBybitWs } from "../CEXs/bybit.js";
-import { openCoinbaseWs } from "../CEXs/coinbase.js";
-import { openCrypto_comWs } from "../CEXs/crypto-com.js";
-import { openKrakenWs } from "../CEXs/kraken.js";
-import { PairStatus, TokenPair, WsConnections } from "../types.js";
+import { openBinanceWs } from "../Exchanges/binance.js";
+import { openBybitWs } from "../Exchanges/bybit.js";
+import { openCoinbaseWs } from "../Exchanges/coinbase.js";
+import { openCrypto_comWs } from "../Exchanges/crypto-com.js";
+import { openKrakenWs } from "../Exchanges/kraken.js";
+import { PairStatus, TokenPair, ExConnections } from "../types.js";
+import { openJupiterHttp } from "../Exchanges/jupiter.js";
 
 export const initializeObject = () => {
     return {
@@ -22,7 +23,8 @@ export const initializePriceObject = () => {
         kraken: PairStatus.Loading,
         coinbase: PairStatus.Loading,
         crypto_com: PairStatus.Loading,
-        bybit: PairStatus.Loading
+        bybit: PairStatus.Loading,
+        jupiter: PairStatus.Loading,
     }
 }
 
@@ -47,7 +49,8 @@ export const minusOneConnection = (previousPairString: string) => {
             TokenPairConnections[previousPairString]?.coinbase?.close()
             TokenPairConnections[previousPairString]?.crypto_com?.close()
             TokenPairConnections[previousPairString]?.kraken?.close()
-    
+            TokenPairConnections[previousPairString]?.jupiter?.close()
+
             TokenPairConnections[previousPairString] = undefined
         }
     } catch (error) {
@@ -64,13 +67,15 @@ export const openExchangeWsConnections = (currentTokenPair: TokenPair) => {
         let coinbaseSocket = openCoinbaseWs(currentTokenPair.base, currentTokenPair.quote)
         let crypto_comSocket = openCrypto_comWs(currentTokenPair.base, currentTokenPair.quote)
         let krakenSocket = openKrakenWs(currentTokenPair.base, currentTokenPair.quote)
+        let jupiterHttpLoop = openJupiterHttp(currentTokenPair.base, currentTokenPair.quote)
 
-        let wsExchanges: WsConnections = {
+        let wsExchanges: ExConnections = {
             binance: binanceSocket,
             kraken: bybitSocket,
             coinbase: coinbaseSocket,
             crypto_com: crypto_comSocket,
             bybit: krakenSocket,
+            jupiter: jupiterHttpLoop,
         }
         //store the connections
         TokenPairConnections[tokenPairString] = wsExchanges;
