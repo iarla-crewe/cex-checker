@@ -21,34 +21,34 @@ type WithdrawalFees = {
 
 export const CEXList: CEX[] = [
     {
-        name: "binance", 
-        displayName: "Binance", 
-        logoSrc: "/binance.svg", 
-        brandColor: "#F1B90C", 
-        textColor: "black", 
-        borderColor: "", 
+        name: "binance",
+        displayName: "Binance",
+        logoSrc: "/binance.svg",
+        brandColor: "#F1B90C",
+        textColor: "black",
+        borderColor: "",
         templateUrl: "https://www.binance.com/en/trade/™_†?_from=markets&type=spot",
         capStyle: "UPPER",
         price: PairStatus.Loading
     },
     {
-        name: "bybit", 
-        displayName: "ByBit", 
-        logoSrc: "/bybit.svg", 
-        brandColor: "#17181e", 
-        textColor: "white", 
-        borderColor: "#f7a600", 
+        name: "bybit",
+        displayName: "ByBit",
+        logoSrc: "/bybit.svg",
+        brandColor: "#17181e",
+        textColor: "white",
+        borderColor: "#f7a600",
         templateUrl: "https://www.bybit.com/en/trade/spot/™/†",
         capStyle: "UPPER",
         price: PairStatus.Loading
     },
     {
-        name: "coinbase", 
-        displayName: "Coinbase", 
-        logoSrc: "/coinbase.svg", 
-        brandColor: "#004af7", 
-        textColor: "white", 
-        borderColor: "white", 
+        name: "coinbase",
+        displayName: "Coinbase",
+        logoSrc: "/coinbase.svg",
+        brandColor: "#004af7",
+        textColor: "white",
+        borderColor: "white",
         templateUrl: "https://www.coinbase.com/advanced-trade/spot/™-†",
         capStyle: "UPPER",
         withdrawFees: {
@@ -58,34 +58,34 @@ export const CEXList: CEX[] = [
         price: PairStatus.Loading
     },
     {
-        name: "crypto_com", 
-        displayName: "Crypto.com", 
-        logoSrc: "/crypto_com.svg", 
-        brandColor: "#032f69", 
-        textColor: "white", 
-        borderColor: "white", 
+        name: "crypto_com",
+        displayName: "Crypto.com",
+        logoSrc: "/crypto_com.svg",
+        brandColor: "#032f69",
+        textColor: "white",
+        borderColor: "white",
         templateUrl: "https://crypto.com/exchange/trade/™_†",
         capStyle: "UPPER",
         price: PairStatus.Loading
     },
     {
-        name: "kraken", 
-        displayName: "Kraken", 
-        logoSrc: "/kraken.svg", 
-        brandColor: "#7132F5", 
-        textColor: "white", 
-        borderColor: "white", 
+        name: "kraken",
+        displayName: "Kraken",
+        logoSrc: "/kraken.svg",
+        brandColor: "#7132F5",
+        textColor: "white",
+        borderColor: "white",
         templateUrl: "https://pro.kraken.com/app/trade/™-†",
         capStyle: "LOWER",
         price: PairStatus.Loading,
     },
     {
-        name: "jupiter", 
-        displayName: "Jupiter", 
-        logoSrc: "/jupiter.svg", 
-        brandColor: "#131B24", 
-        textColor: "white", 
-        borderColor: "#C7F283", 
+        name: "jupiter",
+        displayName: "Jupiter",
+        logoSrc: "/jupiter.svg",
+        brandColor: "#131B24",
+        textColor: "white",
+        borderColor: "#C7F283",
         templateUrl: "https://jup.ag/swap/™-†",
         capStyle: "UPPER",
         price: PairStatus.Loading,
@@ -137,7 +137,15 @@ export function setExchangeLink(tokenPair: TokenPair, cex: CEX) {
         if (tokenPair.base == "usdc") base = "usd"
         if (tokenPair.quote == "usdc") quote = "usd"
     }
- 
+
+
+    if (cex.name === "kraken" || cex.name === 'bybit' || cex.name === 'coinbase') {
+        if (tokenPair.base == "eur" && tokenPair.quote == "usdt") {
+            base = tokenPair.quote
+            quote = tokenPair.base
+        }
+    }
+
     if (cex.capStyle === "UPPER") {
         link = link
             .replace("™", base.toUpperCase())
