@@ -90,6 +90,17 @@ export const CEXList: CEX[] = [
         capStyle: "UPPER",
         price: PairStatus.Loading,
     },
+    {
+        name: "oneInch",
+        displayName: "1inch",
+        logoSrc: "/1inch.svg",
+        brandColor: "#0B121E",
+        textColor: "white",
+        borderColor: "#2E8AF5",
+        templateUrl: "https://app.1inch.io/#/42161/simple/swap/™/†",
+        capStyle: "UPPER",
+        price: PairStatus.Loading,
+    },
 ]
 
 

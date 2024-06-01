@@ -6,6 +6,7 @@ export interface FilterObj {
     crypto_com: boolean;
     kraken: boolean;
     jupiter: boolean;
+    oneInch: boolean;
 }
 
 export type FilterOptionValue = [string, boolean]
@@ -37,6 +38,7 @@ export function listToFilter(filterList: FilterOptionValue[]) {
         crypto_com: false,
         kraken: false,
         jupiter: false,
+        oneInch: false,
     };
 
     filterList.forEach(([cex, value]) => {

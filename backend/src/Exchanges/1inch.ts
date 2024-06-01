@@ -54,15 +54,13 @@ export const openOneInchHttp = (baseToken: string, quoteToken: string) => {
 
     if (price != undefined) {
       //Store price in object
-      console.log("Price!: ", price)
       TokenPairPrices[tokenPairString].oneInch = price
     } else {
       TokenPairPrices[tokenPairString].oneInch = PairStatus.NoPairFound;
       //close loop
-      console.log("No token pair found oneinch")
       clearInterval(intervalId);
     }
-  }, 7500);
+  }, 25000);
 
   const OneInchLoopObj: HttpLoopObj = {
     close: function (): void {

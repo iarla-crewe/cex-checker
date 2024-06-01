@@ -24,6 +24,7 @@ export default function Home() {
       crypto_com: true,
       kraken: true,
       jupiter: true,
+      oneInch: true,
     })
   });
   const [isSelling, setIsSelling] = useState(false);

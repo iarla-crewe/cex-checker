@@ -26,6 +26,7 @@ export type ResponseData = {
     crypto_com: number | PairStatus;
     bybit: number | PairStatus;
     jupiter: number | PairStatus;
+    oneInch: number | PairStatus;
 }
 
 export enum PairStatus {
@@ -70,5 +71,6 @@ export const initializeRespobseObject = () => {
         crypto_com: PairStatus.Loading,
         bybit: PairStatus.Loading,
         jupiter: PairStatus.Loading,
+        oneInch: PairStatus.Loading,
     }
 }
