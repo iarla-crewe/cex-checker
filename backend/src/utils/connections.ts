@@ -6,6 +6,7 @@ import { openCrypto_comWs } from "../Exchanges/crypto-com.js";
 import { openKrakenWs } from "../Exchanges/kraken.js";
 import { PairStatus, TokenPair, ExConnections } from "../types.js";
 import { openJupiterHttp } from "../Exchanges/jupiter.js";
+import { openOneInchHttp } from "../Exchanges/1inch.js";
 
 export const initializeObject = () => {
     return {
@@ -15,6 +16,7 @@ export const initializeObject = () => {
         crypto_com: undefined,
         bybit: undefined,
         jupiter: undefined,
+        oneInch: undefined,
     }
 }
 
@@ -26,6 +28,7 @@ export const initializePriceObject = () => {
         crypto_com: PairStatus.Loading,
         bybit: PairStatus.Loading,
         jupiter: PairStatus.Loading,
+        oneInch: PairStatus.Loading,
     }
 }
 
@@ -51,6 +54,7 @@ export const minusOneConnection = (previousPairString: string) => {
             TokenPairConnections[previousPairString]?.crypto_com?.close()
             TokenPairConnections[previousPairString]?.kraken?.close()
             TokenPairConnections[previousPairString]?.jupiter?.close()
+            TokenPairConnections[previousPairString]?.oneInch?.close()
 
             TokenPairConnections[previousPairString] = undefined
         }
@@ -69,6 +73,7 @@ export const openExchangeWsConnections = (currentTokenPair: TokenPair) => {
         let crypto_comSocket = openCrypto_comWs(currentTokenPair.base, currentTokenPair.quote)
         let krakenSocket = openKrakenWs(currentTokenPair.base, currentTokenPair.quote)
         let jupiterHttpLoop = openJupiterHttp(currentTokenPair.base, currentTokenPair.quote)
+        let oneInchHttpLoop = openOneInchHttp(currentTokenPair.base, currentTokenPair.quote)
 
         let wsExchanges: ExConnections = {
             binance: binanceSocket,
@@ -77,6 +82,7 @@ export const openExchangeWsConnections = (currentTokenPair: TokenPair) => {
             crypto_com: crypto_comSocket,
             bybit: krakenSocket,
             jupiter: jupiterHttpLoop,
+            oneInch: oneInchHttpLoop,
         }
         //store the connections
         TokenPairConnections[tokenPairString] = wsExchanges;

@@ -42,6 +42,7 @@ io.on('connection', (socket) => {
             crypto_com: false,
             bybit: false,
             jupiter: false,
+            oneInch: false,
         }
     }; // Variable to store previous query data
 

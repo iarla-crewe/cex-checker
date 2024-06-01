@@ -16,7 +16,7 @@ export default function DisplayPrice(props: DisplayPriceProps) {
 
     let withdrawFeeText = (isSelling) ? "-" : "+";
     if (withdrawFee === 0) {
-        withdrawFeeText += ` network gas fees`
+        withdrawFeeText += `gas fee`
     } else if (withdrawFee === undefined) {
         withdrawFeeText += `withdrawal fee (loading...)`
     } else {

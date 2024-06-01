@@ -7,6 +7,7 @@ export let exchangeTakerFees: ExchangeFees = {
     crypto_com: 0.00075,
     bybit: 0.001,
     jupiter: 0,
+    oneInch: 0,
 }
 
 export let exchangeMakerFees: ExchangeFees = {
@@ -16,4 +17,5 @@ export let exchangeMakerFees: ExchangeFees = {
     crypto_com: 0.00075,
     bybit: 0.001,
     jupiter: 0,
+    oneInch: 0,
 }

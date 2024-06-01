@@ -8,6 +8,7 @@ export type Prices = {
     crypto_com: number | PairStatus;
     bybit: number | PairStatus;
     jupiter: number | PairStatus;
+    oneInch: number | PairStatus;
 }
 
 export enum PairStatus {
@@ -22,6 +23,7 @@ export type CexList = {
     crypto_com: boolean,
     bybit: boolean,
     jupiter: boolean,
+    oneInch: boolean,
 }
 
 export type ExchangeFees = {
@@ -32,6 +34,7 @@ export type ExchangeFees = {
     crypto_com: number,
     bybit: number,
     jupiter: number,
+    oneInch: number,
 }
 
 export type PriceQuery = {
@@ -58,6 +61,7 @@ export type ExConnections = {
     crypto_com?: WebSocket,
     bybit?: WebSocket,
     jupiter?: HttpLoopObj,
+    oneInch?: HttpLoopObj,
 }
 
 export type TokenPairConnections = {
