@@ -20,8 +20,7 @@ export default function FilterOption(props: FilterOptionProps) {
     const borderColor = enabled ? "var(--primary)" : "var(--text)";
     const cssVariables = {
         '--filter-border': "var(--card-border-colorless) " + borderColor,
-        '--filter-opacity': enabled ? "1" : "0.7",
-        '--filter-padding': enabled ? "0px 0px" : "0px 12.5px",
+        '--filter-opacity': enabled ? "1" : "0.7"
     } as React.CSSProperties;
     
     return (
@@ -33,10 +32,8 @@ export default function FilterOption(props: FilterOptionProps) {
                 onUpdate(!enabled);
             }
         }>
-            <div className={styles["filter-button-content"]} style={cssVariables}>
-                <p>{getCEXDisplayName(name)}</p>
-                <CloseFilter enabled={enabled}/>
-            </div>
+            <p>{getCEXDisplayName(name)}</p>
+            <CloseFilter enabled={enabled}/>
         </button>
     )
 }
@@ -46,14 +43,12 @@ function CloseFilter(props: CloseFilterProps) {
     if (!enabled) return (<></>)
 
     return (
-        <div className={styles["close-filter"]}>
-            <Image
-                src="/close_icon.svg"
-                alt="x"
-                height={25}
-                width={25}
-                className={styles["close-filter-icon"]}
-            />
-        </div>
+        <Image
+            src="/close_icon.svg"
+            alt="x"
+            height={25}
+            width={25}
+            className={styles["close-filter"]}
+        />
     )
 }
