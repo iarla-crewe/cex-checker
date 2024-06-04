@@ -1,6 +1,7 @@
 import WebSocket from "ws";
 import { TokenPairPrices } from "../index.js";
 import { PairStatus } from "../types.js";
+import axios from "axios";
 
 export const openBinanceWs = (baseToken: string, quoteToken: string, flipped?: boolean) => {
     const binanceWebSocketUrl = `wss://stream.binance.com:9443/ws/${baseToken + quoteToken}@trade`;
@@ -74,4 +75,30 @@ export const openBinanceWs = (baseToken: string, quoteToken: string, flipped?: b
     });
 
     return binanceSocket;
+}
+
+const API_URL = "https://data-api.binance.vision/api/v3/ticker/price"
+
+export const getCurrentBinancePrice = async (baseToken: string, quoteToken: string) => {
+    let tokenPairString = `${baseToken}/${quoteToken}`
+
+    const config = {
+        params: {
+            symbol: `${baseToken.toUpperCase()}${quoteToken.toUpperCase()}`,
+        }
+    };
+    let response;
+    try {
+        response = await axios.get(API_URL, config);
+    } catch (error) {
+        //@ts-ignore
+        console.log("binance api call error", error.response.data)
+        TokenPairPrices[tokenPairString].binance = PairStatus.NoPairFound
+        return
+    }
+    let price = Number(response!.data.price);
+    console.log("Binance Price from api call: ", price);
+
+    TokenPairPrices[tokenPairString].binance = price
+    return;
 }

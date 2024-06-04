@@ -16,11 +16,11 @@ export const openJupiterHttp = (baseToken: string, quoteToken: string) => {
 
         if (baseToken == "eur" || quoteToken == "eur") {
             TokenPairPrices[tokenPairString].jupiter = PairStatus.NoPairFound;
-            clearInterval(intervalId);  
+            clearInterval(intervalId);
         } else if (price != undefined) {
             //Store price in object
             TokenPairPrices[tokenPairString].jupiter = price
-        }  else {
+        } else {
             TokenPairPrices[tokenPairString].jupiter = PairStatus.NoPairFound;
             //close loop
             clearInterval(intervalId);
@@ -39,7 +39,7 @@ export const openJupiterHttp = (baseToken: string, quoteToken: string) => {
 }
 
 
-export async function getJupiterPriceData(inputToken: string, outputToken: string) {
+async function getJupiterPriceData(inputToken: string, outputToken: string) {
     try {
         let link = setExchangeLink(API_URL, inputToken, outputToken);
         const response = await axios.get(link);
@@ -49,13 +49,31 @@ export async function getJupiterPriceData(inputToken: string, outputToken: strin
             //No pair found
             return undefined;
         } else if (jupPriceObj[inputToken.toUpperCase()]) {
-            return jupPriceObj[inputToken.toUpperCase()].price;
+            let price = jupPriceObj[inputToken.toUpperCase()].price;
+            console.log("Jupiter Price from api call: ", price);
+            return price
         }
         console.log("Jupiter - Options not matched")
         return undefined;
     } catch (error) {
         console.error('Jupiter - Error fetching data:', error);
         return undefined;
+    }
+}
+
+export const getCurrentJupiterPrice = async (baseToken: string, quoteToken: string) => {
+    let tokenPairString = `${baseToken}/${quoteToken}`
+    const price = await getJupiterPriceData(baseToken, quoteToken);
+
+    if (baseToken == "eur" || quoteToken == "eur") {
+        TokenPairPrices[tokenPairString].jupiter = PairStatus.NoPairFound;
+    }
+
+    if (price != undefined) {
+        //Store price in object
+        TokenPairPrices[tokenPairString].jupiter = price
+    } else {
+        TokenPairPrices[tokenPairString].jupiter = PairStatus.NoPairFound;
     }
 }
 

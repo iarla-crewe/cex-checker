@@ -105,6 +105,7 @@ async function getOneInchPriceData(inputToken: string, outputToken: string): Pro
 
     try {
       let price = formatNumber(oneInchPriceObj.dstAmount, oneInchPriceObj.dstToken.decimals);
+      console.log("1inch Price from api call: ", price)
       return Number(price)
     } catch (error) {
       console.log("1inch Price error when formatting: ", error)
@@ -123,11 +124,14 @@ function formatNumber(number: number, decimals: number) {
   return formattedNumber;
 }
 
+export const getCurrentOneInchPrice = async (baseToken: string, quoteToken: string) => {
+  let tokenPairString = `${baseToken}/${quoteToken}`
+  const price = await getOneInchPriceData(baseToken, quoteToken);
 
-// async function test() {
-//   let httpIn = openOneInchHttp("eth", "usdt")
-
-//   setTimeout(() => httpIn.close(), 30000)
-// }
-
-// test();
+  if (price != undefined) {
+    //Store price in object
+    TokenPairPrices[tokenPairString].oneInch = price
+  } else {
+    TokenPairPrices[tokenPairString].oneInch = PairStatus.NoPairFound;
+  }
+}

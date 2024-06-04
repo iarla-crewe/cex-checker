@@ -1,6 +1,7 @@
 import WebSocket from "ws";
 import { TokenPairPrices } from "../index.js";
 import { PairStatus } from "../types.js";
+import axios from "axios";
 
 export const openCoinbaseWs = (baseTokenOriginal: string, quoteTokenOriginal: string, flipped?: boolean) => {
     let btFormatted = baseTokenOriginal
@@ -75,4 +76,25 @@ export const openCoinbaseWs = (baseTokenOriginal: string, quoteTokenOriginal: st
     });
 
     return coinbaseSocket;
+}
+
+export const getCurrentCoinbasePrice = async (baseToken: string, quoteToken: string) => {
+    let tokenPairString = `${baseToken}/${quoteToken}`
+    const API_URL = `https://api.coinbase.com/v2/prices/${baseToken.toUpperCase()}-${quoteToken.toUpperCase()}/spot`;
+
+    let response;
+    try {
+        response = await axios.get(API_URL);
+        console.log("Response: ", response.data)
+    } catch (error) {
+        //@ts-ignore
+        console.log("Coinbase No token pair found - ", error.response.data.message)
+        TokenPairPrices[tokenPairString].coinbase = PairStatus.NoPairFound
+        return
+    }
+    let price: number;
+    price = Number(response.data.data.amount);
+    console.log("coinbase Price from api call: ", price);
+    TokenPairPrices[tokenPairString].coinbase = price
+    return
 }

@@ -2,6 +2,7 @@ import WebSocket from 'ws';
 import dotenv from 'dotenv';
 import { TokenPairPrices } from '../index.js';
 import { PairStatus } from '../types.js';
+import axios from 'axios';
 dotenv.config();
 
 export const openKrakenWs = (baseToken: string, quoteToken: string, flipped?: boolean) => {
@@ -59,3 +60,44 @@ export const openKrakenWs = (baseToken: string, quoteToken: string, flipped?: bo
 
     return krakenSocket;
 };
+
+export const getCurrentKrakenPrice = async (baseToken: string, quoteToken: string) => {
+    let tokenPairString = `${baseToken}/${quoteToken}`
+
+    let config = {
+        method: 'get',
+        maxBodyLength: Infinity,
+        url: `https://api.kraken.com/0/public/Trades?pair=${baseToken.toUpperCase()}${quoteToken.toUpperCase()}&count=1`,
+        headers: {
+            'Accept': 'application/json'
+        }
+    };
+    let response;
+    try {
+        response = await axios(config);
+    } catch (error) {
+        //@ts-ignore
+        console.log("kraken api call error", error.response.data)
+        TokenPairPrices[tokenPairString].kraken = PairStatus.NoPairFound
+        return
+    }
+
+    if (response.data.error.length != 0) {
+        console.log("kraken error: ", response.data.error[0]);
+        TokenPairPrices[tokenPairString].kraken = PairStatus.NoPairFound
+        return
+    }
+    let price;
+    try {
+        price = Number(response.data.result[`${baseToken.toUpperCase()}${quoteToken.toUpperCase()}`][0][0]);
+    } catch (error) {
+        TokenPairPrices[tokenPairString].kraken = PairStatus.NoPairFound
+    }
+    console.log("Kraken Price from api call:", price)
+    if (price == undefined) {
+        TokenPairPrices[tokenPairString].kraken = PairStatus.NoPairFound
+        return
+    }
+    TokenPairPrices[tokenPairString].kraken = price!
+    return;
+}

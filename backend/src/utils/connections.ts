@@ -1,12 +1,12 @@
 import { ConnectionsNumber, PreviousPrices, TokenPairConnections, TokenPairPrices } from "../index.js";
-import { openBinanceWs } from "../Exchanges/binance.js";
-import { openBybitWs } from "../Exchanges/bybit.js";
-import { openCoinbaseWs } from "../Exchanges/coinbase.js";
-import { openCrypto_comWs } from "../Exchanges/crypto-com.js";
-import { openKrakenWs } from "../Exchanges/kraken.js";
+import { getCurrentBinancePrice, openBinanceWs } from "../Exchanges/binance.js";
+import { getCurrentBybitPrice, openBybitWs } from "../Exchanges/bybit.js";
+import { getCurrentCoinbasePrice, openCoinbaseWs } from "../Exchanges/coinbase.js";
+import { getCurrentCrypto_comPrice, openCrypto_comWs } from "../Exchanges/crypto-com.js";
+import { getCurrentKrakenPrice, openKrakenWs } from "../Exchanges/kraken.js";
 import { PairStatus, TokenPair, ExConnections } from "../types.js";
-import { openJupiterHttp } from "../Exchanges/jupiter.js";
-import { openOneInchHttp } from "../Exchanges/1inch.js";
+import { getCurrentJupiterPrice, openJupiterHttp } from "../Exchanges/jupiter.js";
+import { getCurrentOneInchPrice, openOneInchHttp } from "../Exchanges/1inch.js";
 
 export const initializeObject = () => {
     return {
@@ -63,10 +63,13 @@ export const minusOneConnection = (previousPairString: string) => {
     }
 }
 
-export const openExchangeWsConnections = (currentTokenPair: TokenPair) => {
+export const openExchangeWsConnections =  (currentTokenPair: TokenPair) => {
     const tokenPairString = `${currentTokenPair.base}/${currentTokenPair.quote}`
 
     if (TokenPairConnections[tokenPairString] == undefined) {
+        //call api endpoint for each exchanges current price.
+        getCurrentPrices(currentTokenPair.base, currentTokenPair.quote)
+
         let binanceSocket = openBinanceWs(currentTokenPair.base, currentTokenPair.quote)
         let bybitSocket = openBybitWs(currentTokenPair.base, currentTokenPair.quote)
         let coinbaseSocket = openCoinbaseWs(currentTokenPair.base, currentTokenPair.quote)
@@ -90,4 +93,15 @@ export const openExchangeWsConnections = (currentTokenPair: TokenPair) => {
         TokenPairPrices[tokenPairString] = initializePriceObject()
         PreviousPrices[tokenPairString] = initializePriceObject()
     }
+}
+
+//Calls APIs to get the current price on each exchange
+const getCurrentPrices = (base: string, quote: string) => {
+    getCurrentBinancePrice(base, quote)
+    getCurrentKrakenPrice(base, quote)
+    getCurrentOneInchPrice(base, quote)
+    getCurrentJupiterPrice(base, quote)
+    getCurrentBybitPrice(base, quote)
+    getCurrentCrypto_comPrice(base, quote)
+    getCurrentCoinbasePrice(base, quote)
 }

@@ -1,6 +1,7 @@
 import WebSocket from "ws";
 import { TokenPairPrices } from "../index.js";
 import { PairStatus } from "../types.js";
+import axios from "axios";
 
 export const openBybitWs = (baseToken: string, quoteToken: string, flipped?: boolean) => {
     const bybitWebSocketUrl = 'wss://stream.bybit.com/v5/public/spot';
@@ -53,4 +54,30 @@ export const openBybitWs = (baseToken: string, quoteToken: string, flipped?: boo
     });
 
     return bybitSocket;
+}
+
+
+export const getCurrentBybitPrice = async (baseToken: string, quoteToken: string) => {
+    let tokenPairString = `${baseToken}/${quoteToken}`
+    const API_URL = `https://api.bybit.com/spot/v3/public/quote/ticker/price?symbol=${baseToken.toUpperCase()}${quoteToken.toUpperCase()}`;
+
+    let response;
+    try {
+        response = await axios.get(API_URL);
+    } catch (error) {
+        //@ts-ignore
+        console.log("bybit api call error", error.response.data)
+        TokenPairPrices[tokenPairString].bybit = PairStatus.NoPairFound
+        return
+    }
+    let price: number;
+    if (response.data.result.price == undefined) {
+        console.log("No bybit price found from api")
+        TokenPairPrices[tokenPairString].bybit = PairStatus.NoPairFound
+        return
+    }
+    price = Number(response.data.result.price);
+    console.log("bybit Price from api call: ", price);
+    TokenPairPrices[tokenPairString].bybit = price
+    return
 }
