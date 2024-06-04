@@ -33,22 +33,25 @@ export default function SelectFilter(props: SelectFilterProps) {
     }
 
     return (
-        <div className={styles["select-filter"]}>
-            <Image
-                src="/filter_icon.svg"
-                alt="CEX Filter"
-                height={30}
-                width={30}
-                className={styles["filter-icon"]}
-            />
-            {filter.map(([cex, enabled], _) => (
-                <FilterOption 
-                    key={cex}
-                    name={cex} 
-                    defaultEnabled={enabled}
-                    onUpdate={(value: boolean) => updateFilter([cex, value])}
+        <div className={styles["select-filter-wrapper"]}>
+            <div className={styles["select-filter-content"]}>
+                <Image
+                    src="/filter_icon.svg"
+                    alt="CEX Filter"
+                    height={30}
+                    width={30}
+                    className={styles["filter-icon"]}
                 />
-            ))}
+                {filter.map(([cex, enabled], _) => (
+                    <FilterOption 
+                        key={cex}
+                        name={cex} 
+                        defaultEnabled={enabled}
+                        onUpdate={(value: boolean) => updateFilter([cex, value])}
+                    />
+                ))}
+            </div>
+            <div className={styles["fade-mask"]}/>
         </div>
     );
 }

@@ -1,26 +1,37 @@
-.select-filter {
-    background-color: pink;
-    padding: 10px 0px;
-
-    align-self: flex-start;
-
-    margin-bottom: 80px;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    gap: 5px;
-
+.select-filter-wrapper {
     -ms-overflow-style: none;
     scrollbar-width: none;
     overflow-x: scroll;
     overflow-y: hidden;
     white-space: nowrap;
+    width: var(--max-width);
+
+    margin-bottom: 80px;
+    align-self: flex-start;
 }
 
-.select-filter::-webkit-scrollbar {
+.select-filter-wrapper::-webkit-scrollbar {
     display: none;
-  }
+}
+
+@media screen and (max-width: 1020px) {
+    .select-filter-wrapper {
+      width: 100%;
+    }
+}
+
+
+
+.select-filter-content {
+    width: auto;
+    float: left;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+}
 
 .filter-icon {
     padding-right: 15px;
@@ -54,5 +65,11 @@
 @media screen and (max-width: 420px) {
     .close-filter {
         height: 18px;
+    }
+
+    .filter-icon {
+        padding-right: 8px;
+        height: 22px;
+        width: auto;
     }
 }
