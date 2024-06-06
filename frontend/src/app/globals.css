@@ -68,7 +68,25 @@
     --ring: 212.7 26.8% 83.9%;
   }
 
+  [filter-fade='none'] {
+    --start-fade-size: 0px;
+    --end-fade-size: 0px;
+  }
+
+  [filter-fade='start'] {
+    --start-fade-size: 0px;
+    --end-fade-size: 30px !important;
+  }
+
+  [filter-fade='middle'] {
+    --start-fade-size: 30px !important;
+    --end-fade-size: 30px !important;
+  }
+
   :root {
+    --start-fade-size: 0px;
+    --end-fade-size: 30px !important;
+
     --max-width: 940px;
     --font-mono: ui-monospace, Menlo, Monaco, "Cascadia Mono", "Segoe UI Mono",
       "Roboto Mono", "Oxygen Mono", "Ubuntu Monospace", "Source Code Pro",
@@ -142,6 +160,12 @@
       --size-p: 16px;
       --size-small: 12.8px;
     }
+  }
+
+  [data-theme='dark'] {
+    --primary-color: #9e9e9e;
+    --background-color: #000;
+    --text-color: #fff;
   }
 
   /*

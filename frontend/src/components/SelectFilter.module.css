@@ -6,6 +6,9 @@
     white-space: nowrap;
     width: var(--max-width);
 
+    -webkit-mask-image: linear-gradient(to right, transparent 0, black var(--start-fade-size, 0), black calc(100% - var(--end-fade-size, 0)), transparent 100%);
+    mask-image: linear-gradient(to right, transparent 0, black var(--start-fade-size, 0), black calc(100% - var(--end-fade-size, 0)), transparent 100%);
+
     margin-bottom: 80px;
     align-self: flex-start;
 }
@@ -20,8 +23,6 @@
     }
 }
 
-
-
 .select-filter-content {
     width: auto;
     float: left;
@@ -31,6 +32,8 @@
     justify-content: center;
     align-items: center;
     gap: 5px;
+
+    padding-right: 30px;
 }
 
 .filter-icon {
