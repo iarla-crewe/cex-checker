@@ -1,79 +1,78 @@
-.select-filter {
+.select-filter-wrapper {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+    overflow-x: scroll;
+    overflow-y: hidden;
+    white-space: nowrap;
+    width: var(--max-width);
+
+    -webkit-mask-image: linear-gradient(to right, transparent 0, black var(--start-fade-size, 0), black calc(100% - var(--end-fade-size, 0)), transparent 100%);
+    mask-image: linear-gradient(to right, transparent 0, black var(--start-fade-size, 0), black calc(100% - var(--end-fade-size, 0)), transparent 100%);
+
     margin-bottom: 80px;
+    align-self: flex-start;
+}
+
+.select-filter-wrapper::-webkit-scrollbar {
+    display: none;
+}
+
+@media screen and (max-width: 1020px) {
+    .select-filter-wrapper {
+      width: 100%;
+    }
+}
+
+.select-filter-content {
+    width: auto;
+    float: left;
+
     display: flex;
     flex-direction: row;
     justify-content: center;
     align-items: center;
     gap: 5px;
-}
 
-.inner-filters {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    gap: 5px;
-}
-
-.inner-filters-wrap-mobile {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    gap: 5px;
-}
-
-.filter-button-content {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: var(--filter-padding);
-    gap: 15px;
-    font-size: var(--size-small);
-}
-
-.filter-option {
-    border: var(--filter-border);
-    opacity: var(--filter-opacity);
-    min-height: var(--button-max-height);
-}
-
-.close-filter {
-    height: var(--button-max-height);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: 0px -10px 0px -5px;
+    padding-right: 30px;
 }
 
 .filter-icon {
     padding-right: 15px;
 }
 
+.filter-option {
+    border: var(--filter-border);
+    opacity: var(--filter-opacity);
+    min-height: var(--button-max-height);
+    gap: 8px;
+}
+
+.close-filter {
+    margin-right: -8px;
+}
+
+
 @media screen and (max-width: 845px) {
-    .select-filter {
-        flex-direction: column;
-        gap: 10px;
-        margin-bottom: 60px;
+    .filter-option {
+        padding: 0px 10px;
+        gap: 5px;
     }
 
-    .filter-icon {
-        padding-right: 0px;
-    }
-
-    .close-filter-icon {
+    .close-filter {
+        margin-right: -2px;
         height: 22px;
         width: auto;
     }
 }
 
 @media screen and (max-width: 420px) {
-    .inner-filters-wrap-mobile {
-        flex-direction: column;
-        gap: 10px;
+    .close-filter {
+        height: 18px;
     }
 
-    .close-filter-icon {
-        height: 18px;
+    .filter-icon {
+        padding-right: 8px;
+        height: 22px;
+        width: auto;
     }
 }

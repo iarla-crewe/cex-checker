@@ -14,6 +14,7 @@ export default function Header() {
                     alt={"Quartz"}
                     width={300}
                     height={100}
+                    priority={true}
                 />
             </a>
         </div>
