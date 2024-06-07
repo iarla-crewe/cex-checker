@@ -46,6 +46,11 @@ export default function SelectFilter(props: SelectFilterProps) {
         };
     }, []);
 
+    const manuallyScroll = (amount: number) => {
+        const wrapper = scrollableWrapperRef.current;
+        if (wrapper) wrapper.scrollLeft += amount;
+    }
+
     const updateFilter = (value: FilterOptionValue) => {
         const index = filter.findIndex(([val]) => val === value[0]);
 
@@ -65,6 +70,34 @@ export default function SelectFilter(props: SelectFilterProps) {
 
     return (
         <div className={styles["select-filter-wrapper"]} ref={scrollableWrapperRef}>
+            <button
+                className={styles["scroll-button"]}
+                id="left"
+                onClick={() => {manuallyScroll(-100)}}
+            >
+                <Image
+                    src="/left_arrow.svg"
+                    alt="Scroll Left"
+                    height={30}
+                    width={30}
+                    className={styles["scroll-icon"]}
+                />
+            </button>
+
+            <button
+                className={styles["scroll-button"]}
+                id="right"
+                onClick={() => {manuallyScroll(100)}}
+            >
+                <Image
+                    src="/right_arrow.svg"
+                    alt="Scroll Right"
+                    height={30}
+                    width={30}
+                    className={styles["scroll-icon"]}
+                />
+            </button>
+            
             <div className={styles["select-filter-content"]} ref={scrollableContentRef}>
                 <Image
                     src="/filter_icon.svg"
