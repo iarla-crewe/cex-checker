@@ -180,7 +180,15 @@
     overflow-x: hidden;
   }
   
+  body[data-scroll-locked] {
+    overflow: hidden;
+    position: fixed;
+    width: 100%;
+  }
+
   body {
+    margin: 0 auto !important;
+
     background-color: var(--background);
     color: var(--text);
     font-weight: 250;
