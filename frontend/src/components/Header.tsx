@@ -3,7 +3,7 @@ import styles from "./Header.module.css";
 
 export default function Header() {
     const mainSiteLink = "https://www.quartzpay.io/";
-    const logoSrc = "/quartz.png";
+    const logoSrc = "/quartz.jpg";
 
     return (
         <div className={styles["header-container"]}>
@@ -12,7 +12,7 @@ export default function Header() {
                     className={styles["quartz-logo"]}
                     src={logoSrc}
                     alt={"Quartz"}
-                    width={300}
+                    width={250}
                     height={100}
                     priority={true}
                 />
