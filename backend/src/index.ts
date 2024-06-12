@@ -8,6 +8,7 @@ import { addOneConnection, minusOneConnection, openExchangeWsConnections } from 
 
 const app = express();
 
+// deepcode ignore HttpToHttps: implementing on localhost is not worth the time investment, production already uses https connection
 const server = http.createServer(app)
 
 const pricePort = process.env.PORT || 443;

@@ -14,7 +14,7 @@ export type FilterOptionValue = [string, boolean]
 export function filterToList(filterObject: FilterObj) {
     let enabledList: FilterOptionValue[] = [];
     let disabledList: FilterOptionValue[] = [];
-    Object.entries(filterObject).map(([cex, enabled]) => {
+    Object.entries(filterObject).forEach(([cex, enabled]) => {
         if (enabled) enabledList.push([cex, enabled]);
         else disabledList.push([cex, enabled]);
     });

@@ -41,7 +41,7 @@ export default function InputAmount(props: InputAmountProps) {
             setInputValue(targetValue);
             
             const num = Number(targetValue);
-            if (!isNaN(num) && num > 0) updateAmount(num);
+            if (!Number.isNaN(num) && num > 0) updateAmount(num);
         }
     };
 

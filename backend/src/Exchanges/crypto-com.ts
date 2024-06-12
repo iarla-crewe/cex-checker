@@ -26,9 +26,7 @@ export const openCrypto_comWs = (baseToken: string, quoteToken: string) => {
                 "id": priceObject.id,
                 "method": "public/respond-heartbeat"
             }))
-        } else if (priceObject.message == 'Unknown symbol') {
-            TokenPairPrices[`${baseToken}/${quoteToken}`].crypto_com = PairStatus.NoPairFound
-        } else if (priceObject.result == undefined) {
+        } else if (priceObject.message == 'Unknown symbol' || priceObject.result == undefined) {
             TokenPairPrices[`${baseToken}/${quoteToken}`].crypto_com = PairStatus.NoPairFound
         } else {
             try {
