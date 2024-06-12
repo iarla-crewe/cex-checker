@@ -12,6 +12,7 @@ import { TokenPair, getTokenPair } from "@/lib/utils";
 import { listToFilter, filterToList, FilterObj } from "@/model/FilterData";
 
 export default function Home() {
+  const [csrfToken, setCsrfToken] = useState(0);
   const [responseData, setResponseData] = useState<ResponseData>(initializeRespobseObject());
   const [queryData, setQueryData] = useState<PriceQuery>({
     inputToken: 'sol',
