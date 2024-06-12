@@ -1,12 +1,12 @@
 import { UpdatePriceQuery } from "@/model/API";
-import styles from "./SelectFilter.module.css";
+import styles from "./Settings.module.css";
 import { FilterObj, FilterOptionValue } from "@/model/FilterData";
 import FilterOption from "./FilterOption";
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { usePostHog } from 'posthog-js/react'
 
-interface SelectFilterProps {
+interface Settings {
     handleUpdate: (data: UpdatePriceQuery) => void;
     filter: FilterOptionValue[];
 }
@@ -19,7 +19,7 @@ interface ScrollArrowProps {
     enabled: boolean;
 }
 
-export default function SelectFilter(props: SelectFilterProps) {
+export default function Settings(props: Settings) {
     const { handleUpdate, filter } = props;
     const posthog = usePostHog();
     const scrollableWrapperRef = useRef<HTMLDivElement>(null);
@@ -88,18 +88,28 @@ export default function SelectFilter(props: SelectFilterProps) {
     }
 
     return (
-        <div className={styles["select-filter-wrapper"]}>
+        <div className={styles["settings"]}>
+            <button className={styles["settings-button"] + " " + styles["icon-padding"]}>
+                <Image
+                    src="/settings.svg"
+                    alt="Settings"
+                    height={30}
+                    width={30}
+                    className={styles["icon-size"]}
+                />
+            </button>
+            
             <ScrollArrow src="/left_arrow.svg" alt="Scroll Left" direction="s-left" onClick={() => {manuallyScroll(-100)}} enabled={leftScroll}/>
             <ScrollArrow src="/right_arrow.svg" alt="Scroll Right" direction="s-right" onClick={() => {manuallyScroll(100)}} enabled={rightScroll}/>
 
-            <div className={styles["select-filter-container"]} ref={scrollableWrapperRef}>
-                <div className={styles["select-filter-content"]} ref={scrollableContentRef}>
+            <div className={styles["filters-wrapper"]} ref={scrollableWrapperRef}>
+                <div className={styles["filters-content"]} ref={scrollableContentRef}>
                     <Image
                         src="/filter_icon.svg"
                         alt="CEX Filter"
                         height={30}
                         width={30}
-                        className={styles["filter-icon"]}
+                        className={styles["icon-size"] + " " + styles["icon-padding"]}
                     />
                     {filter.map(([cex, enabled], _) => (
                         <FilterOption 

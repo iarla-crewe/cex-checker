@@ -1,5 +1,25 @@
-.select-filter-container {
+.settings {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: 80px;
     position: relative;
+}
+
+.settings-button {
+    padding: 6px;
+    border-radius: 100%;
+    border: 0px;
+    cursor: pointer;
+    max-height: none;
+}
+
+.icon-padding {
+    margin-right: 15px;
+}
+
+.filters-wrapper {
+    flex-shrink: 1;
     z-index: 0;
 
     -ms-overflow-style: none;
@@ -7,20 +27,18 @@
     overflow-x: scroll;
     overflow-y: hidden;
     white-space: nowrap;
-    width: 100%;
 
     -webkit-mask-image: linear-gradient(to right, transparent 0, black var(--start-fade-size, 0), black calc(100% - var(--end-fade-size, 0)), transparent 100%);
     mask-image: linear-gradient(to right, transparent 0, black var(--start-fade-size, 0), black calc(100% - var(--end-fade-size, 0)), transparent 100%);
 
-    margin-bottom: 80px;
     align-self: flex-start;
 }
 
-.select-filter-container::-webkit-scrollbar {
+.filters-wrapper::-webkit-scrollbar {
     display: none;
 }
 
-.select-filter-content {
+.filters-content {
     width: auto;
     float: left;
 
@@ -31,32 +49,6 @@
     gap: 5px;
 
     padding-right: 30px;
-}
-
-.filter-icon {
-    padding-right: 15px;
-}
-
-.filter-option {
-    border: var(--filter-border);
-    opacity: var(--filter-opacity);
-    min-height: var(--button-max-height);
-    gap: 8px;
-}
-
-.close-filter {
-    margin-right: -8px;
-}
-
-.select-filter-wrapper {
-    position: relative;
-    width: var(--max-width);
-}
-
-@media screen and (max-width: 1020px) {
-    .select-filter-wrapper {
-      width: 100%;
-    }
 }
 
 .s-left {
@@ -70,7 +62,7 @@
     -moz-box-shadow: 0px 0px 15px 0px var(--background);
     box-shadow: 0px 0px 15px 0px var(--background);
 
-    left: 0px;
+    left: 57px;
     z-index: 1;
 }
 
@@ -89,6 +81,16 @@
     z-index: 1;
 }
 
+.filter-option {
+    border: var(--filter-border);
+    opacity: var(--filter-opacity);
+    min-height: var(--button-max-height);
+    gap: 8px;
+}
+
+.close-filter {
+    margin-right: -8px;
+}
 
 @media screen and (max-width: 845px) {
     .filter-option {
@@ -104,14 +106,17 @@
 }
 
 @media screen and (max-width: 420px) {
-    .close-filter {
-        height: 18px;
-    }
-
-    .filter-icon {
-        padding-right: 8px;
+    .icon-size {
         height: 22px;
         width: auto;
+    }
+
+    .icon-padding {
+        margin-right: 8px;
+    }
+
+    .close-filter {
+        height: 18px;
     }
 
     .s-left {

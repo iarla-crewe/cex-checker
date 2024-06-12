@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { getCEXDisplayName } from "@/model/CEXList";
-import styles from "./SelectFilter.module.css";
+import styles from "./Settings.module.css";
 import Image from "next/image";
 
 interface FilterOptionProps {

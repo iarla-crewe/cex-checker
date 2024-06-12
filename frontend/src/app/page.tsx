@@ -2,7 +2,7 @@
 
 import styles from "./page.module.css";
 import TradeInfo from "@/components/TradeInfo/TradeInfo";
-import SelectFilter from "@/components/SelectFilter";
+import Settings from "@/components/Settings";
 import Results from "@/components/Results/Results";
 import { useEffect, useState } from "react";
 import { ResponseData, PriceQuery, UpdatePriceQuery, getPriceData, socket, getFeeData, initializeRespobseObject } from "@/model/API";
@@ -12,7 +12,6 @@ import { TokenPair, getTokenPair } from "@/lib/utils";
 import { listToFilter, filterToList, FilterObj } from "@/model/FilterData";
 
 export default function Home() {
-  const [csrfToken, setCsrfToken] = useState(0);
   const [responseData, setResponseData] = useState<ResponseData>(initializeRespobseObject());
   const [queryData, setQueryData] = useState<PriceQuery>({
     inputToken: 'sol',
@@ -34,6 +33,8 @@ export default function Home() {
     quote: queryData.outputToken
   });
   const [currency, setCurrency] = useState<string>(isSelling ? queryData.outputToken : queryData.inputToken);
+
+  const [resetTime, setResetTime] = useState(5000);
 
   useEffect(() => {
     // Function to handle "get-price" events
@@ -57,14 +58,14 @@ export default function Home() {
     // Add listener for "get-price" events
     socket.on("get-price", handleGetPrice);
 
-    const intervalId = setInterval(fetchPriceData, 5000);
+    const intervalId = setInterval(fetchPriceData, resetTime);
 
     // Clean-up function to remove the old listener when queryData changes
     return () => {
       clearInterval(intervalId);
       socket.off("get-price", handleGetPrice);
     };
-  }, [queryData])
+  }, [queryData, resetTime])
 
 
   useEffect(() => {
@@ -100,7 +101,7 @@ export default function Home() {
           handleSetIsSelling={setIsSelling}
         />
 
-        <SelectFilter 
+        <Settings 
           handleUpdate={handleQueryUpdate}
           filter={queryData.filter}
         />
