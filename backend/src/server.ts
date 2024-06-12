@@ -2,6 +2,9 @@
 // Import necessary modules
 // const express = require('express');
 import express, { Request, Response } from 'express';
+import helmet from 'helmet';
+import csurf from 'csurf';
+import cookieParser from 'cookie-parser';
 
 // Create an Express application
 const app = express();
@@ -9,6 +12,13 @@ const APIport = 3001;
 
 // Middleware to parse JSON bodies
 app.use(express.json());
+
+// Security middleware
+app.use(helmet());
+app.use(csurf());
+app.use(cookieParser());
+const csrfProtection = csurf({ cookie: true });
+app.use(csrfProtection);
 
 // Define a POST endpoint to receive data from the client
 app.post('/get-best-price', (req: Request, res: Response) => {
