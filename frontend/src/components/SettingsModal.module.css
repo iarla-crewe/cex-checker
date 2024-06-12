@@ -1,0 +1,23 @@
+.modal-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 100;
+    background: rgba(0, 0, 0, 0.5);
+}
+
+.settings-modal {
+    position: absolute;
+    top: 50%;  
+    left: 50%; 
+    transform: translate(-50%, -50%);
+    z-index: 101;
+
+    border: var(--card-border);
+    background-color: var(--background);
+    border-radius: var(--button-border-radius);
+
+    padding: 30px;
+}

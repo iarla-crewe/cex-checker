@@ -10,6 +10,7 @@ import { setFeeData } from "@/model/CEXList";
 import Header from "@/components/Header";
 import { TokenPair, getTokenPair } from "@/lib/utils";
 import { listToFilter, filterToList, FilterObj } from "@/model/FilterData";
+import SettingsModal from "@/components/SettingsModal";
 
 export default function Home() {
   const [responseData, setResponseData] = useState<ResponseData>(initializeRespobseObject());
@@ -89,6 +90,8 @@ export default function Home() {
 
   return (
     <main className={styles["main"]}>
+      <SettingsModal /> 
+
       <div className={styles["container"]}>
         <Header />
 

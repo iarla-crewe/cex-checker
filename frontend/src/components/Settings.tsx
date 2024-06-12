@@ -5,6 +5,7 @@ import FilterOption from "./FilterOption";
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { usePostHog } from 'posthog-js/react'
+import Link from "next/link";
 
 interface Settings {
     handleUpdate: (data: UpdatePriceQuery) => void;
@@ -24,6 +25,8 @@ export default function Settings(props: Settings) {
     const posthog = usePostHog();
     const scrollableWrapperRef = useRef<HTMLDivElement>(null);
     const scrollableContentRef = useRef<HTMLDivElement>(null);
+
+    const [enableSettings, setEnableSettings] = useState(false);
 
     const [leftScroll, setLeftScroll] = useState(false);
     const [rightScroll, setRightScroll] = useState(true);
@@ -95,15 +98,17 @@ export default function Settings(props: Settings) {
 
     return (
         <div className={styles["settings"]}>
-            <button className={styles["settings-button"] + " " + styles["icon-padding"]}>
-                <Image
-                    src="/settings.svg"
-                    alt="Settings"
-                    height={30}
-                    width={30}
-                    className={styles["icon-size"]}
-                />
-            </button>
+            <Link href="?settings=true">
+                <button className={styles["settings-button"] + " " + styles["icon-padding"]}>
+                    <Image
+                        src="/settings.svg"
+                        alt="Settings"
+                        height={30}
+                        width={30}
+                        className={styles["icon-size"]}
+                    />
+                </button>
+            </Link>
             
             <ScrollArrow src="/left_arrow.svg" alt="Scroll Left" direction="s-left" onClick={() => {manuallyScroll(-150)}} enabled={leftScroll}/>
             <ScrollArrow src="/right_arrow.svg" alt="Scroll Right" direction="s-right" onClick={() => {manuallyScroll(150)}} enabled={rightScroll}/>
