@@ -66,7 +66,12 @@ export default function Settings(props: Settings) {
 
     const manuallyScroll = (amount: number) => {
         const wrapper = scrollableWrapperRef.current;
-        if (wrapper) wrapper.scrollLeft += amount;
+        if (wrapper) {
+            wrapper.scrollTo({
+                left: wrapper.scrollLeft + amount,
+                behavior: 'smooth'
+            });
+        }
         updateFadeSizes();
     }
 
@@ -83,6 +88,7 @@ export default function Settings(props: Settings) {
             });
 
             handleUpdate({filter: newFilter});
+            updateFadeSizes();
             posthog?.capture('Changed Exchange Filter', { exchangeFilter: newFilter })
         }
     }
@@ -99,8 +105,8 @@ export default function Settings(props: Settings) {
                 />
             </button>
             
-            <ScrollArrow src="/left_arrow.svg" alt="Scroll Left" direction="s-left" onClick={() => {manuallyScroll(-100)}} enabled={leftScroll}/>
-            <ScrollArrow src="/right_arrow.svg" alt="Scroll Right" direction="s-right" onClick={() => {manuallyScroll(100)}} enabled={rightScroll}/>
+            <ScrollArrow src="/left_arrow.svg" alt="Scroll Left" direction="s-left" onClick={() => {manuallyScroll(-150)}} enabled={leftScroll}/>
+            <ScrollArrow src="/right_arrow.svg" alt="Scroll Right" direction="s-right" onClick={() => {manuallyScroll(150)}} enabled={rightScroll}/>
 
             <div className={styles["filters-wrapper"]} ref={scrollableWrapperRef}>
                 <div className={styles["filters-content"]} ref={scrollableContentRef}>
