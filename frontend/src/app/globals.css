@@ -69,12 +69,12 @@
   }
 
   [filter-fade='none'] {
-    --start-fade-size: 0px;
-    --end-fade-size: 0px;
+    --start-fade-size: 0px !important;
+    --end-fade-size: 0px !important;
   }
 
   [filter-fade='start'] {
-    --start-fade-size: 0px;
+    --start-fade-size: 0px !important;
     --end-fade-size: 30px !important;
   }
 
@@ -83,11 +83,16 @@
     --end-fade-size: 30px !important;
   }
 
+  [filter-fade='end'] {
+    --start-fade-size: 30px !important;
+    --end-fade-size: 0px !important;
+  }
+
   :root {
     --start-fade-size: 0px;
-    --end-fade-size: 30px !important;
+    --end-fade-size: 30px;
 
-    --max-width: 940px;
+    --max-width: 1040px;
     --font-mono: ui-monospace, Menlo, Monaco, "Cascadia Mono", "Segoe UI Mono",
       "Roboto Mono", "Oxygen Mono", "Ubuntu Monospace", "Source Code Pro",
       "Fira Mono", "Droid Sans Mono", "Courier New", monospace;

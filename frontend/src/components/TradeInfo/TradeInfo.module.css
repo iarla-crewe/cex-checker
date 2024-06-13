@@ -4,10 +4,10 @@
     justify-content: space-between;
     align-items: center;
     gap: var(--trade-info-gap);
-    padding: 20px 30px;
+    padding: 25px 30px;
     border-radius: var(--card-border-radius);
     border: var(--card-border);
-    margin-bottom: 50px;
+    margin-bottom: 40px;
 }
 
 .currencies {
