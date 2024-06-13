@@ -116,6 +116,9 @@
     --size-price-subheading: 10.6px;
     --size-p: 22px;
     --size-small: 17.6px;
+
+    --size-settings-heading: 30px;
+    --size-label-heading: 22px;
   }
 
   @media screen and (max-width: 1020px) {
@@ -146,6 +149,9 @@
       --size-price-subheading: 10.5px;
       --size-p: 17.8px;
       --size-small: 14.2px;
+
+      --size-settings-heading: 25.5px;
+      --size-label-heading: 18.7px;
     }
   }
 
@@ -159,6 +165,9 @@
       --size-price-subheading: 10px;
       --size-p: 16px;
       --size-small: 12.8px;
+
+      --size-settings-heading: 21.7px;
+      --size-label-heading: 15.9px;
     }
   }
 

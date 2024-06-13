@@ -1,10 +1,10 @@
-"use client"
+"use client";
 
 import styles from "./page.module.css";
 import TradeInfo from "@/components/TradeInfo/TradeInfo";
 import Settings from "@/components/Settings/Settings";
 import Results from "@/components/Results/Results";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { ResponseData, PriceQuery, UpdatePriceQuery, getPriceData, socket, getFeeData, initializeRespobseObject } from "@/model/API";
 import { setFeeData } from "@/model/CEXList";
 import Header from "@/components/Header";
@@ -35,7 +35,7 @@ export default function Home() {
   });
   const [currency, setCurrency] = useState<string>(isSelling ? queryData.outputToken : queryData.inputToken);
 
-  const [resetTime, setResetTime] = useState(5000);
+  const [refreshSpeed, setRefreshSpeed] = useState(5000);
 
   useEffect(() => {
     // Function to handle "get-price" events
@@ -59,14 +59,14 @@ export default function Home() {
     // Add listener for "get-price" events
     socket.on("get-price", handleGetPrice);
 
-    const intervalId = setInterval(fetchPriceData, resetTime);
+    const intervalId = setInterval(fetchPriceData, refreshSpeed);
 
     // Clean-up function to remove the old listener when queryData changes
     return () => {
       clearInterval(intervalId);
       socket.off("get-price", handleGetPrice);
     };
-  }, [queryData, resetTime])
+  }, [queryData, refreshSpeed])
 
 
   useEffect(() => {
@@ -90,7 +90,12 @@ export default function Home() {
 
   return (
     <main className={styles["main"]}>
-      <SettingsModal /> 
+      <Suspense>
+        <SettingsModal 
+          refreshSpeed={refreshSpeed/1000}
+          setRefreshSpeed={(value) => {setRefreshSpeed(value*1000)}}
+        /> 
+      </Suspense>
 
       <div className={styles["container"]}>
         <Header />

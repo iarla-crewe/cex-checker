@@ -8,23 +8,48 @@
     background: rgba(0, 0, 0, 0.5);
 }
 
+.settings-header {
+    font-size: var(--size-settings-heading);
+    font-weight: 200;
+    margin-top: 10px;
+    margin-bottom: 0px;
+}
+
 .settings-modal {
     position: absolute;
     top: 50%;  
     left: 50%; 
     transform: translate(-50%, -50%);
     z-index: 101;
-    min-width: 33VW;
+    width: 500px;
 
     border: var(--card-border);
     background-color: var(--background);
     border-radius: var(--button-border-radius);
 
     padding: 50px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 40px;
+}
+
+@media screen and (max-width: 845px) {
+    .settings-modal {
+        width: 60%;
+        padding: 40px;
+    }
+}
+
+@media screen and (max-width: 420px) {
+    .settings-modal {
+        width: 75%;
+        padding: 30px;
+    }
 }
 
 .refresh-speed {
-    margin-bottom: 40px;
+    align-self: stretch;
 }
 
 .slider-label {
@@ -34,11 +59,21 @@
 
     justify-content: space-between;
     width: 100%;
+
+    font-size: var(--size-label-heading);
 }
 
-.slider-track {
-    height: 12px;
-    width: 100%; 
-    background-color: var(--primary);
-    border-radius: 6px;
+.label-header {
+    font-size: var(--size-label-heading);
+    font-weight: 300;
+    margin-top: 0px;
+}
+
+.label-value {
+    margin-block-start: 0px;
+}
+
+.button-close {
+    align-self: flex-end;
+    height: 46px;
 }
