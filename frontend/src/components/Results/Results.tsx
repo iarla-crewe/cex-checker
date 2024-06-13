@@ -12,10 +12,12 @@ interface ResultsProps {
     isSelling: boolean;
     filter: FilterObj;
     tokenPair: TokenPair;
+    includeWithdrawFees: boolean;
+    arbitrageView: boolean;
 }
 
 export default function Results(props: ResultsProps) {
-    const { responseData, outputToken, feeCurrency, isSelling, filter, tokenPair } = props;
+    const { responseData, outputToken, feeCurrency, isSelling, filter, tokenPair, includeWithdrawFees, arbitrageView } = props;
 
     let filteredCEXList = CEXList.filter(cex => filter[cex.name] === true);
 

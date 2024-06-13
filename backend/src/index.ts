@@ -5,6 +5,7 @@ import { calculatePrices, isNewReponse, resetPriceResponse } from './emit.js';
 import { getTokenPair, tokensFlipped } from './utils/tokenPair.js';
 import { ConnectionsNumber as NumberConnections, PriceQuery, TokenPair, TokenPairConnections as TradingPairConnections, TradingPairPrices } from './types.js';
 import { addOneConnection, minusOneConnection, openExchangeWsConnections } from './utils/connections.js';
+import { pool } from './database.js';
 
 const app = express();
 
@@ -25,12 +26,12 @@ export let ConnectionsNumber: NumberConnections = {}
 export let TokenPairPrices: TradingPairPrices = {}
 export let PreviousPrices: TradingPairPrices = {}
 
+export const feesConnection = pool.connect();
 
 //connection with the client
 io.on('connection', (socket) => {
     console.log("Connection")
     let previousTokenPair: TokenPair;
-    let previousInputToken: string;
 
     let previousQueryData: PriceQuery = {
         inputToken: '',
@@ -44,13 +45,14 @@ io.on('connection', (socket) => {
             bybit: false,
             jupiter: false,
             oneInch: false,
-        }
+        },
+        includeFees: false
     }; // Variable to store previous query data
 
     let currentTokenPair: TokenPair = { base: "", quote: "" };
 
-    socket.on('get-price', ({ inputToken, outputToken, inputAmount, cexList }: PriceQuery) => {
-        const currentQueryData: PriceQuery = { inputToken, outputToken, inputAmount, cexList };
+    socket.on('get-price', async ({ inputToken, outputToken, inputAmount, cexList, includeFees }: PriceQuery) => {
+        const currentQueryData: PriceQuery = { inputToken, outputToken, inputAmount, cexList,  includeFees};
 
         try { currentTokenPair = getTokenPair(inputToken, outputToken); }
         catch (error) { io.emit('error', { error }) }
@@ -77,18 +79,23 @@ io.on('connection', (socket) => {
 
                 previousTokenPair = currentTokenPair;
                 console.log("Token Connections: ", ConnectionsNumber)
-
             }
+
             //checks if new input amount is different to old one  or if tokens got flipped
             if (currentQueryData.inputAmount != previousQueryData.inputAmount || tokensFlipped(previousQueryData, currentQueryData)) {
-                queryChanged = true
+                queryChanged = true;
                 previousTokenPair = currentTokenPair;
-                previousInputToken = currentQueryData.inputToken
+            }
+
+            if (currentQueryData.includeFees != previousQueryData.includeFees) {
+                queryChanged = true;
             }
             previousQueryData = { ...currentQueryData };
         }
-        let prices = calculatePrices(TokenPairPrices[tokenPairString], inputAmount, inputToken, currentTokenPair)
+
+        let prices = await calculatePrices(TokenPairPrices[tokenPairString], inputAmount, inputToken, outputToken, currentTokenPair, includeFees)
         let response = isNewReponse(queryChanged, tokenPairString)
+
         if (response) {
             console.log("Emitting new reponse:", prices)
             socket.emit('get-price', { prices: prices });

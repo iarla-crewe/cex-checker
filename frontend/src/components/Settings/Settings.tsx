@@ -7,10 +7,11 @@ import Image from "next/image";
 import { usePostHog } from 'posthog-js/react'
 import Link from "next/link";
 
-interface Settings {
+interface SettingsProps {
     handleUpdate: (data: UpdatePriceQuery) => void;
     filter: FilterOptionValue[];
-}
+    short: boolean;  
+} 
 
 interface ScrollArrowProps {
     src: string;
@@ -20,16 +21,15 @@ interface ScrollArrowProps {
     enabled: boolean;
 }
 
-export default function Settings(props: Settings) {
-    const { handleUpdate, filter } = props;
+export default function Settings({ handleUpdate, filter, short }: SettingsProps) {
     const posthog = usePostHog();
     const scrollableWrapperRef = useRef<HTMLDivElement>(null);
     const scrollableContentRef = useRef<HTMLDivElement>(null);
 
-    const [enableSettings, setEnableSettings] = useState(false);
-
     const [leftScroll, setLeftScroll] = useState(false);
     const [rightScroll, setRightScroll] = useState(true);
+
+    const marginBottom = short ? {"--settings-margin-bottom": "40px"} : {"--settings-margin-bottom": "60px"}
 
     const updateFadeSizes = () => {
         const wrapper = scrollableWrapperRef.current;
@@ -97,7 +97,7 @@ export default function Settings(props: Settings) {
     }
 
     return (
-        <div className={styles["settings"]}>
+        <div className={styles["settings"]} style={marginBottom as React.CSSProperties}>
             <Link href="?settings=true">
                 <button className={styles["settings-button"] + " " + styles["icon-padding"]}>
                     <Image

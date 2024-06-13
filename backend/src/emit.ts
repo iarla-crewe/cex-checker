@@ -1,5 +1,6 @@
 import { exchangeTakerFees } from "./Exchanges/prices.js";
-import { PreviousPrices, TokenPairPrices } from "./index.js";
+import { getFees } from "./database.js";
+import { PreviousPrices, TokenPairPrices, feesConnection } from "./index.js";
 import { Prices, TokenPair } from "./types.js";
 import { initializePriceObject } from "./utils/connections.js";
 
@@ -26,9 +27,18 @@ export const isNewReponse = (queryChanged: boolean, tokenPairString: string) => 
     return false
 }
 
-export const calculatePrices = (tokenPrices: Prices, amount: number, inputToken: string, tokenPair: TokenPair): Prices => {
+export const calculatePrices = async (tokenPrices: Prices, amount: number, inputToken: string, outputToken: string, tokenPair: TokenPair, includeFees: boolean): Promise<Prices> => {
     const calculatedPrices: Prices = initializePriceObject();
-    let inputIsBase = checkIfInputIsBase(tokenPair, inputToken)
+    let inputIsBase = checkIfInputIsBase(tokenPair, inputToken);
+
+    let withdrawalFees = undefined;
+
+    const connection = await feesConnection;
+    if (includeFees) {
+        const inputFees = await getFees(inputToken, connection);
+        const outputFees = await getFees(outputToken, connection);
+        console.log("[DEBUG]: " + inputFees + ", " + outputFees);
+    }
 
     for (const exchange in tokenPrices) {
         if (tokenPrices.hasOwnProperty(exchange)) {

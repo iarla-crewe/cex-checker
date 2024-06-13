@@ -41,7 +41,8 @@ export type PriceQuery = {
     inputToken: string,
     outputToken: string,
     inputAmount: number,
-    cexList: CexList
+    cexList: CexList,
+    includeFees: boolean
 }
 
 export type TokenPair = {

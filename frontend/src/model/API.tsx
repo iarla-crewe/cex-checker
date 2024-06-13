@@ -1,14 +1,15 @@
 import { FilterOptionValue, listToFilter } from "./FilterData";
 import { io } from "socket.io-client";
 
-export const socket = io('https://cex-checker-8mqk8.ondigitalocean.app/')
-// export const socket = io('http://localhost:443')
+// export const socket = io('https://cex-checker-8mqk8.ondigitalocean.app/')
+export const socket = io('http://localhost:443')
 
 export interface PriceQuery {
     inputToken: string;
     outputToken: string;
     amount: number;
     filter: FilterOptionValue[];
+    includeFees: boolean;
 }
 
 export interface UpdatePriceQuery {
@@ -16,6 +17,7 @@ export interface UpdatePriceQuery {
     outputToken?: string;
     amount?: number; 
     filter?: FilterOptionValue[];
+    includeFees?: boolean;
 }
 
 export type ResponseData = {
@@ -34,9 +36,9 @@ export enum PairStatus {
     Loading = "Loading"
 }
 
-export function getPriceData({ inputToken, outputToken, amount, filter: filterList }: PriceQuery) {
+export function getPriceData({ inputToken, outputToken, amount, filter: filterList, includeFees }: PriceQuery) {
     const filterObj = listToFilter(filterList);
-    socket.emit('get-price', { inputToken, outputToken, inputAmount: amount, cexList: filterObj })
+    socket.emit('get-price', { inputToken, outputToken, inputAmount: amount, cexList: filterObj, includeFees })
 }
 
 export async function getFeeData(tokenA: string, tokenB: string) {

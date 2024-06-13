@@ -27,10 +27,7 @@ export default function SettingsModal(props: SettingsModalProps) {
 
     const [displayRefreshSpeed, setDisplayRefreshSpeed] = useState(refreshSpeed);
 
-    const disabledColor = 
-        arbitrageView 
-        ? {"opacity": "75%"} as React.CSSProperties
-        : {"opacity": "100%"} as React.CSSProperties;
+    const disabledColor = arbitrageView ? {"opacity": "75%"} : {"opacity": "100%"};
 
     return (
         <>
@@ -53,7 +50,7 @@ export default function SettingsModal(props: SettingsModalProps) {
                     </label>
 
                     <label className={styles["toggle-setting"]}>
-                        <span className={styles["settings-label"]} style={disabledColor}>Include withdraw fees in prices</span>
+                        <span className={styles["settings-label"]} style={disabledColor as React.CSSProperties}>Include withdraw fees in prices</span>
                         <ReactSwitch 
                             checked={arbitrageView || includeWithdrawFees} 
                             onChange={setIncludeWithdrawFees} 

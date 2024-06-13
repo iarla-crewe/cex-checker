@@ -13,6 +13,10 @@ import { listToFilter, filterToList, FilterObj } from "@/model/FilterData";
 import SettingsModal from "@/components/Settings/SettingsModal";
 
 export default function Home() {
+  const [refreshSpeed, setRefreshSpeed] = useState(5000);
+  const [includeWithdrawFees, setIncludeWithdrawFees] = useState(false);
+  const [arbitrageView, setArbitrageView] = useState(false);
+
   const [responseData, setResponseData] = useState<ResponseData>(initializeRespobseObject());
   const [queryData, setQueryData] = useState<PriceQuery>({
     inputToken: 'sol',
@@ -26,7 +30,8 @@ export default function Home() {
       kraken: true,
       jupiter: true,
       oneInch: true,
-    })
+    }),
+    includeFees: includeWithdrawFees,
   });
   const [isSelling, setIsSelling] = useState(false);
   const [tokenPair, setTokenPair] = useState<TokenPair>({
@@ -34,10 +39,6 @@ export default function Home() {
     quote: queryData.outputToken
   });
   const [currency, setCurrency] = useState<string>(isSelling ? queryData.outputToken : queryData.inputToken);
-
-  const [refreshSpeed, setRefreshSpeed] = useState(5000);
-  const [includeWithdrawFees, setIncludeWithdrawFees] = useState(false);
-  const [arbitrageView, setArbitrageView] = useState(false);
 
   useEffect(() => {
     // Function to handle "get-price" events
@@ -80,11 +81,16 @@ export default function Home() {
     if (data.outputToken === undefined) data.outputToken = queryData.outputToken;
     if (data.amount === undefined) data.amount = queryData.amount;
     if (data.filter === undefined) data.filter = queryData.filter;
+    if (data.includeFees === undefined) data.includeFees = queryData.includeFees;
 
     setTokenPair(getTokenPair(data.inputToken, data.outputToken));
 
     setQueryData({
-      inputToken: data.inputToken, outputToken: data.outputToken, amount: data.amount, filter: data.filter
+      inputToken: data.inputToken, 
+      outputToken: data.outputToken, 
+      amount: data.amount, 
+      filter: data.filter,
+      includeFees: data.includeFees
     })
     setResponseData(initializeRespobseObject())
   }
@@ -97,14 +103,20 @@ export default function Home() {
           refreshSpeed={refreshSpeed/1000}
           setRefreshSpeed={(value) => {setRefreshSpeed(value*1000)}}
           includeWithdrawFees={includeWithdrawFees}
-          setIncludeWithdrawFees={setIncludeWithdrawFees}
+          setIncludeWithdrawFees={(value) => {
+            handleQueryUpdate({includeFees: value || arbitrageView});
+            setIncludeWithdrawFees(value);
+          }}
           arbitrageView={arbitrageView}
-          setArbitrageView={setArbitrageView}
+          setArbitrageView={(value) => {
+            handleQueryUpdate({includeFees: includeWithdrawFees || value});
+            setArbitrageView(value);
+          }}
         /> 
       </Suspense>
 
       <div className={styles["container"]}>
-        <Header />
+        <Header short={arbitrageView}/>
 
         <TradeInfo
           defaultInputToken={queryData.inputToken}
@@ -118,6 +130,7 @@ export default function Home() {
         <Settings 
           handleUpdate={handleQueryUpdate}
           filter={queryData.filter}
+          short={arbitrageView}
         />
         
         <Results
@@ -127,6 +140,8 @@ export default function Home() {
           isSelling={isSelling}
           tokenPair={tokenPair}
           filter={listToFilter(queryData.filter)}
+          includeWithdrawFees={includeWithdrawFees}
+          arbitrageView={arbitrageView}
         />
       </div>
     </main>
