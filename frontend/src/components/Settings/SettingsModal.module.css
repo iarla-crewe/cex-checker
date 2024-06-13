@@ -14,10 +14,31 @@
     left: 50%; 
     transform: translate(-50%, -50%);
     z-index: 101;
+    min-width: 33VW;
 
     border: var(--card-border);
     background-color: var(--background);
     border-radius: var(--button-border-radius);
 
-    padding: 30px;
+    padding: 50px;
+}
+
+.refresh-speed {
+    margin-bottom: 40px;
+}
+
+.slider-label {
+    display: flex;
+    flex-direction: row;
+    align-items: baseline;
+
+    justify-content: space-between;
+    width: 100%;
+}
+
+.slider-track {
+    height: 12px;
+    width: 100%; 
+    background-color: var(--primary);
+    border-radius: 6px;
 }

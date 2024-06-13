@@ -2,7 +2,7 @@
 
 import styles from "./page.module.css";
 import TradeInfo from "@/components/TradeInfo/TradeInfo";
-import Settings from "@/components/Settings";
+import Settings from "@/components/Settings/Settings";
 import Results from "@/components/Results/Results";
 import { useEffect, useState } from "react";
 import { ResponseData, PriceQuery, UpdatePriceQuery, getPriceData, socket, getFeeData, initializeRespobseObject } from "@/model/API";
@@ -10,7 +10,7 @@ import { setFeeData } from "@/model/CEXList";
 import Header from "@/components/Header";
 import { TokenPair, getTokenPair } from "@/lib/utils";
 import { listToFilter, filterToList, FilterObj } from "@/model/FilterData";
-import SettingsModal from "@/components/SettingsModal";
+import SettingsModal from "@/components/Settings/SettingsModal";
 
 export default function Home() {
   const [responseData, setResponseData] = useState<ResponseData>(initializeRespobseObject());
