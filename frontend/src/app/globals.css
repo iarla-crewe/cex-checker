@@ -98,6 +98,7 @@
     --secondary: #070808;
     --secondary-hover: #16516B;
     --background-hover: #102637;
+    --color-disabled: #ccc;
   
     --light-text-opacity: 0.9;
     --card-border-colorless: 2px solid;
@@ -117,8 +118,8 @@
     --size-p: 22px;
     --size-small: 17.6px;
 
-    --size-settings-heading: 30px;
-    --size-label-heading: 22px;
+    --size-settings-heading: 34px;
+    --size-label-heading: 20px;
   }
 
   @media screen and (max-width: 1020px) {
@@ -150,8 +151,8 @@
       --size-p: 17.8px;
       --size-small: 14.2px;
 
-      --size-settings-heading: 25.5px;
-      --size-label-heading: 18.7px;
+      --size-settings-heading: 28.9px;
+      --size-label-heading: 17px;
     }
   }
 
@@ -166,8 +167,8 @@
       --size-p: 16px;
       --size-small: 12.8px;
 
-      --size-settings-heading: 21.7px;
-      --size-label-heading: 15.9px;
+      --size-settings-heading: 24.6px;
+      --size-label-heading: 14.5px;
     }
   }
 

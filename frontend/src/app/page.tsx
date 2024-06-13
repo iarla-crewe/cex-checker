@@ -36,6 +36,8 @@ export default function Home() {
   const [currency, setCurrency] = useState<string>(isSelling ? queryData.outputToken : queryData.inputToken);
 
   const [refreshSpeed, setRefreshSpeed] = useState(5000);
+  const [includeWithdrawFees, setIncludeWithdrawFees] = useState(false);
+  const [arbitrageView, setArbitrageView] = useState(false);
 
   useEffect(() => {
     // Function to handle "get-price" events
@@ -94,6 +96,10 @@ export default function Home() {
         <SettingsModal 
           refreshSpeed={refreshSpeed/1000}
           setRefreshSpeed={(value) => {setRefreshSpeed(value*1000)}}
+          includeWithdrawFees={includeWithdrawFees}
+          setIncludeWithdrawFees={setIncludeWithdrawFees}
+          arbitrageView={arbitrageView}
+          setArbitrageView={setArbitrageView}
         /> 
       </Suspense>
 

@@ -27,7 +27,7 @@ export default function Slider({step, min, max, value, setDisplayValue, updateVa
                 ...props.style,
                 height: '16px',
                 width: '5px',
-                backgroundColor: index * step < value ? 'var(--primary)' : '#ccc'
+                backgroundColor: index * step < value ? 'var(--primary)' : 'var(--color-disabled)'
                 }}
             />
             )}

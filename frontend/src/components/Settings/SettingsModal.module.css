@@ -12,7 +12,7 @@
     font-size: var(--size-settings-heading);
     font-weight: 200;
     margin-top: 10px;
-    margin-bottom: 0px;
+    margin-bottom: 20px;
 }
 
 .settings-modal {
@@ -48,6 +48,14 @@
     }
 }
 
+.toggle-setting {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 20px;
+}
+
 .refresh-speed {
     align-self: stretch;
 }
@@ -63,10 +71,11 @@
     font-size: var(--size-label-heading);
 }
 
-.label-header {
+.settings-label {
     font-size: var(--size-label-heading);
     font-weight: 300;
     margin-top: 0px;
+    color: var(--label-color)
 }
 
 .label-value {
@@ -76,4 +85,5 @@
 .button-close {
     align-self: flex-end;
     height: 46px;
+    margin-top: 10px;
 }

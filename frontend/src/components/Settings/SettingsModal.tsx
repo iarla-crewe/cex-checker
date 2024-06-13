@@ -1,16 +1,24 @@
 "use client";
-import { Dialog } from "@headlessui/react";
+
 import styles from "./SettingsModal.module.css";
 import { useRouter, useSearchParams } from "next/navigation";
 import { MutableRefObject, useRef, useState } from "react";
 import Slider from "./Slider";
+import { Dialog } from "@headlessui/react";
+import ReactSwitch from "react-switch";
 
 interface SettingsModalProps {
     refreshSpeed: number,
-    setRefreshSpeed: (value: number) => void
+    setRefreshSpeed: (value: number) => void,
+    includeWithdrawFees: boolean,
+    setIncludeWithdrawFees: (value: boolean) => void
+    arbitrageView: boolean,
+    setArbitrageView: (value: boolean) => void
 }
 
-export default function SettingsModal({refreshSpeed, setRefreshSpeed} : SettingsModalProps) {
+export default function SettingsModal(props: SettingsModalProps) {
+    const {refreshSpeed, setRefreshSpeed, includeWithdrawFees, setIncludeWithdrawFees, arbitrageView, setArbitrageView} = props;
+
     const router = useRouter();
     const enabled = useSearchParams().get("settings");
 
@@ -19,6 +27,11 @@ export default function SettingsModal({refreshSpeed, setRefreshSpeed} : Settings
 
     const [displayRefreshSpeed, setDisplayRefreshSpeed] = useState(refreshSpeed);
 
+    const disabledColor = 
+        arbitrageView 
+        ? {"opacity": "75%"} as React.CSSProperties
+        : {"opacity": "100%"} as React.CSSProperties;
+
     return (
         <>
             {enabled && (
@@ -26,9 +39,36 @@ export default function SettingsModal({refreshSpeed, setRefreshSpeed} : Settings
                 <Dialog static open={true} onClose={onClose} initialFocus={overlayRef} className={styles["settings-modal"]}>
                     <h2 className={styles["settings-header"]}>Settings</h2>
 
+                    <label className={styles["toggle-setting"]}>
+                        <span className={styles["settings-label"]}>Enable arbitrage view</span>
+                        <ReactSwitch 
+                            checked={arbitrageView} 
+                            onChange={setArbitrageView} 
+                            offColor="#ccc"
+                            onColor="#2780A6"
+                            checkedIcon={false}
+                            uncheckedIcon={false}
+                            height={25}
+                        />
+                    </label>
+
+                    <label className={styles["toggle-setting"]}>
+                        <span className={styles["settings-label"]} style={disabledColor}>Include withdraw fees in prices</span>
+                        <ReactSwitch 
+                            checked={arbitrageView || includeWithdrawFees} 
+                            onChange={setIncludeWithdrawFees} 
+                            offColor="#ccc"
+                            onColor="#2780A6"
+                            checkedIcon={false}
+                            uncheckedIcon={false}
+                            height={25}
+                            disabled={arbitrageView}
+                        />
+                    </label>
+
                     <div className={styles["refresh-speed"]}>
                         <div className={styles["slider-label"]}>
-                            <h3 className={styles["label-header"]}>Refresh Speed</h3>
+                            <h3 className={styles["settings-label"]}>Refresh Speed</h3>
                             <p className={styles["label-value"]}>
                                 {displayRefreshSpeed} second{(displayRefreshSpeed > 1) && <span>s</span>}
                             </p>
