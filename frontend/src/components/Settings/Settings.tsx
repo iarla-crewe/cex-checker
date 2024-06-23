@@ -60,9 +60,11 @@ export default function Settings({ handleUpdate, filter, short }: SettingsProps)
         updateFadeSizes();
         const wrapper = scrollableWrapperRef.current;
 
+        window.addEventListener('resize', updateFadeSizes);
         if (wrapper) wrapper.addEventListener('scroll', updateFadeSizes);
 
         return () => {
+            window.removeEventListener('resize', updateFadeSizes);
             if (wrapper) wrapper.removeEventListener('scroll', updateFadeSizes);
         };
     }, []);
