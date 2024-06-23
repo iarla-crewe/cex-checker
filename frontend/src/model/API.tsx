@@ -42,7 +42,6 @@ export enum PairStatus {
 
 export function getPriceData({ inputToken, outputToken, amount, filter: filterList, includeFees, isSelling }: PriceQuery) {
     const filterObj = listToFilter(filterList);
-    console.log(inputToken, outputToken, amount, filterObj, includeFees, isSelling);
     socket.emit('get-price', { inputToken, outputToken, inputAmount: amount, cexList: filterObj, includeFees, isSelling })
 }
 
