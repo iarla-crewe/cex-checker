@@ -1,4 +1,4 @@
-import { PriceQuery, TokenPair } from "../types.js";
+import { PriceQuery, Prices, TokenPair } from "../types.js";
 
 //find the basetoken for between input token and output token
 const quoteTokens: { [key: string]: number } = {
@@ -58,4 +58,8 @@ export const getTokenPair = (input: string, output: string) => {
 export const tokensFlipped = (previousQuery: PriceQuery, newQuery: PriceQuery) => {
     if (previousQuery.inputToken == newQuery.outputToken && previousQuery.outputToken == newQuery.inputToken) return true
     return false
+}
+
+export const convertWithdrawFees = (fees: Prices, price: number) => {
+    return 0;
 }

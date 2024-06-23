@@ -97,9 +97,7 @@ io.on('connection', (socket) => {
 
         if (response) {
             let prices = await calculatePrices(TokenPairPrices[tokenPairString], inputAmount, inputToken, outputToken, currentTokenPair, includeFees, isSelling)
-            console.log("Emitting new price reponse")
-            console.log("Include fees?", includeFees);
-            console.log("Is sellng?", isSelling);
+            console.log("Emitting new price reponse");
             socket.emit('get-price', { prices: prices });
         }
     })

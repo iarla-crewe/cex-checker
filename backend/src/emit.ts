@@ -3,6 +3,7 @@ import { getFees } from "./database.js";
 import { PreviousPrices, TokenPairPrices } from "./index.js";
 import { PairStatus, Prices, TokenPair } from "./types.js";
 import { initializePriceObject } from "./utils/connections.js";
+import { convertWithdrawFees } from "./utils/tokenPair.js";
 
 const exchanges = ['binance', 'bybit', 'coinbase', 'crypto_com', 'kraken', 'jupiter', 'oneInch'];
 
@@ -51,12 +52,16 @@ export const calculatePrices = async (tokenPrices: Prices, amount: number, input
 
             // If selling, withdrawal fee is subtracted
             if (isSelling) withdrawalFee *= -1;
-
+            
             // Check if both token price and taker fee are defined for the current exchange
             if (typeof tokenPrice === 'number' && typeof takerFee === 'number') {
                 let price = calculateOutputAmount(amount, tokenPrice, inputIsBase)
                 price = price * (1 - takerFee);
+                
+                // If buying, withdrawal fee currency needs to be exchanged, as its different from price
+                if (!isSelling) withdrawalFee = calculateOutputAmount(withdrawalFee, tokenPrice, inputIsBase);
                 price = price + withdrawalFee;
+
                 calculatedPrices[exchange] = parseFloat(price.toFixed(5));
             } else {
                 calculatedPrices[exchange] = tokenPrice // tokenprice is either Not found or Loading
