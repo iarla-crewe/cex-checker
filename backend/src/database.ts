@@ -20,17 +20,17 @@ export const pool = new Pool({
     ssl: true
 });
 
-export async function getFees(tokenA: string, tokenB: string) {
-    let feesA: Prices = {
-        binance: 0,
-        kraken: 0,
-        coinbase: 0,
-        crypto_com: 0,
-        bybit: 0,
-        jupiter: 0,
-        oneInch: 0
+export async function getFees(token: string) {
+    let fees: Prices = {
+        binance: 100,
+        kraken: 100,
+        coinbase: 100,
+        crypto_com: 100,
+        bybit: 100,
+        jupiter: 100,
+        oneInch: 100
     }
-    let feesB: Prices = Object.assign({}, feesA);
+    return fees;
     const query = 
         `SELECT 'withdrawal' AS type, e.name AS exchange_name, wf.fee_amount AS fee
         FROM withdrawal_fee wf
@@ -39,25 +39,17 @@ export async function getFees(tokenA: string, tokenB: string) {
 
     try {
         const connection = await pool.connect();
-        const resultA = await connection.query(query, [tokenA]);
-        const resultB = await connection.query(query, [tokenB]);
+        const result = await connection.query(query, [token]);
 
-        const withdrawalFeesWithTokenA  = resultA.rows.map(obj => ({ ...obj, token: `${tokenA}` }));
-        const withdrawalFeesWithTokenB = resultB.rows.map(obj => ({ ...obj, token: `${tokenB}` }));
-        const combinedWithdrawalFees = [...withdrawalFeesWithTokenA, ...withdrawalFeesWithTokenB];
-
-        for(const cex in feesA) {
+        const withdrawalFees  = result.rows.map(obj => ({ ...obj, token: `${token}` }));
+        for(const cex in fees) {
             //@ts-ignore
-            let matchingObject = combinedWithdrawalFees.find(obj => obj.exchange_name == cex.name && obj.token == tokenA);
-            if (matchingObject) feesA[cex] = matchingObject.fee;
-
-            //@ts-ignore
-            matchingObject = combinedWithdrawalFees.find(obj => obj.exchange_name == cex.name && obj.token == tokenB);
-            if (matchingObject) feesB[cex] = matchingObject.fee;
+            let matchingObject = withdrawalFees.find(obj => obj.exchange_name == cex.name && obj.token == tokenA);
+            if (matchingObject) fees[cex] = matchingObject.fee;
         }
     } catch (error) {
         console.log("[Error] Could not read from fees database: " + error)
     } finally {
-        return [feesA, feesB];
+        return fees;
     }
 }

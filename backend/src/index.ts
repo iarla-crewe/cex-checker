@@ -94,8 +94,10 @@ io.on('connection', (socket) => {
         let response = isNewReponse(queryChanged, tokenPairString)
 
         if (response) {
-            let prices = await calculatePrices(TokenPairPrices[tokenPairString], inputAmount, inputToken, outputToken, currentTokenPair, includeFees)
+            const isSelling = true; // TODO - Remove hardcoding
+            let prices = await calculatePrices(TokenPairPrices[tokenPairString], inputAmount, inputToken, outputToken, currentTokenPair, includeFees, isSelling)
             console.log("Emitting new price reponse")
+            console.log("Include fees? ", includeFees);
             socket.emit('get-price', { prices: prices });
         }
     })

@@ -1,7 +1,7 @@
 import { exchangeTakerFees } from "./Exchanges/prices.js";
 import { getFees } from "./database.js";
 import { PreviousPrices, TokenPairPrices } from "./index.js";
-import { Prices, TokenPair } from "./types.js";
+import { PairStatus, Prices, TokenPair } from "./types.js";
 import { initializePriceObject } from "./utils/connections.js";
 
 const exchanges = ['binance', 'bybit', 'coinbase', 'crypto_com', 'kraken', 'jupiter', 'oneInch'];
@@ -27,27 +27,36 @@ export const isNewReponse = (queryChanged: boolean, tokenPairString: string) => 
     return false
 }
 
-export const calculatePrices = async (tokenPrices: Prices, amount: number, inputToken: string, outputToken: string, tokenPair: TokenPair, includeFees: boolean): Promise<Prices> => {
+export const calculatePrices = async (tokenPrices: Prices, amount: number, inputToken: string, outputToken: string, tokenPair: TokenPair, includeFees: boolean, isSelling: boolean): Promise<Prices> => {
     const calculatedPrices: Prices = initializePriceObject();
     let inputIsBase = checkIfInputIsBase(tokenPair, inputToken);
 
     let withdrawalFees = undefined;
-
     if (includeFees) {
-        const [inputFees, outputFees] = await getFees(inputToken, outputToken);
-        console.log("[DEBUG]");
-        console.log(inputFees);
+        if (isSelling) withdrawalFees = await getFees(outputToken);
+        else withdrawalFees = await getFees(inputToken);
     }
+
+    // console.log("[DEBUG]");
+    // console.log(withdrawalFees[0]);
 
     for (const exchange in tokenPrices) {
         if (tokenPrices.hasOwnProperty(exchange)) {
             const tokenPrice = tokenPrices[exchange];
             const takerFee = exchangeTakerFees[exchange];
 
+            // If withdrawalFee is set, assign. Otherwise set to 0.
+            let withdrawalFee = (withdrawalFees === undefined) ? 0 : withdrawalFees[exchange];
+            if (typeof withdrawalFee !== "number") withdrawalFee = 0;
+
+            // If selling, withdrawal fee is subtracted
+            if (isSelling) withdrawalFee *= -1;
+
             // Check if both token price and taker fee are defined for the current exchange
             if (typeof tokenPrice === 'number' && typeof takerFee === 'number') {
                 let price = calculateOutputAmount(amount, tokenPrice, inputIsBase)
                 price = price * (1 - takerFee);
+                price = price + withdrawalFee;
                 calculatedPrices[exchange] = parseFloat(price.toFixed(5));
             } else {
                 calculatedPrices[exchange] = tokenPrice // tokenprice is either Not found or Loading
