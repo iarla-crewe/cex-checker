@@ -9,10 +9,11 @@ interface CEXCardWrapperProps {
     outputToken: string;
     feeCurrency: string;
     isSelling: boolean;
+    includeWithdrawFees: boolean;
 }
 
 export default function CEXCardWrapper(props: CEXCardWrapperProps) {
-    const { cex, outputToken, feeCurrency, isSelling } = props;
+    const { cex, outputToken, feeCurrency, isSelling, includeWithdrawFees } = props;
     const posthog = usePostHog();
 
     const handleClick = () => {
@@ -24,12 +25,12 @@ export default function CEXCardWrapper(props: CEXCardWrapperProps) {
     if (typeof cex.price === 'number') {
         return (
             <a href={cex.website} target="_blank"  onClick={handleClick}>
-                <CEXCard cex={cex} outputToken={outputToken} feeCurrency={feeCurrency} isSelling={isSelling}/>
+                <CEXCard cex={cex} outputToken={outputToken} feeCurrency={feeCurrency} isSelling={isSelling} includeWithdrawFees={includeWithdrawFees}/>
             </a>
         )
     } else {
         return (
-            <CEXCard cex={cex} outputToken={outputToken} feeCurrency={feeCurrency} isSelling={isSelling}/>
+            <CEXCard cex={cex} outputToken={outputToken} feeCurrency={feeCurrency} isSelling={isSelling} includeWithdrawFees={includeWithdrawFees}/>
         )
     }
 }

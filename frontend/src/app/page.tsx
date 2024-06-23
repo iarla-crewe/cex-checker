@@ -140,7 +140,7 @@ export default function Home() {
           isSelling={isSelling}
           tokenPair={tokenPair}
           filter={listToFilter(queryData.filter)}
-          includeWithdrawFees={includeWithdrawFees}
+          includeWithdrawFees={includeWithdrawFees || arbitrageView}
           arbitrageView={arbitrageView}
         />
       </div>

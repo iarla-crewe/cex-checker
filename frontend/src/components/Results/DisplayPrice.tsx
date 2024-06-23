@@ -9,18 +9,20 @@ interface DisplayPriceProps {
     feeCurrency: string;
     withdrawFee: number | undefined;
     textColor: string;
+    includeWithdrawFees: boolean;
 }
 
 export default function DisplayPrice(props: DisplayPriceProps) {
-    const { price, outputToken, isSelling, feeCurrency, withdrawFee, textColor } = props;
+    const { price, outputToken, isSelling, feeCurrency, withdrawFee, textColor, includeWithdrawFees } = props;
 
-    let withdrawFeeText = (isSelling) ? "-" : "+";
-    if (withdrawFee === 0) {
-        withdrawFeeText += ` network gas fee`
-    } else if (withdrawFee === undefined) {
-        withdrawFeeText += ` withdrawal fee (loading...)`
+    let withdrawFeeText = "";
+    if (includeWithdrawFees) {
+        withdrawFeeText = "including withdrawal fee"
     } else {
-        withdrawFeeText += `${withdrawFee} ${feeCurrency.toUpperCase()} withdrawal fee`
+        withdrawFeeText = (isSelling) ? "-" : "+";
+        if (withdrawFee === 0) withdrawFeeText += ` network gas fee`;
+        else if (withdrawFee === undefined) withdrawFeeText += ` withdrawal fee (loading...)`;
+        else withdrawFeeText += `${withdrawFee} ${feeCurrency.toUpperCase()} withdrawal fee`;
     }
 
     let priceHeading = (isSelling) ? `${outputToken.toUpperCase()} received` : `Price in ${outputToken.toUpperCase()}`
