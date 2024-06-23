@@ -22,15 +22,14 @@ export const pool = new Pool({
 
 export async function getFees(token: string) {
     let fees: Prices = {
-        binance: 100,
-        kraken: 100,
-        coinbase: 100,
-        crypto_com: 100,
-        bybit: 100,
-        jupiter: 100,
-        oneInch: 100
+        binance: 0,
+        kraken: 0,
+        coinbase: 0,
+        crypto_com: 0,
+        bybit: 0,
+        jupiter: 0,
+        oneInch: 0
     }
-    return fees;
     const query = 
         `SELECT 'withdrawal' AS type, e.name AS exchange_name, wf.fee_amount AS fee
         FROM withdrawal_fee wf
@@ -41,11 +40,9 @@ export async function getFees(token: string) {
         const connection = await pool.connect();
         const result = await connection.query(query, [token]);
 
-        const withdrawalFees  = result.rows.map(obj => ({ ...obj, token: `${token}` }));
         for(const cex in fees) {
-            //@ts-ignore
-            let matchingObject = withdrawalFees.find(obj => obj.exchange_name == cex.name && obj.token == tokenA);
-            if (matchingObject) fees[cex] = matchingObject.fee;
+            let cexRow = result.rows.find(obj => obj.exchange_name === cex);
+            if (cexRow) fees[cex] = parseFloat(cexRow.fee);
         }
     } catch (error) {
         console.log("[Error] Could not read from fees database: " + error)

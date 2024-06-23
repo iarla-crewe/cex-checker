@@ -38,8 +38,8 @@ export const calculatePrices = async (tokenPrices: Prices, amount: number, input
         else withdrawalFees = await getFees(inputToken);
     }
 
-    // console.log("[DEBUG]");
-    // console.log(withdrawalFees[0]);
+    console.log("[DEBUG]");
+    console.log(withdrawalFees);
 
     for (const exchange in tokenPrices) {
         if (tokenPrices.hasOwnProperty(exchange)) {
@@ -47,8 +47,12 @@ export const calculatePrices = async (tokenPrices: Prices, amount: number, input
             const takerFee = exchangeTakerFees[exchange];
 
             // If withdrawalFee is set, assign. Otherwise set to 0.
-            let withdrawalFee = (withdrawalFees === undefined) ? 0 : withdrawalFees[exchange];
-            if (typeof withdrawalFee !== "number") withdrawalFee = 0;
+            let withdrawalFee = 0;
+            if (withdrawalFees != undefined) {
+                const tmp = withdrawalFees[exchange];
+                if (typeof tmp === "number") withdrawalFee = tmp;
+                console.log(typeof tmp)
+            }
 
             // If selling, withdrawal fee is subtracted
             if (isSelling) withdrawalFee *= -1;
