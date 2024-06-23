@@ -1,8 +1,10 @@
 import { FilterOptionValue, listToFilter } from "./FilterData";
 import { io } from "socket.io-client";
+import * as dotenv from "dotenv";
 
-// export const socket = io('https://cex-checker-8mqk8.ondigitalocean.app/')
-export const socket = io('http://localhost:443')
+dotenv.config();
+const DEV_BUILD = process.env.DEV_BUILD;
+export const socket = (DEV_BUILD === "true") ? io('http://localhost:443') : io('https://cex-checker-8mqk8.ondigitalocean.app/');
 
 export interface PriceQuery {
     inputToken: string;
