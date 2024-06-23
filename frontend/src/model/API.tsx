@@ -10,6 +10,7 @@ export interface PriceQuery {
     amount: number;
     filter: FilterOptionValue[];
     includeFees: boolean;
+    isSelling: boolean;
 }
 
 export interface UpdatePriceQuery {
@@ -18,6 +19,7 @@ export interface UpdatePriceQuery {
     amount?: number; 
     filter?: FilterOptionValue[];
     includeFees?: boolean;
+    isSelling?: boolean;
 }
 
 export type ResponseData = {
@@ -36,9 +38,9 @@ export enum PairStatus {
     Loading = "Loading"
 }
 
-export function getPriceData({ inputToken, outputToken, amount, filter: filterList, includeFees }: PriceQuery) {
+export function getPriceData({ inputToken, outputToken, amount, filter: filterList, includeFees, isSelling }: PriceQuery) {
     const filterObj = listToFilter(filterList);
-    socket.emit('get-price', { inputToken, outputToken, inputAmount: amount, cexList: filterObj, includeFees })
+    socket.emit('get-price', { inputToken, outputToken, inputAmount: amount, cexList: filterObj, includeFees, isSelling })
 }
 
 export async function getFeeData(tokenA: string, tokenB: string) {

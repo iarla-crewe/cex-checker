@@ -16,6 +16,7 @@ export default function Home() {
   const [refreshSpeed, setRefreshSpeed] = useState(5000);
   const [includeWithdrawFees, setIncludeWithdrawFees] = useState(false);
   const [arbitrageView, setArbitrageView] = useState(false);
+  const [isSelling, setIsSelling] = useState(false);
 
   const [responseData, setResponseData] = useState<ResponseData>(initializeRespobseObject());
   const [queryData, setQueryData] = useState<PriceQuery>({
@@ -32,8 +33,8 @@ export default function Home() {
       oneInch: true,
     }),
     includeFees: includeWithdrawFees,
+    isSelling: isSelling
   });
-  const [isSelling, setIsSelling] = useState(false);
   const [tokenPair, setTokenPair] = useState<TokenPair>({
     base: queryData.inputToken,
     quote: queryData.outputToken
@@ -82,6 +83,7 @@ export default function Home() {
     if (data.amount === undefined) data.amount = queryData.amount;
     if (data.filter === undefined) data.filter = queryData.filter;
     if (data.includeFees === undefined) data.includeFees = queryData.includeFees;
+    if (data.isSelling === undefined) data.isSelling = queryData.isSelling;
 
     setTokenPair(getTokenPair(data.inputToken, data.outputToken));
 
@@ -90,7 +92,8 @@ export default function Home() {
       outputToken: data.outputToken, 
       amount: data.amount, 
       filter: data.filter,
-      includeFees: data.includeFees
+      includeFees: data.includeFees,
+      isSelling: data.isSelling
     })
     setResponseData(initializeRespobseObject())
   }
@@ -124,7 +127,10 @@ export default function Home() {
           defaultAmount={queryData.amount}
           defaultIsSelling={isSelling}
           handleUpdate={handleQueryUpdate}
-          handleSetIsSelling={setIsSelling}
+          handleSetIsSelling={(value) => {
+            handleQueryUpdate({isSelling: value});
+            setIsSelling(value);
+          }}
         />
 
         <Settings 

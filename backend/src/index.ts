@@ -44,13 +44,14 @@ io.on('connection', (socket) => {
             jupiter: false,
             oneInch: false,
         },
-        includeFees: false
+        includeFees: false,
+        isSelling: false,
     }; // Variable to store previous query data
 
     let currentTokenPair: TokenPair = { base: "", quote: "" };
 
-    socket.on('get-price', async ({ inputToken, outputToken, inputAmount, cexList, includeFees }: PriceQuery) => {
-        const currentQueryData: PriceQuery = { inputToken, outputToken, inputAmount, cexList,  includeFees};
+    socket.on('get-price', async ({ inputToken, outputToken, inputAmount, cexList, includeFees, isSelling }: PriceQuery) => {
+        const currentQueryData: PriceQuery = { inputToken, outputToken, inputAmount, cexList,  includeFees, isSelling};
 
         try { currentTokenPair = getTokenPair(inputToken, outputToken); }
         catch (error) { io.emit('error', { error }) }
@@ -85,19 +86,20 @@ io.on('connection', (socket) => {
                 previousTokenPair = currentTokenPair;
             }
 
-            if (currentQueryData.includeFees != previousQueryData.includeFees) {
-                queryChanged = true;
-            }
+            //checks if includeFees or isSelling has changed
+            if (currentQueryData.includeFees != previousQueryData.includeFees) queryChanged = true;
+            if (currentQueryData.isSelling != previousQueryData.isSelling) queryChanged = true;
+
             previousQueryData = { ...currentQueryData };
         }
 
         let response = isNewReponse(queryChanged, tokenPairString)
 
         if (response) {
-            const isSelling = true; // TODO - Remove hardcoding
             let prices = await calculatePrices(TokenPairPrices[tokenPairString], inputAmount, inputToken, outputToken, currentTokenPair, includeFees, isSelling)
             console.log("Emitting new price reponse")
-            console.log("Include fees? ", includeFees);
+            console.log("Include fees?", includeFees);
+            console.log("Is sellng?", isSelling);
             socket.emit('get-price', { prices: prices });
         }
     })
