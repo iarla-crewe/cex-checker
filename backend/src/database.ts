@@ -11,14 +11,14 @@ if (!PGHOST || !PGDATABASE || !PGUSER || !PGPASSWORD) {
   throw new Error("Missing required environment variables");
 }
 
-export const pool = new Pool({
+const pool = new Pool({
     host: PGHOST,
     database: PGDATABASE,
     user: PGUSER,
     password: PGPASSWORD,
     port: 5432,
     ssl: true
-});
+}).connect();
 
 export async function getFees(token: string) {
     let fees: Prices = {
@@ -37,7 +37,7 @@ export async function getFees(token: string) {
         WHERE wf.token = $1;`;
 
     try {
-        const connection = await pool.connect();
+        const connection = await pool;
         const result = await connection.query(query, [token]);
 
         for(const cex in fees) {

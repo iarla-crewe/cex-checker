@@ -32,6 +32,7 @@ export const calculatePrices = async (tokenPrices: Prices, amount: number, input
     const calculatedPrices: Prices = initializePriceObject();
     let inputIsBase = checkIfInputIsBase(tokenPair, inputToken);
 
+    console.log("[DEBUG]: calculating prices")
     let withdrawalFees = undefined;
     if (includeFees) {
         if (isSelling) withdrawalFees = await getFees(outputToken);
@@ -49,9 +50,8 @@ export const calculatePrices = async (tokenPrices: Prices, amount: number, input
             // If withdrawalFee is set, assign. Otherwise set to 0.
             let withdrawalFee = 0;
             if (withdrawalFees != undefined) {
-                const tmp = withdrawalFees[exchange];
-                if (typeof tmp === "number") withdrawalFee = tmp;
-                console.log(typeof tmp)
+                const fee = withdrawalFees[exchange];
+                if (typeof fee === "number") withdrawalFee = fee;
             }
 
             // If selling, withdrawal fee is subtracted

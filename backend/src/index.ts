@@ -5,7 +5,6 @@ import { calculatePrices, isNewReponse, resetPriceResponse } from './emit.js';
 import { getTokenPair, tokensFlipped } from './utils/tokenPair.js';
 import { ConnectionsNumber as NumberConnections, PriceQuery, TokenPair, TokenPairConnections as TradingPairConnections, TradingPairPrices } from './types.js';
 import { addOneConnection, minusOneConnection, openExchangeWsConnections } from './utils/connections.js';
-import { pool } from './database.js';
 
 const app = express();
 
@@ -52,6 +51,7 @@ io.on('connection', (socket) => {
 
     socket.on('get-price', async ({ inputToken, outputToken, inputAmount, cexList, includeFees, isSelling }: PriceQuery) => {
         const currentQueryData: PriceQuery = { inputToken, outputToken, inputAmount, cexList,  includeFees, isSelling};
+        console.log(currentQueryData);
 
         try { currentTokenPair = getTokenPair(inputToken, outputToken); }
         catch (error) { io.emit('error', { error }) }
@@ -93,11 +93,11 @@ io.on('connection', (socket) => {
             previousQueryData = { ...currentQueryData };
         }
 
-        let response = isNewReponse(queryChanged, tokenPairString)
+        let newReponse = isNewReponse(queryChanged, tokenPairString)
 
-        if (response) {
-            let prices = await calculatePrices(TokenPairPrices[tokenPairString], inputAmount, inputToken, outputToken, currentTokenPair, includeFees, isSelling)
-            console.log("Emitting new price reponse");
+        if (newReponse) {
+            let prices = await calculatePrices(TokenPairPrices[tokenPairString], inputAmount, inputToken, outputToken, currentTokenPair, includeFees, isSelling);
+            console.log("Emitting new price reponse - include withdraw fees?", includeFees, "is selling?", isSelling);
             socket.emit('get-price', { prices: prices });
         }
     })
