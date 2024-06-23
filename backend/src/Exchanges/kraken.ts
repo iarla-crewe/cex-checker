@@ -18,7 +18,6 @@ export const openKrakenWs = (baseToken: string, quoteToken: string, flipped?: bo
 
     krakenSocket.on('open', function open() {
         krakenSocket.send(publicWebSocketSubscriptionMsg);
-        console.log("Connecting with kraken")
     });
 
     krakenSocket.on('message', function incoming(wsMsg) {
@@ -27,7 +26,6 @@ export const openKrakenWs = (baseToken: string, quoteToken: string, flipped?: bo
         if (priceObject.status === 'error') {
             if ((baseToken == "eur" || quoteToken == "eur") && !flipped) {
                 //flip tokens and retry the connection.
-                console.log("Flipping kraken token pair")
                 //Must test if this gets stored as the current token pairs ws connetion
                 return openKrakenWs(quoteToken, baseToken, true)
             }
@@ -55,7 +53,7 @@ export const openKrakenWs = (baseToken: string, quoteToken: string, flipped?: bo
     });
 
     krakenSocket.on('error', (error: Error) => {
-        console.error('Kraken WebSocket error:', error.message);
+        console.error('[Error] Kraken WebSocket:', error.message);
     });
 
     return krakenSocket;
@@ -77,13 +75,13 @@ export const getCurrentKrakenPrice = async (baseToken: string, quoteToken: strin
         response = await axios(config);
     } catch (error) {
         //@ts-ignore
-        console.log("kraken api call error", error.response.data)
+        console.log("[Error] Kraken API call: ", error.response.data)
         TokenPairPrices[tokenPairString].kraken = PairStatus.NoPairFound
         return
     }
 
     if (response.data.error.length != 0) {
-        console.log("kraken error: ", response.data.error[0]);
+        console.log("[Error] Kraken: ", response.data.error[0]);
         TokenPairPrices[tokenPairString].kraken = PairStatus.NoPairFound
         return
     }
@@ -93,7 +91,6 @@ export const getCurrentKrakenPrice = async (baseToken: string, quoteToken: strin
     } catch (error) {
         TokenPairPrices[tokenPairString].kraken = PairStatus.NoPairFound
     }
-    console.log("Kraken Price from api call:", price)
     if (price == undefined) {
         TokenPairPrices[tokenPairString].kraken = PairStatus.NoPairFound
         return

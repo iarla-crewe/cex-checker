@@ -35,10 +35,8 @@ export const initializePriceObject = () => {
 export const addOneConnection = (tokenPairString: string) => {
     if (Number.isNaN(ConnectionsNumber[tokenPairString]) || ConnectionsNumber[tokenPairString] == undefined) {
         ConnectionsNumber[tokenPairString] = 1; //Initialize the count for that connection
-        console.log("Initializing count for : ", tokenPairString)
     }
     else {
-        console.log("Plus one for : ", tokenPairString)
         ConnectionsNumber[tokenPairString] += 1; //Add one to that connections count
     }
 }
@@ -59,7 +57,7 @@ export const minusOneConnection = (previousPairString: string) => {
             TokenPairConnections[previousPairString] = undefined
         }
     } catch (error) {
-        console.log("minus connection error: ", error)
+        console.log("[Error] Minus connection: ", error)
     }
 }
 

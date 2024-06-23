@@ -16,7 +16,6 @@ export const openCrypto_comWs = (baseToken: string, quoteToken: string) => {
               "channels": [`trade.${baseToken.toUpperCase()}_${quoteToken.toUpperCase()}`]
             }
           }))
-        console.log("Connecting with crypto.com for pair: ", baseToken.toUpperCase(), quoteToken.toUpperCase())
     }
 
     crypto_comSocket.onmessage = ({ data }: any) => {
@@ -32,17 +31,17 @@ export const openCrypto_comWs = (baseToken: string, quoteToken: string) => {
             try {
                 TokenPairPrices[`${baseToken}/${quoteToken}`].crypto_com = parseFloat(priceObject.result.data[0].p)
             } catch (error) {
-                console.log("crypto.com data object does not contain a price:", priceObject, "error: ", error)
+                console.log("[Error] Crypto.com data object does not contain a price:", priceObject, ", error: ", error)
             }
         }
     };
 
     crypto_comSocket.on('close', (code: number, reason: string) => {
-        console.log(`crypto.com webSocket connection closed, code: ${code}, reason: ${reason}`);
+        console.log(`Crypto.com webSocket connection closed, code: ${code}, reason: ${reason}`);
     });
 
     crypto_comSocket.on('error', (error: Error) => {
-        console.error('crypto.com webSocket error:', error.message);
+        console.error('[Error] Crypto.com webSocket:', error.message);
     });
 
     return crypto_comSocket;
@@ -56,7 +55,6 @@ export const getCurrentCrypto_comPrice = async (baseToken: string, quoteToken: s
     try {
         response = await axios.get(API_URL);
     } catch (error) {
-        console.log("Crypto.com api call error, no token pair found")
         TokenPairPrices[tokenPairString].crypto_com = PairStatus.NoPairFound
         return
     }
@@ -64,12 +62,10 @@ export const getCurrentCrypto_comPrice = async (baseToken: string, quoteToken: s
     try {
         price = Number(response.data.result.data[0].a);
     } catch (error) {
-        console.log("error calling crypto.com price api: ")
-        //console.log("error: ", error)
+        console.log("[Error] Crypto.com API call: ")
         TokenPairPrices[tokenPairString].crypto_com = PairStatus.NoPairFound
         return
     }
-    console.log("Crypto.com Price from api call: ", price);
     TokenPairPrices[tokenPairString].crypto_com = price
     return
 }

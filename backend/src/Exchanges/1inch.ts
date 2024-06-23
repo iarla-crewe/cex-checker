@@ -81,7 +81,6 @@ async function getOneInchPriceData(inputToken: string, outputToken: string): Pro
     let outputAddress = tokenAddresses[outputToken]?.address
 
     if (inputAddress == undefined || inputDecimals == undefined || outputAddress == undefined) {
-      console.log("1inch No token pair found")
       return undefined
     }
 
@@ -105,15 +104,14 @@ async function getOneInchPriceData(inputToken: string, outputToken: string): Pro
 
     try {
       let price = formatNumber(oneInchPriceObj.dstAmount, oneInchPriceObj.dstToken.decimals);
-      console.log("1inch Price from api call: ", price)
       return Number(price)
     } catch (error) {
-      console.log("1inch Price error when formatting: ", error)
+      console.log("[Error] 1inch price formatting: ", error)
       //No pair found
       return undefined;
     }
   } catch (error) {
-    console.error('1inch - Error fetching data:', error);
+    console.error('[Error] 1inch fetching data: ', error);
     return undefined;
   }
 }

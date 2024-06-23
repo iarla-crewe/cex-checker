@@ -36,7 +36,6 @@ export const openCoinbaseWs = (baseTokenOriginal: string, quoteTokenOriginal: st
                 }
             ]
         }))
-        console.log("Connecting with coinbase")
     }
 
     coinbaseSocket.onmessage = ({ data }: any) => {
@@ -44,7 +43,6 @@ export const openCoinbaseWs = (baseTokenOriginal: string, quoteTokenOriginal: st
         if (priceObject.type == 'error') {
             if ((btFormatted == "eur" || qtFormatted == "eur") && !flipped) {
                 //flip tokens and retry the connection.
-                console.log("Flipping coinbase token pair")
                 //Must test if this gets stored as the current token pairs ws connetion
                 return openCoinbaseWs(quoteTokenOriginal, baseTokenOriginal, true)
             }
@@ -62,7 +60,7 @@ export const openCoinbaseWs = (baseTokenOriginal: string, quoteTokenOriginal: st
                     TokenPairPrices[tokenPairString].coinbase = price
                 }
             } catch (error) {
-                console.log("Coinbase data object does not contain a price", error)
+                console.log("[Error] Coinbase data object does not contain a price: ", error)
             }
         }
     };
@@ -72,7 +70,7 @@ export const openCoinbaseWs = (baseTokenOriginal: string, quoteTokenOriginal: st
     });
 
     coinbaseSocket.on('error', (error: Error) => {
-        console.error('Coinbase webSocket error:', error.message);
+        console.error('[Error] Coinbase webSocket:', error.message);
     });
 
     return coinbaseSocket;
@@ -85,16 +83,14 @@ export const getCurrentCoinbasePrice = async (baseToken: string, quoteToken: str
     let response;
     try {
         response = await axios.get(API_URL);
-        console.log("Response: ", response.data)
     } catch (error) {
         //@ts-ignore
-        console.log("Coinbase No token pair found - ", error.response.data.message)
         TokenPairPrices[tokenPairString].coinbase = PairStatus.NoPairFound
         return
     }
     let price: number;
     price = Number(response.data.data.amount);
-    console.log("coinbase Price from api call: ", price);
+    console.log("[Error] Coinbase API call: ", price);
     TokenPairPrices[tokenPairString].coinbase = price
     return
 }

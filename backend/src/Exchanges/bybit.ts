@@ -17,7 +17,6 @@ export const openBybitWs = (baseToken: string, quoteToken: string, flipped?: boo
             "op": "subscribe",
             "args": [`publicTrade.${(baseToken + quoteToken).toUpperCase()}`]
         }))
-        console.log("Connecting with bybit")
     }
 
     bybitSocket.onmessage = ({ data }: any) => {
@@ -26,7 +25,6 @@ export const openBybitWs = (baseToken: string, quoteToken: string, flipped?: boo
         if (priceObject.success === false) {
             if ((baseToken == "eur" || quoteToken == "eur") && !flipped) {
                 //flip tokens and retry the connection.
-                console.log("Flipping bybit token pair")
                 return openBybitWs(quoteToken, baseToken, true)
             }
             if (priceObject.ret_msg.includes("Invalid symbol")) {
@@ -40,7 +38,7 @@ export const openBybitWs = (baseToken: string, quoteToken: string, flipped?: boo
                 }
                 TokenPairPrices[tokenPairString].bybit = price
             } catch (error) {
-                console.log("Bybit data object does not contain a price")
+                console.log("[Error] Bybit data object does not contain a price")
             }
         }
     };
@@ -50,7 +48,7 @@ export const openBybitWs = (baseToken: string, quoteToken: string, flipped?: boo
     });
 
     bybitSocket.on('error', (error: Error) => {
-        console.error('Bybit webSocket error:', error.message);
+        console.error('[Error] Bybit webSocket: ', error.message);
     });
 
     return bybitSocket;
@@ -66,18 +64,16 @@ export const getCurrentBybitPrice = async (baseToken: string, quoteToken: string
         response = await axios.get(API_URL);
     } catch (error) {
         //@ts-ignore
-        console.log("bybit api call error", error.response.data)
+        console.log("[Error] ByBit API call: ", error.response.data)
         TokenPairPrices[tokenPairString].bybit = PairStatus.NoPairFound
         return
     }
     let price: number;
     if (response.data.result.price == undefined) {
-        console.log("No bybit price found from api")
         TokenPairPrices[tokenPairString].bybit = PairStatus.NoPairFound
         return
     }
     price = Number(response.data.result.price);
-    console.log("bybit Price from api call: ", price);
     TokenPairPrices[tokenPairString].bybit = price
     return
 }

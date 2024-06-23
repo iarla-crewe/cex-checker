@@ -11,6 +11,16 @@ export type Prices = {
     oneInch: number | PairStatus;
 }
 
+// export const newPrices: Prices = {
+//     binance: 0,
+//     kraken: 0,
+//     coinbase: 0,
+//     crypto_com: 0,
+//     bybit: 0,
+//     jupiter: 0,
+//     oneInch: 0
+// }
+
 export enum PairStatus {
     NoPairFound = "No Pair Found",
     Loading = "Loading"

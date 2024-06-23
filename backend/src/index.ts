@@ -26,11 +26,9 @@ export let ConnectionsNumber: NumberConnections = {}
 export let TokenPairPrices: TradingPairPrices = {}
 export let PreviousPrices: TradingPairPrices = {}
 
-export const feesConnection = pool.connect();
-
 //connection with the client
 io.on('connection', (socket) => {
-    console.log("Connection")
+    console.log("Client connected")
     let previousTokenPair: TokenPair;
 
     let previousQueryData: PriceQuery = {
@@ -78,7 +76,7 @@ io.on('connection', (socket) => {
                 openExchangeWsConnections(currentTokenPair)
 
                 previousTokenPair = currentTokenPair;
-                console.log("Token Connections: ", ConnectionsNumber)
+                console.log("Token connections: ", ConnectionsNumber)
             }
 
             //checks if new input amount is different to old one  or if tokens got flipped
@@ -93,11 +91,11 @@ io.on('connection', (socket) => {
             previousQueryData = { ...currentQueryData };
         }
 
-        let prices = await calculatePrices(TokenPairPrices[tokenPairString], inputAmount, inputToken, outputToken, currentTokenPair, includeFees)
         let response = isNewReponse(queryChanged, tokenPairString)
 
         if (response) {
-            console.log("Emitting new reponse:", prices)
+            let prices = await calculatePrices(TokenPairPrices[tokenPairString], inputAmount, inputToken, outputToken, currentTokenPair, includeFees)
+            console.log("Emitting new price reponse")
             socket.emit('get-price', { prices: prices });
         }
     })
@@ -107,11 +105,11 @@ io.on('connection', (socket) => {
         try {
             if (previousTokenPair != undefined) minusOneConnection(`${previousTokenPair.base}/${previousTokenPair.quote}`);
         } catch (error) {
-            console.log("Disconnection: ", error)
+            console.log("[Error] Disconnection: ", error)
         }
     })
 })
 
 server.listen(pricePort, () => {
-    console.log(`Server running at http://localhost:${pricePort}`);
+    console.log(`Server running on port ${pricePort}`);
 })

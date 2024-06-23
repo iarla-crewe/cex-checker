@@ -23,14 +23,11 @@ export const openBinanceWs = (baseToken: string, quoteToken: string, flipped?: b
                 ],
             "id": 1
         }))
-        console.log("Connecting with binance")
 
         setTimeout(() => {
             isLoading = false;
             if ((baseToken == "eur" || quoteToken == "eur") && !flipped && !foundPrice) {
                 //flip tokens and retry the connection.
-                console.log("Flipping binance token pair")
-                console.log("Token pair string binance: ", tokenPairString)
                 return openBinanceWs(quoteToken, baseToken, true);
             } else {
                 if (!foundPrice) {
@@ -47,7 +44,6 @@ export const openBinanceWs = (baseToken: string, quoteToken: string, flipped?: b
 
             if ((baseToken == "eur" || quoteToken == "eur") && !flipped) {
                 //flip tokens and retry the connection.
-                console.log("Flipping binance token pair")
                 return openBinanceWs(quoteToken, baseToken, true);
             } else {
                 TokenPairPrices[tokenPairString].binance = PairStatus.NoPairFound
@@ -71,7 +67,7 @@ export const openBinanceWs = (baseToken: string, quoteToken: string, flipped?: b
     });
 
     binanceSocket.on('error', (error: Error) => {
-        console.error('Binance webSocket error:', error.message);
+        console.error('[Error] Binance webSocket: ', error.message);
     });
 
     return binanceSocket;
@@ -92,12 +88,11 @@ export const getCurrentBinancePrice = async (baseToken: string, quoteToken: stri
         response = await axios.get(API_URL, config);
     } catch (error) {
         //@ts-ignore
-        console.log("binance api call error", error.response.data)
+        console.log("[Error]: Binance API call", error.response.data)
         TokenPairPrices[tokenPairString].binance = PairStatus.NoPairFound
         return
     }
     let price = Number(response!.data.price);
-    console.log("Binance Price from api call: ", price);
 
     TokenPairPrices[tokenPairString].binance = price
     return;

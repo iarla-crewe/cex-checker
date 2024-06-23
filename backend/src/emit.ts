@@ -1,6 +1,6 @@
 import { exchangeTakerFees } from "./Exchanges/prices.js";
 import { getFees } from "./database.js";
-import { PreviousPrices, TokenPairPrices, feesConnection } from "./index.js";
+import { PreviousPrices, TokenPairPrices } from "./index.js";
 import { Prices, TokenPair } from "./types.js";
 import { initializePriceObject } from "./utils/connections.js";
 
@@ -33,11 +33,10 @@ export const calculatePrices = async (tokenPrices: Prices, amount: number, input
 
     let withdrawalFees = undefined;
 
-    const connection = await feesConnection;
     if (includeFees) {
-        const inputFees = await getFees(inputToken, connection);
-        const outputFees = await getFees(outputToken, connection);
-        console.log("[DEBUG]: " + inputFees + ", " + outputFees);
+        const [inputFees, outputFees] = await getFees(inputToken, outputToken);
+        console.log("[DEBUG]");
+        console.log(inputFees);
     }
 
     for (const exchange in tokenPrices) {

@@ -50,13 +50,11 @@ async function getJupiterPriceData(inputToken: string, outputToken: string) {
             return undefined;
         } else if (jupPriceObj[inputToken.toUpperCase()]) {
             let price = jupPriceObj[inputToken.toUpperCase()].price;
-            console.log("Jupiter Price from api call: ", price);
             return price
         }
-        console.log("Jupiter - Options not matched")
         return undefined;
     } catch (error) {
-        console.error('Jupiter - Error fetching data:', error);
+        console.error('[Error] Jupiter fetching data: ', error);
         return undefined;
     }
 }
