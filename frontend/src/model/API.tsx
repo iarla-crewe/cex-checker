@@ -1,10 +1,8 @@
 import { FilterOptionValue, listToFilter } from "./FilterData";
 import { io } from "socket.io-client";
-import * as dotenv from "dotenv";
 
-dotenv.config();
-const DEV_BUILD = process.env.DEV_BUILD;
-export const socket = (DEV_BUILD === "true") ? io('http://localhost:443') : io('https://cex-checker-8mqk8.ondigitalocean.app/');
+export const socket = io('http://localhost:443');
+// export const socket = io('https://cex-checker-8mqk8.ondigitalocean.app/');
 
 export interface PriceQuery {
     inputToken: string;
@@ -13,6 +11,7 @@ export interface PriceQuery {
     filter: FilterOptionValue[];
     includeFees: boolean;
     isSelling: boolean;
+    isArbitrage: boolean;
 }
 
 export interface UpdatePriceQuery {
@@ -22,6 +21,7 @@ export interface UpdatePriceQuery {
     filter?: FilterOptionValue[];
     includeFees?: boolean;
     isSelling?: boolean;
+    isArbitrage?: boolean;
 }
 
 export type PriceData = {
@@ -45,9 +45,10 @@ export enum PairStatus {
     Loading = "Loading"
 }
 
-export function getPriceData({ inputToken, outputToken, amount, filter: filterList, includeFees, isSelling }: PriceQuery) {
+export function getPriceData({ inputToken, outputToken, amount, filter: filterList, includeFees, isSelling, isArbitrage }: PriceQuery) {
     const filterObj = listToFilter(filterList);
-    socket.emit('get-price', { inputToken, outputToken, inputAmount: amount, cexList: filterObj, includeFees, isSelling })
+    console.log(inputToken, outputToken, amount, filterList, includeFees, isSelling, isArbitrage);
+    socket.emit('get-price', { inputToken, outputToken, inputAmount: amount, cexList: filterObj, includeFees, isSelling, isArbitrage })
 }
 
 export async function getFeeData(tokenA: string, tokenB: string) {

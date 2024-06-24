@@ -45,12 +45,13 @@ io.on('connection', (socket) => {
         },
         includeFees: false,
         isSelling: false,
+        isArbitrage: false
     }; // Variable to store previous query data
 
     let currentTokenPair: TokenPair = { base: "", quote: "" };
 
-    socket.on('get-price', async ({ inputToken, outputToken, inputAmount, cexList, includeFees, isSelling }: PriceQuery) => {
-        const currentQueryData: PriceQuery = { inputToken, outputToken, inputAmount, cexList,  includeFees, isSelling};
+    socket.on('get-price', async ({ inputToken, outputToken, inputAmount, cexList, includeFees, isSelling, isArbitrage }: PriceQuery) => {
+        const currentQueryData: PriceQuery = { inputToken, outputToken, inputAmount, cexList,  includeFees, isSelling, isArbitrage};
         console.log(currentQueryData);
 
         try { currentTokenPair = getTokenPair(inputToken, outputToken); }
@@ -93,12 +94,24 @@ io.on('connection', (socket) => {
             previousQueryData = { ...currentQueryData };
         }
 
-        let newReponse = isNewReponse(queryChanged, tokenPairString)
+        let newReponse = isNewReponse(queryChanged, tokenPairString);
 
         if (newReponse) {
+            let arbitrageSellPrices = undefined;
+            if (isArbitrage) {
+                isSelling = false;
+                console.log("[DEBUG] Arb calculation")
+                arbitrageSellPrices = await calculatePrices(TokenPairPrices[tokenPairString], inputAmount, inputToken, outputToken, currentTokenPair, includeFees, true);
+            }
+
             let prices = await calculatePrices(TokenPairPrices[tokenPairString], inputAmount, inputToken, outputToken, currentTokenPair, includeFees, isSelling);
-            console.log("Emitting new price reponse - include withdraw fees?", includeFees, "is selling?", isSelling);
-            socket.emit('get-price', { prices: prices });
+            console.log("Emitting new price reponse - include withdraw fees?", includeFees, "is selling?", isSelling, "is arbitrage?", isArbitrage);
+            socket.emit('get-price', { 
+                response: {
+                    prices: prices,
+                    arbitrageSellPrices: arbitrageSellPrices
+                }
+            });
         }
     })
 

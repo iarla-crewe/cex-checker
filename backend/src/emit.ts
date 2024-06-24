@@ -32,7 +32,6 @@ export const calculatePrices = async (tokenPrices: Prices, amount: number, input
     const calculatedPrices: Prices = initializePriceObject();
     let inputIsBase = checkIfInputIsBase(tokenPair, inputToken);
 
-    console.log("[DEBUG]: calculating prices")
     let withdrawalFees = undefined;
     if (includeFees) {
         if (isSelling) withdrawalFees = await getFees(outputToken);

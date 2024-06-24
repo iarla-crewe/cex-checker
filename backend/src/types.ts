@@ -53,7 +53,8 @@ export type PriceQuery = {
     inputAmount: number,
     cexList: CexList,
     includeFees: boolean,
-    isSelling: boolean
+    isSelling: boolean,
+    isArbitrage: boolean,
 }
 
 export type TokenPair = {

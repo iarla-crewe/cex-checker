@@ -35,7 +35,8 @@ export default function Home() {
       oneInch: true,
     }),
     includeFees: includeWithdrawFees,
-    isSelling: isSelling
+    isSelling: isSelling,
+    isArbitrage: arbitrageView,
   });
   const [tokenPair, setTokenPair] = useState<TokenPair>({
     base: queryData.inputToken,
@@ -45,7 +46,7 @@ export default function Home() {
 
   const updateArbitrageView = (value: boolean) => {
     value = arbitrageViewAvailable && value; //Only enable if available
-    handleQueryUpdate({includeFees: includeWithdrawFees || value});
+    handleQueryUpdate({isArbitrage: value, includeFees: includeWithdrawFees || value});
     setArbitrageView(value);
   }
 
@@ -58,7 +59,7 @@ export default function Home() {
         updateArbitrageView(false);
       }
     }
-    
+
     isArbitrageViewWidth();
     window.addEventListener('resize', isArbitrageViewWidth);
     return () => {window.removeEventListener('resize', isArbitrageViewWidth);};
@@ -66,7 +67,10 @@ export default function Home() {
 
   useEffect(() => {
     // Function to handle "get-price" events
-    const handleGetPrice = (response: any) => setResponseData(response.prices);
+    const handleGetPrice = (response: any) => {
+      console.log(response);
+      setResponseData(response.response);
+    }
 
     const fetchPriceData = () => {
       getPriceData(queryData);
@@ -107,6 +111,7 @@ export default function Home() {
     if (data.filter === undefined) data.filter = queryData.filter;
     if (data.includeFees === undefined) data.includeFees = queryData.includeFees;
     if (data.isSelling === undefined) data.isSelling = queryData.isSelling;
+    if (data.isArbitrage === undefined) data.isArbitrage = queryData.isArbitrage;
 
     setTokenPair(getTokenPair(data.inputToken, data.outputToken));
 
@@ -116,7 +121,8 @@ export default function Home() {
       amount: data.amount, 
       filter: data.filter,
       includeFees: data.includeFees,
-      isSelling: data.isSelling
+      isSelling: data.isSelling,
+      isArbitrage: data.isArbitrage,
     })
     setResponseData(initializeResponseObject())
   }
