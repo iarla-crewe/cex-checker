@@ -5,7 +5,7 @@ import TradeInfo from "@/components/TradeInfo/TradeInfo";
 import Settings from "@/components/Settings/Settings";
 import Results from "@/components/Results/Results";
 import { Suspense, useEffect, useState } from "react";
-import { ResponseData, PriceQuery, UpdatePriceQuery, getPriceData, socket, getFeeData, initializeRespobseObject } from "@/model/API";
+import { ResponseData, PriceQuery, UpdatePriceQuery, getPriceData, socket, getFeeData, initializeResponseObject } from "@/model/API";
 import { setFeeData } from "@/model/CEXList";
 import Header from "@/components/Header";
 import { TokenPair, getTokenPair } from "@/lib/utils";
@@ -20,7 +20,7 @@ export default function Home() {
   const [arbitrageView, setArbitrageView] = useState(false);
   const [isSelling, setIsSelling] = useState(false);
 
-  const [responseData, setResponseData] = useState<ResponseData>(initializeRespobseObject());
+  const [responseData, setResponseData] = useState<ResponseData>(initializeResponseObject());
   const [queryData, setQueryData] = useState<PriceQuery>({
     inputToken: 'sol',
     outputToken: 'usdt',
@@ -50,14 +50,15 @@ export default function Home() {
   }
 
   // Disable arbitrage view if below 600px width
-  const isArbitrageViewWidth = () => {
-    if (window.innerWidth >= 600) setArbitrageViewAvailable(true);
-    else {
-      setArbitrageViewAvailable(false);
-      updateArbitrageView(false);
-    }
-  }
   useEffect(() => {
+    const isArbitrageViewWidth = () => {
+      if (window.innerWidth >= 600) setArbitrageViewAvailable(true);
+      else {
+        setArbitrageViewAvailable(false);
+        updateArbitrageView(false);
+      }
+    }
+    
     isArbitrageViewWidth();
     window.addEventListener('resize', isArbitrageViewWidth);
     return () => {window.removeEventListener('resize', isArbitrageViewWidth);};
@@ -117,7 +118,7 @@ export default function Home() {
       includeFees: data.includeFees,
       isSelling: data.isSelling
     })
-    setResponseData(initializeRespobseObject())
+    setResponseData(initializeResponseObject())
   }
 
 

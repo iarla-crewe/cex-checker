@@ -24,7 +24,7 @@ export interface UpdatePriceQuery {
     isSelling?: boolean;
 }
 
-export type ResponseData = {
+export type PriceData = {
     [exchange: string]: number | PairStatus;
     binance: number | PairStatus;
     kraken: number | PairStatus;
@@ -33,6 +33,11 @@ export type ResponseData = {
     bybit: number | PairStatus;
     jupiter: number | PairStatus;
     oneInch: number | PairStatus;
+}
+
+export type ResponseData = {
+    prices: PriceData,
+    arbitrageSellPrices?: PriceData;
 }
 
 export enum PairStatus {
@@ -69,14 +74,16 @@ export async function getFeeData(tokenA: string, tokenB: string) {
     return [depositFeeObj, withdrawalFeeObj]
 }
 
-export const initializeRespobseObject = () => {
+export const initializeResponseObject = () => {
     return {
-        binance: PairStatus.Loading,
-        kraken: PairStatus.Loading,
-        coinbase: PairStatus.Loading,
-        crypto_com: PairStatus.Loading,
-        bybit: PairStatus.Loading,
-        jupiter: PairStatus.Loading,
-        oneInch: PairStatus.Loading,
+        prices: {
+            binance: PairStatus.Loading,
+            kraken: PairStatus.Loading,
+            coinbase: PairStatus.Loading,
+            crypto_com: PairStatus.Loading,
+            bybit: PairStatus.Loading,
+            jupiter: PairStatus.Loading,
+            oneInch: PairStatus.Loading,
+        }
     }
 }
