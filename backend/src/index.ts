@@ -100,7 +100,6 @@ io.on('connection', (socket) => {
             let arbitrageSellPrices = undefined;
             if (isArbitrage) {
                 isSelling = false;
-                console.log("[DEBUG] Arb calculation")
                 arbitrageSellPrices = await calculatePrices(TokenPairPrices[tokenPairString], inputAmount, inputToken, outputToken, currentTokenPair, includeFees, true);
             }
 

@@ -38,9 +38,6 @@ export const calculatePrices = async (tokenPrices: Prices, amount: number, input
         else withdrawalFees = await getFees(inputToken);
     }
 
-    console.log("[DEBUG]");
-    console.log(withdrawalFees);
-
     for (const exchange in tokenPrices) {
         if (tokenPrices.hasOwnProperty(exchange)) {
             const tokenPrice = tokenPrices[exchange];
