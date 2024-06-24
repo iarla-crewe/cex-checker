@@ -68,8 +68,10 @@ export default function Home() {
   useEffect(() => {
     // Function to handle "get-price" events
     const handleGetPrice = (response: any) => {
-      console.log(response);
-      setResponseData(response.response);
+      // This supports older backend response by wrapping with new one
+      let value = response.response;
+      if (value === undefined) value = {prices: response.prices}
+      setResponseData(value);
     }
 
     const fetchPriceData = () => {
