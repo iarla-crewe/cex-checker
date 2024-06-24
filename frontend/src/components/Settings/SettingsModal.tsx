@@ -8,16 +8,17 @@ import { Dialog } from "@headlessui/react";
 import ReactSwitch from "react-switch";
 
 interface SettingsModalProps {
-    refreshSpeed: number,
-    setRefreshSpeed: (value: number) => void,
-    includeWithdrawFees: boolean,
-    setIncludeWithdrawFees: (value: boolean) => void
-    arbitrageView: boolean,
-    setArbitrageView: (value: boolean) => void
+    refreshSpeed: number;
+    setRefreshSpeed: (value: number) => void;
+    includeWithdrawFees: boolean;
+    setIncludeWithdrawFees: (value: boolean) => void;
+    arbitrageView: boolean;
+    setArbitrageView: (value: boolean) => void;
+    arbitrageViewAvailable: boolean;
 }
 
 export default function SettingsModal(props: SettingsModalProps) {
-    const {refreshSpeed, setRefreshSpeed, includeWithdrawFees, setIncludeWithdrawFees, arbitrageView, setArbitrageView} = props;
+    const {refreshSpeed, setRefreshSpeed, includeWithdrawFees, setIncludeWithdrawFees, arbitrageView, setArbitrageView, arbitrageViewAvailable} = props;
 
     const router = useRouter();
     const enabled = useSearchParams().get("settings");
@@ -39,13 +40,14 @@ export default function SettingsModal(props: SettingsModalProps) {
                     <label className={styles["toggle-setting"]}>
                         <span className={styles["settings-label"]}>Enable arbitrage view</span>
                         <ReactSwitch 
-                            checked={arbitrageView} 
+                            checked={arbitrageView && arbitrageViewAvailable} 
                             onChange={setArbitrageView} 
                             offColor="#ccc"
                             onColor="#2780A6"
                             checkedIcon={false}
-                            uncheckedIcon={false}
+                            uncheckedIcon={false}   
                             height={25}
+                            disabled={!arbitrageViewAvailable}
                         />
                     </label>
 

@@ -16,10 +16,11 @@ interface TradeInfoProps {
     defaultIsSelling: boolean,
     handleUpdate: (data: UpdatePriceQuery) => void;
     handleSetIsSelling: (value: boolean) => void;
+    arbitrageView: boolean;
 }
 
 export default function TradeInfo(props: TradeInfoProps) {
-    const { defaultInputToken, defaultOutputToken, defaultAmount, defaultIsSelling, handleUpdate, handleSetIsSelling } = props;
+    const { defaultInputToken, defaultOutputToken, defaultAmount, defaultIsSelling, handleUpdate, handleSetIsSelling, arbitrageView } = props;
 
     const [isSelling, setIsSelling] = useState(defaultIsSelling);
     const [inputToken, setInputToken] = useState(defaultInputToken);
@@ -73,8 +74,10 @@ export default function TradeInfo(props: TradeInfoProps) {
 
     return (
         <div className={styles["trade-info"]}>
-            <BuySellButton isSelling={isSelling} onClickHandler={swapBuySell}/>
-
+            {!arbitrageView &&
+                <BuySellButton isSelling={isSelling} onClickHandler={swapBuySell}/>
+            }
+            
             <InputAmount defaultValue={defaultAmount} updateAmount={handleAmount}/>
 
             <div className={styles["currencies"]}>

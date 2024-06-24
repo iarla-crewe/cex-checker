@@ -12,6 +12,7 @@ interface CEXCardProps {
     feeCurrency: string;
     isSelling: boolean;
     includeWithdrawFees: boolean;
+    arbitrageView: boolean;
 }
 
 export type Tokens = {
@@ -19,10 +20,10 @@ export type Tokens = {
 }
 
 export default function CEXCard(props: CEXCardProps) {
-    const { cex, outputToken,  feeCurrency, isSelling, includeWithdrawFees } = props;
+    const { cex, outputToken,  feeCurrency, isSelling, includeWithdrawFees, arbitrageView } = props;
     
     const loaded = (typeof cex.price === 'number')
-    const cardClass = loaded ? styles["cex-card"] + " " + styles["cex-card-loaded"] : styles["cex-card"];
+    
 
     const borderColor = (cex.borderColor != "") ? cex.borderColor : cex.brandColor;
     const hoverColor = (cex.textColor == "white") ? "rgba(255, 255, 255, 0.08)" : "rgba(0, 0, 0, 0.08)";
@@ -35,9 +36,17 @@ export default function CEXCard(props: CEXCardProps) {
         '--hover-color': hoverColor
     } as React.CSSProperties;
 
+    const classGridItem = arbitrageView ? "grid-item-arb" : "grid-item";
+    const classCexLogoWrapper = arbitrageView ? "cex-logo-wrapper-arb" : "cex-logo-wrapper";
+    const classCardResponsive = arbitrageView ? "cex-card-responsive-arb" : "cex-card-responsive";
+    const classCard = 
+        loaded 
+        ? styles["cex-card"] + " " + styles[classCardResponsive] + " " + styles["cex-card-loaded"] 
+        : styles["cex-card"] + " " + styles[classCardResponsive];
+
     return (
-        <div className={cardClass} style={cssVariables}>
-            <div className={styles["cex-logo-wrapper"] + " " + styles["grid-item"]}>
+        <div className={classCard} style={cssVariables}>
+            <div className={styles[classCexLogoWrapper] + " " + styles[classGridItem]}>
                 <Image 
                     className={styles["cex-logo"]}
                     src={cex.logoSrc}
@@ -48,7 +57,7 @@ export default function CEXCard(props: CEXCardProps) {
                 />
             </div>
 
-            <div className={styles["grid-item"]}>
+            <div className={styles[classGridItem]}>
                 <DisplayPrice 
                     price={cex.price} 
                     outputToken={outputToken} 
@@ -60,7 +69,7 @@ export default function CEXCard(props: CEXCardProps) {
                 />
             </div>
 
-            <OpenLinkSVG textColor={cex.textColor} loaded={loaded}/>
+            <OpenLinkSVG textColor={cex.textColor} loaded={loaded} arbitrageView={arbitrageView}/>
         </div>
     )
 }

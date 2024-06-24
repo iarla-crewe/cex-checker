@@ -5,20 +5,22 @@ import TradeInfo from "@/components/TradeInfo/TradeInfo";
 import Settings from "@/components/Settings/Settings";
 import Results from "@/components/Results/Results";
 import { Suspense, useEffect, useState } from "react";
-import { ResponseData, PriceQuery, UpdatePriceQuery, getPriceData, socket, getFeeData, initializeRespobseObject } from "@/model/API";
+import { ResponseData, PriceQuery, UpdatePriceQuery, getPriceData, socket, getFeeData, initializeResponseObject } from "@/model/API";
 import { setFeeData } from "@/model/CEXList";
 import Header from "@/components/Header";
 import { TokenPair, getTokenPair } from "@/lib/utils";
 import { listToFilter, filterToList, FilterObj } from "@/model/FilterData";
 import SettingsModal from "@/components/Settings/SettingsModal";
+import ResultsView from "@/components/Results/ResultsView";
 
 export default function Home() {
   const [refreshSpeed, setRefreshSpeed] = useState(5000);
   const [includeWithdrawFees, setIncludeWithdrawFees] = useState(false);
+  const [arbitrageViewAvailable, setArbitrageViewAvailable] = useState(true);
   const [arbitrageView, setArbitrageView] = useState(false);
   const [isSelling, setIsSelling] = useState(false);
 
-  const [responseData, setResponseData] = useState<ResponseData>(initializeRespobseObject());
+  const [responseData, setResponseData] = useState<ResponseData>(initializeResponseObject());
   const [queryData, setQueryData] = useState<PriceQuery>({
     inputToken: 'sol',
     outputToken: 'usdt',
@@ -33,7 +35,8 @@ export default function Home() {
       oneInch: true,
     }),
     includeFees: includeWithdrawFees,
-    isSelling: isSelling
+    isSelling: isSelling,
+    isArbitrage: arbitrageView,
   });
   const [tokenPair, setTokenPair] = useState<TokenPair>({
     base: queryData.inputToken,
@@ -41,9 +44,33 @@ export default function Home() {
   });
   const [currency, setCurrency] = useState<string>(isSelling ? queryData.outputToken : queryData.inputToken);
 
+  const updateArbitrageView = (value: boolean) => {
+    value = arbitrageViewAvailable && value; //Only enable if available
+    handleQueryUpdate({isArbitrage: value, includeFees: includeWithdrawFees || value});
+    setArbitrageView(value);
+  }
+
+  // Disable arbitrage view if below 600px width
+  useEffect(() => {
+    const isArbitrageViewWidth = () => {
+      if (window.innerWidth >= 600) setArbitrageViewAvailable(true);
+      else {
+        setArbitrageViewAvailable(false);
+        updateArbitrageView(false);
+      }
+    }
+
+    isArbitrageViewWidth();
+    window.addEventListener('resize', isArbitrageViewWidth);
+    return () => {window.removeEventListener('resize', isArbitrageViewWidth);};
+  }, []);
+
   useEffect(() => {
     // Function to handle "get-price" events
-    const handleGetPrice = (response: any) => setResponseData(response.prices);
+    const handleGetPrice = (response: any) => {
+      console.log(response);
+      setResponseData(response.response);
+    }
 
     const fetchPriceData = () => {
       getPriceData(queryData);
@@ -84,6 +111,7 @@ export default function Home() {
     if (data.filter === undefined) data.filter = queryData.filter;
     if (data.includeFees === undefined) data.includeFees = queryData.includeFees;
     if (data.isSelling === undefined) data.isSelling = queryData.isSelling;
+    if (data.isArbitrage === undefined) data.isArbitrage = queryData.isArbitrage;
 
     setTokenPair(getTokenPair(data.inputToken, data.outputToken));
 
@@ -93,9 +121,10 @@ export default function Home() {
       amount: data.amount, 
       filter: data.filter,
       includeFees: data.includeFees,
-      isSelling: data.isSelling
+      isSelling: data.isSelling,
+      isArbitrage: data.isArbitrage,
     })
-    setResponseData(initializeRespobseObject())
+    setResponseData(initializeResponseObject())
   }
 
 
@@ -111,10 +140,8 @@ export default function Home() {
             setIncludeWithdrawFees(value);
           }}
           arbitrageView={arbitrageView}
-          setArbitrageView={(value) => {
-            handleQueryUpdate({includeFees: includeWithdrawFees || value});
-            setArbitrageView(value);
-          }}
+          setArbitrageView={updateArbitrageView}
+          arbitrageViewAvailable={arbitrageViewAvailable}
         /> 
       </Suspense>
 
@@ -131,6 +158,7 @@ export default function Home() {
             handleQueryUpdate({isSelling: value});
             setIsSelling(value);
           }}
+          arbitrageView={arbitrageView}
         />
 
         <Settings 
@@ -139,7 +167,7 @@ export default function Home() {
           short={arbitrageView}
         />
         
-        <Results
+        <ResultsView
           responseData={responseData}
           outputToken={queryData.outputToken}
           feeCurrency={currency}

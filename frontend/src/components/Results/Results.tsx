@@ -1,12 +1,12 @@
 import { CEX, CEXList, setExchangeLink } from "@/model/CEXList";
 import styles from "./Results.module.css";
 import CEXCardWrapper from "./CEXCardWrapper";
-import { PairStatus, ResponseData } from "@/model/API";
+import { PairStatus, PriceData, ResponseData } from "@/model/API";
 import { FilterObj } from "@/model/FilterData";
 import { TokenPair } from "@/lib/utils";
 
 interface ResultsProps {
-    responseData: ResponseData;
+    prices: PriceData;
     outputToken: string;
     feeCurrency: string;
     isSelling: boolean;
@@ -17,15 +17,14 @@ interface ResultsProps {
 }
 
 export default function Results(props: ResultsProps) {
-    const { responseData, outputToken, feeCurrency, isSelling, filter, tokenPair, includeWithdrawFees, arbitrageView } = props;
+    const { prices, outputToken, feeCurrency, isSelling, filter, tokenPair, includeWithdrawFees, arbitrageView } = props;
 
     let filteredCEXList = CEXList.filter(cex => filter[cex.name] === true);
 
     let pricedCEXList = filteredCEXList.map((cex) => {
         let price: number | PairStatus = PairStatus.Loading;
-        //if (responseData !== undefined) price = responseData[cex.name];
         setExchangeLink(tokenPair, cex)
-        price = responseData[cex.name];
+        price = prices[cex.name];
         return { ...cex, price };
     });
 
@@ -35,7 +34,14 @@ export default function Results(props: ResultsProps) {
         <ul className={styles["cex-list"]}>
             {pricedCEXList.map((cex, index) => (
                 <li key={index}>
-                    <CEXCardWrapper cex={cex} outputToken={outputToken} feeCurrency={feeCurrency} isSelling={isSelling} includeWithdrawFees={includeWithdrawFees}/>
+                    <CEXCardWrapper 
+                        cex={cex} 
+                        outputToken={outputToken} 
+                        feeCurrency={feeCurrency} 
+                        isSelling={isSelling} 
+                        includeWithdrawFees={includeWithdrawFees}
+                        arbitrageView={arbitrageView}
+                    />
                 </li>
             ))}
         </ul>
