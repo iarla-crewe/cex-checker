@@ -70,7 +70,10 @@ export default function Home() {
     const handleGetPrice = (response: any) => {
       // This supports older backend response by wrapping with new one
       let value = response.response;
-      if (value === undefined) value = {prices: response.prices}
+      if (value === undefined) {
+        console.log("Warning: outdated Quartz server version detected - results may be not be fully acurate");
+        value = {prices: response.prices}
+      }
       setResponseData(value);
     }
 
