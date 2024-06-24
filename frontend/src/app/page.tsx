@@ -11,10 +11,12 @@ import Header from "@/components/Header";
 import { TokenPair, getTokenPair } from "@/lib/utils";
 import { listToFilter, filterToList, FilterObj } from "@/model/FilterData";
 import SettingsModal from "@/components/Settings/SettingsModal";
+import ResultsView from "@/components/Results/ResultsView";
 
 export default function Home() {
   const [refreshSpeed, setRefreshSpeed] = useState(5000);
   const [includeWithdrawFees, setIncludeWithdrawFees] = useState(false);
+  const [arbitrageViewAvailable, setArbitrageViewAvailable] = useState(true);
   const [arbitrageView, setArbitrageView] = useState(false);
   const [isSelling, setIsSelling] = useState(false);
 
@@ -40,6 +42,26 @@ export default function Home() {
     quote: queryData.outputToken
   });
   const [currency, setCurrency] = useState<string>(isSelling ? queryData.outputToken : queryData.inputToken);
+
+  const updateArbitrageView = (value: boolean) => {
+    value = arbitrageViewAvailable && value; //Only enable if available
+    handleQueryUpdate({includeFees: includeWithdrawFees || value});
+    setArbitrageView(value);
+  }
+
+  // Disable arbitrage view if below 600px width
+  const isArbitrageViewWidth = () => {
+    if (window.innerWidth >= 600) setArbitrageViewAvailable(true);
+    else {
+      setArbitrageViewAvailable(false);
+      updateArbitrageView(false);
+    }
+  }
+  useEffect(() => {
+    isArbitrageViewWidth();
+    window.addEventListener('resize', isArbitrageViewWidth);
+    return () => {window.removeEventListener('resize', isArbitrageViewWidth);};
+  }, []);
 
   useEffect(() => {
     // Function to handle "get-price" events
@@ -111,10 +133,8 @@ export default function Home() {
             setIncludeWithdrawFees(value);
           }}
           arbitrageView={arbitrageView}
-          setArbitrageView={(value) => {
-            handleQueryUpdate({includeFees: includeWithdrawFees || value});
-            setArbitrageView(value);
-          }}
+          setArbitrageView={updateArbitrageView}
+          arbitrageViewAvailable={arbitrageViewAvailable}
         /> 
       </Suspense>
 
@@ -131,6 +151,7 @@ export default function Home() {
             handleQueryUpdate({isSelling: value});
             setIsSelling(value);
           }}
+          arbitrageView={arbitrageView}
         />
 
         <Settings 
@@ -139,7 +160,7 @@ export default function Home() {
           short={arbitrageView}
         />
         
-        <Results
+        <ResultsView
           responseData={responseData}
           outputToken={queryData.outputToken}
           feeCurrency={currency}

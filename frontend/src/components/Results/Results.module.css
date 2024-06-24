@@ -1,3 +1,22 @@
+.arbitrage-view {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+.arbitrage-column {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.arbitrage-column h3 {
+    font-size: var(--size-settings-heading);
+    font-weight: 400;
+    margin-top: 0px;
+    margin-bottom: 25px;
+}
+
 .cex-list {
     list-style-type: none;
     margin: 0px;
@@ -17,17 +36,20 @@
     text-align: right;
 }
 
+.cex-card-responsive {
+    grid-template-columns: 2fr 4fr 0.5fr;
+    padding: 15px 50px;
+}
+
 .cex-card {
     display: grid;
-    grid-template-columns: 2fr 4fr 0.5fr;
-
+    
     position: relative;
     justify-content: space-between;
     align-items: center;
     min-height: 130px;
 
     border-radius: var(--card-border-radius);
-    padding: 15px 50px;
     margin-bottom: 20px;
 
     background-color: var(--brand-color);
@@ -132,7 +154,7 @@
         height: 25.2px;
     }
 
-    .cex-card {
+    .cex-card-responsive {
         grid-template-columns: 4fr 1fr;
         padding: 40px;
         row-gap: 35px;
@@ -149,12 +171,38 @@
     }
 }
 
+.cex-logo-wrapper-arb {
+    width: 160px;
+    height: auto;
+}
+
+.open-link-icon-arb {
+    width: 25.2px;
+    height: 25.2px;
+}
+
+.cex-card-responsive-arb {
+    grid-template-columns: 4fr 1fr;
+    padding: 40px;
+    row-gap: 35px;
+}
+
+.grid-item-arb:nth-child(1),
+.grid-item-arb:nth-child(3) {
+    grid-row: 1;
+}
+
+.grid-item-arb:nth-child(2) {
+    grid-row: 2;
+    grid-column: span 2;
+}
+
 @media screen and (max-width: 420px) {
     .price {
         margin: 15px 0px;
     }
 
-    .cex-card {
+    .cex-card-responsive {
         grid-template-columns: 1fr;
         padding: 30px;
         row-gap: 25px;

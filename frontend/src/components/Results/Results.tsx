@@ -5,7 +5,7 @@ import { PairStatus, ResponseData } from "@/model/API";
 import { FilterObj } from "@/model/FilterData";
 import { TokenPair } from "@/lib/utils";
 
-interface ResultsProps {
+export interface ResultsProps {
     responseData: ResponseData;
     outputToken: string;
     feeCurrency: string;
@@ -35,7 +35,14 @@ export default function Results(props: ResultsProps) {
         <ul className={styles["cex-list"]}>
             {pricedCEXList.map((cex, index) => (
                 <li key={index}>
-                    <CEXCardWrapper cex={cex} outputToken={outputToken} feeCurrency={feeCurrency} isSelling={isSelling} includeWithdrawFees={includeWithdrawFees}/>
+                    <CEXCardWrapper 
+                        cex={cex} 
+                        outputToken={outputToken} 
+                        feeCurrency={feeCurrency} 
+                        isSelling={isSelling} 
+                        includeWithdrawFees={includeWithdrawFees}
+                        arbitrageView={arbitrageView}
+                    />
                 </li>
             ))}
         </ul>
