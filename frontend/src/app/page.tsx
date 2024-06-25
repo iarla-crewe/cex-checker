@@ -16,7 +16,7 @@ import ResultsView from "@/components/Results/ResultsView";
 export default function Home() {
   const [refreshSpeed, setRefreshSpeed] = useState(5000);
   const [includeWithdrawFees, setIncludeWithdrawFees] = useState(false);
-  const [arbitrageViewAvailable, setArbitrageViewAvailable] = useState(true);
+  const [mobileView, setMobileView] = useState(false);
   const [arbitrageView, setArbitrageView] = useState(false);
   const [isSelling, setIsSelling] = useState(false);
 
@@ -45,24 +45,17 @@ export default function Home() {
   const [currency, setCurrency] = useState<string>(isSelling ? queryData.outputToken : queryData.inputToken);
 
   const updateArbitrageView = (value: boolean) => {
-    value = arbitrageViewAvailable && value; //Only enable if available
     handleQueryUpdate({isArbitrage: value, includeFees: includeWithdrawFees || value});
     setArbitrageView(value);
   }
 
   // Disable arbitrage view if below 600px width
   useEffect(() => {
-    const isArbitrageViewWidth = () => {
-      if (window.innerWidth >= 600) setArbitrageViewAvailable(true);
-      else {
-        setArbitrageViewAvailable(false);
-        updateArbitrageView(false);
-      }
-    }
+    const isMobileView = () => setMobileView(window.innerWidth < 600);
 
-    isArbitrageViewWidth();
-    window.addEventListener('resize', isArbitrageViewWidth);
-    return () => {window.removeEventListener('resize', isArbitrageViewWidth);};
+    isMobileView();
+    window.addEventListener('resize', isMobileView);
+    return () => {window.removeEventListener('resize', isMobileView);};
   }, []);
 
   useEffect(() => {
@@ -146,7 +139,6 @@ export default function Home() {
           }}
           arbitrageView={arbitrageView}
           setArbitrageView={updateArbitrageView}
-          arbitrageViewAvailable={arbitrageViewAvailable}
         /> 
       </Suspense>
 
@@ -181,6 +173,7 @@ export default function Home() {
           filter={listToFilter(queryData.filter)}
           includeWithdrawFees={includeWithdrawFees || arbitrageView}
           arbitrageView={arbitrageView}
+          mobileView={mobileView}
         />
       </div>
     </main>

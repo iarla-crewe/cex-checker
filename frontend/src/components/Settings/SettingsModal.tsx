@@ -14,11 +14,10 @@ interface SettingsModalProps {
     setIncludeWithdrawFees: (value: boolean) => void;
     arbitrageView: boolean;
     setArbitrageView: (value: boolean) => void;
-    arbitrageViewAvailable: boolean;
 }
 
 export default function SettingsModal(props: SettingsModalProps) {
-    const {refreshSpeed, setRefreshSpeed, includeWithdrawFees, setIncludeWithdrawFees, arbitrageView, setArbitrageView, arbitrageViewAvailable} = props;
+    const {refreshSpeed, setRefreshSpeed, includeWithdrawFees, setIncludeWithdrawFees, arbitrageView, setArbitrageView} = props;
 
     const router = useRouter();
     const enabled = useSearchParams().get("settings");
@@ -40,14 +39,13 @@ export default function SettingsModal(props: SettingsModalProps) {
                     <label className={styles["toggle-setting"]}>
                         <span className={styles["settings-label"]}>Enable arbitrage view</span>
                         <ReactSwitch 
-                            checked={arbitrageView && arbitrageViewAvailable} 
+                            checked={arbitrageView} 
                             onChange={setArbitrageView} 
                             offColor="#ccc"
                             onColor="#2780A6"
                             checkedIcon={false}
                             uncheckedIcon={false}   
                             height={25}
-                            disabled={!arbitrageViewAvailable}
                         />
                     </label>
 

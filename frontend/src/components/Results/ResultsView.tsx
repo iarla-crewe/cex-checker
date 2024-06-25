@@ -13,10 +13,11 @@ export interface ResultsViewProps {
     tokenPair: TokenPair;
     includeWithdrawFees: boolean;
     arbitrageView: boolean;
+    mobileView: boolean;
 }
 
 export default function ResultsView(props : ResultsViewProps) {
-    const { responseData, outputToken, feeCurrency, isSelling, filter, tokenPair, includeWithdrawFees, arbitrageView } = props;
+    const { responseData, outputToken, feeCurrency, isSelling, filter, tokenPair, includeWithdrawFees, arbitrageView, mobileView } = props;
 
     if (!arbitrageView) {
         return (
@@ -29,6 +30,7 @@ export default function ResultsView(props : ResultsViewProps) {
                 tokenPair={tokenPair}
                 includeWithdrawFees={includeWithdrawFees}
                 arbitrageView={arbitrageView}
+                onlyTop={false}
             />
         )
     }
@@ -39,7 +41,10 @@ export default function ResultsView(props : ResultsViewProps) {
     return (
         <div className={styles["arbitrage-view"]}>
             <div className={styles["arbitrage-column"]}>
-                <h3>Buy</h3>
+                <h3>
+                    {mobileView && <span>Lowest </span>}
+                    Buy
+                </h3>
                 <Results
                     prices={responseData.prices}
                     outputToken={outputToken}
@@ -49,12 +54,16 @@ export default function ResultsView(props : ResultsViewProps) {
                     tokenPair={tokenPair}
                     includeWithdrawFees={includeWithdrawFees}
                     arbitrageView={arbitrageView}
+                    onlyTop={mobileView}
                 />
             </div>
             
 
             <div className={styles["arbitrage-column"]}>
-                <h3>Sell</h3>
+                <h3>
+                    {mobileView && <span>Highest </span>}
+                    Sell
+                </h3>
                 <Results
                     prices={responseData.arbitrageSellPrices}
                     outputToken={outputToken}
@@ -64,6 +73,7 @@ export default function ResultsView(props : ResultsViewProps) {
                     tokenPair={tokenPair}
                     includeWithdrawFees={includeWithdrawFees}
                     arbitrageView={arbitrageView}
+                    onlyTop={mobileView}
                 />
             </div>
         </div>

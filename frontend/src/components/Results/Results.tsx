@@ -14,10 +14,11 @@ interface ResultsProps {
     tokenPair: TokenPair;
     includeWithdrawFees: boolean;
     arbitrageView: boolean;
+    onlyTop: boolean;
 }
 
 export default function Results(props: ResultsProps) {
-    const { prices, outputToken, feeCurrency, isSelling, filter, tokenPair, includeWithdrawFees, arbitrageView } = props;
+    const { prices, outputToken, feeCurrency, isSelling, filter, tokenPair, includeWithdrawFees, arbitrageView, onlyTop } = props;
 
     let filteredCEXList = CEXList.filter(cex => filter[cex.name] === true);
 
@@ -29,6 +30,8 @@ export default function Results(props: ResultsProps) {
     });
 
     pricedCEXList.sort((a, b) => sortCEXList(a, b, isSelling));
+    
+    if (onlyTop) pricedCEXList = pricedCEXList.slice(0, 1);
 
     return (
         <ul className={styles["cex-list"]}>
