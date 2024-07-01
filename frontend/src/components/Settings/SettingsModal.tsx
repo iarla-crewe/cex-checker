@@ -37,7 +37,7 @@ export default function SettingsModal(props: SettingsModalProps) {
                     <h2 className={styles["settings-header"]}>Settings</h2>
 
                     <label className={styles["toggle-setting"]}>
-                        <span className={styles["settings-label"]}>Enable arbitrage view</span>
+                        <span className={styles["settings-label"]}>Enable spread view</span>
                         <ReactSwitch 
                             checked={arbitrageView} 
                             onChange={setArbitrageView} 
