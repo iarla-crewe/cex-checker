@@ -33,6 +33,7 @@ export default function Home() {
       kraken: true,
       jupiter: true,
       oneInch: true,
+      backpack: true,
     }),
     includeFees: includeWithdrawFees,
     isSelling: isSelling,
@@ -67,6 +68,7 @@ export default function Home() {
         console.log("Warning: outdated Quartz server version detected - results may be not be fully acurate");
         value = {prices: response.prices}
       }
+      console.log("Value from server: ", value)
       setResponseData(value);
     }
 

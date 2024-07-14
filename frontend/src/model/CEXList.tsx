@@ -101,6 +101,17 @@ export const CEXList: CEX[] = [
         capStyle: "UPPER",
         price: PairStatus.Loading,
     },
+    {
+        name: "backpack",
+        displayName: "Backpack",
+        logoSrc: "/backpack.svg",
+        brandColor: "#0E0F14",
+        textColor: "white",
+        borderColor: "#E33E40",
+        templateUrl: "https://backpack.exchange/trade/™_†",
+        capStyle: "UPPER",
+        price: PairStatus.Loading,
+    },
 ]
 
 

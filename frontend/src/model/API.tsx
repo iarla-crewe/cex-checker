@@ -1,8 +1,9 @@
+import { Backpack } from "lucide-react";
 import { FilterOptionValue, listToFilter } from "./FilterData";
 import { io } from "socket.io-client";
 
-// export const socket = io('http://localhost:443');
-export const socket = io('https://cex-checker-8mqk8.ondigitalocean.app/');
+export const socket = io('http://localhost:443');
+//export const socket = io('https://cex-checker-8mqk8.ondigitalocean.app/');
 
 export interface PriceQuery {
     inputToken: string;
@@ -33,6 +34,7 @@ export type PriceData = {
     bybit: number | PairStatus;
     jupiter: number | PairStatus;
     oneInch: number | PairStatus;
+    backpack: number | PairStatus;
 }
 
 export type ResponseData = {
@@ -84,6 +86,7 @@ export const initializeResponseObject = () => {
             bybit: PairStatus.Loading,
             jupiter: PairStatus.Loading,
             oneInch: PairStatus.Loading,
+            backpack: PairStatus.Loading,
         }
     }
 }

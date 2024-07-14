@@ -5,7 +5,7 @@ import { PairStatus, Prices, TokenPair } from "./types.js";
 import { initializePriceObject } from "./utils/connections.js";
 import { convertWithdrawFees } from "./utils/tokenPair.js";
 
-const exchanges = ['binance', 'bybit', 'coinbase', 'crypto_com', 'kraken', 'jupiter', 'oneInch'];
+const exchanges = ['binance', 'bybit', 'coinbase', 'crypto_com', 'kraken', 'jupiter', 'oneInch', 'backpack'];
 
 export const isNewReponse = (queryChanged: boolean, tokenPairString: string) => {
     let currentPrices = TokenPairPrices[tokenPairString];
