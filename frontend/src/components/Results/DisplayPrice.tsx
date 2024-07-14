@@ -43,7 +43,7 @@ export default function DisplayPrice(props: DisplayPriceProps) {
     if (price == PairStatus.NoPairFound) {
         return (
             <div className={styles["price-info"]} style={{color: textColor}}>
-                <p className={styles["token-pair-na"]}>Token pair not found</p>
+                <p className={styles["token-pair-na"]}>This market is not available on this exchange</p>
             </div>
         );
     }

@@ -55,7 +55,6 @@ export const getCurrentBackpackPrice = async (baseToken: string, quoteToken: str
         data = await response.json();
     } catch (error) {
         TokenPairPrices[tokenPairString].backpack = PairStatus.NoPairFound
-        console.error("Token pair not found in backpack");
     }
 
     let price: number;
