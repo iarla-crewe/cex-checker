@@ -23,7 +23,7 @@ export default function Home() {
   const [responseData, setResponseData] = useState<ResponseData>(initializeResponseObject());
   const [queryData, setQueryData] = useState<PriceQuery>({
     inputToken: 'sol',
-    outputToken: 'usdt',
+    outputToken: 'usdc',
     amount: 1,
     filter: filterToList({
       binance: true,
