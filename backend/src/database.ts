@@ -28,7 +28,8 @@ export async function getFees(token: string) {
         crypto_com: 0,
         bybit: 0,
         jupiter: 0,
-        oneInch: 0
+        oneInch: 0,
+        backpack: 0,
     }
     const query = 
         `SELECT 'withdrawal' AS type, e.name AS exchange_name, wf.fee_amount AS fee

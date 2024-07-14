@@ -7,6 +7,7 @@ import { getCurrentKrakenPrice, openKrakenWs } from "../Exchanges/kraken.js";
 import { PairStatus, TokenPair, ExConnections } from "../types.js";
 import { getCurrentJupiterPrice, openJupiterHttp } from "../Exchanges/jupiter.js";
 import { getCurrentOneInchPrice, openOneInchHttp } from "../Exchanges/1inch.js";
+import { getCurrentBackpackPrice, openBackpackWs } from "../Exchanges/backpack.js";
 
 export const initializeObject = () => {
     return {
@@ -17,6 +18,8 @@ export const initializeObject = () => {
         bybit: undefined,
         jupiter: undefined,
         oneInch: undefined,
+        backpack: undefined,
+
     }
 }
 
@@ -29,6 +32,7 @@ export const initializePriceObject = () => {
         bybit: PairStatus.Loading,
         jupiter: PairStatus.Loading,
         oneInch: PairStatus.Loading,
+        backpack: PairStatus.Loading,
     }
 }
 
@@ -53,6 +57,7 @@ export const minusOneConnection = (previousPairString: string) => {
             TokenPairConnections[previousPairString]?.kraken?.close()
             TokenPairConnections[previousPairString]?.jupiter?.close()
             TokenPairConnections[previousPairString]?.oneInch?.close()
+            TokenPairConnections[previousPairString]?.backpack?.close()
 
             TokenPairConnections[previousPairString] = undefined
         }
@@ -75,6 +80,7 @@ export const openExchangeWsConnections =  (currentTokenPair: TokenPair) => {
         let krakenSocket = openKrakenWs(currentTokenPair.base, currentTokenPair.quote)
         let jupiterHttpLoop = openJupiterHttp(currentTokenPair.base, currentTokenPair.quote)
         let oneInchHttpLoop = openOneInchHttp(currentTokenPair.base, currentTokenPair.quote)
+        let backpackSocket = openBackpackWs(currentTokenPair.base, currentTokenPair.quote)
 
         let wsExchanges: ExConnections = {
             binance: binanceSocket,
@@ -84,6 +90,7 @@ export const openExchangeWsConnections =  (currentTokenPair: TokenPair) => {
             bybit: krakenSocket,
             jupiter: jupiterHttpLoop,
             oneInch: oneInchHttpLoop,
+            backpack: backpackSocket,
         }
         //store the connections
         TokenPairConnections[tokenPairString] = wsExchanges;
@@ -102,4 +109,5 @@ const getCurrentPrices = (base: string, quote: string) => {
     getCurrentBybitPrice(base, quote)
     getCurrentCrypto_comPrice(base, quote)
     getCurrentCoinbasePrice(base, quote)
+    getCurrentBackpackPrice(base, quote)
 }

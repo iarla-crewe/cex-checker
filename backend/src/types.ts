@@ -9,6 +9,7 @@ export type Prices = {
     bybit: number | PairStatus;
     jupiter: number | PairStatus;
     oneInch: number | PairStatus;
+    backpack: number | PairStatus;
 }
 
 // export const newPrices: Prices = {
@@ -34,6 +35,7 @@ export type CexList = {
     bybit: boolean,
     jupiter: boolean,
     oneInch: boolean,
+    backpack: boolean,
 }
 
 export type ExchangeFees = {
@@ -45,6 +47,7 @@ export type ExchangeFees = {
     bybit: number,
     jupiter: number,
     oneInch: number,
+    backpack: number,
 }
 
 export type PriceQuery = {
@@ -75,6 +78,7 @@ export type ExConnections = {
     bybit?: WebSocket,
     jupiter?: HttpLoopObj,
     oneInch?: HttpLoopObj,
+    backpack?: WebSocket,
 }
 
 export type TokenPairConnections = {

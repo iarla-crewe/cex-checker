@@ -8,6 +8,7 @@ export let exchangeTakerFees: ExchangeFees = {
     bybit: 0.001,
     jupiter: 0,
     oneInch: 0,
+    backpack: 0.00095,
 }
 
 export let exchangeMakerFees: ExchangeFees = {
@@ -18,4 +19,5 @@ export let exchangeMakerFees: ExchangeFees = {
     bybit: 0.001,
     jupiter: 0,
     oneInch: 0,
+    backpack: 0.00085
 }

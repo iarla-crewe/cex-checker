@@ -42,6 +42,7 @@ io.on('connection', (socket) => {
             bybit: false,
             jupiter: false,
             oneInch: false,
+            backpack: false,
         },
         includeFees: false,
         isSelling: false,
