@@ -49,15 +49,17 @@ export default function InputAmount(props: InputAmountProps) {
     // If changing type, change css in globals.css
 
     return (
-        <input 
-            type="number" 
-            className={styles["input-amount"]}
-            value={inputValue} 
-            onChange={handleChange} 
-            onKeyDown={handleKeyDown} 
-            maxLength={9} 
-            placeholder={placeholder}
-        />
+        <div className={styles["input-field"]}>
+            <input 
+                type="number" 
+                className={styles["input-amount"]}
+                value={inputValue} 
+                onChange={handleChange} 
+                onKeyDown={handleKeyDown} 
+                maxLength={9} 
+                placeholder={placeholder}
+            />
+        </div>
     );
 }
 

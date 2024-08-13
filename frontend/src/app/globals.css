@@ -38,8 +38,38 @@
     --size-p: 22px !important;
     --size-small: 17.6px !important;
 
+    --size-panel-buttons: 24.19px;
+    --size-panel-text: 29.03px;
+    --min-width-panel-buttons: 150px;
+
     --size-settings-heading: 30px !important;
     --size-label-heading: 22px !important;
+
+    --color-text: #FFFFFF;
+    --color-text-light: #FFFFFFD9;
+    --color-background: #0B111D;
+    --color-background-shade: #343946;
+    --color-primary: #2987C8;
+    --color-primary-shade: #206C92;
+    --color-accent: #AC5B99;
+    --color-success: #27C667;
+    --color-warning: #E09400;
+    --color-failure: #E80000;
+
+    --button-height: 60px;
+
+    --overlay-color: rgba(255, 255, 255, 0.03);
+    --overlay: linear-gradient(var(--overlay-color), var(--overlay-color));
+
+    --gradient-glass-stroke:
+      linear-gradient(65deg, rgba(41,135,200,0.02) 0%, rgba(41,135,200,0.22) 100%),
+      linear-gradient(65deg, rgba(188,188,188,0.12) 0%, rgba(235,235,235,0.25) 100%);
+    
+    --placeholder-glass-stroke: #4E677D;
+    --placeholder-glass-stroke-accent: #5A355A;
+    --glass-border: 1.5px solid var(--placeholder-glass-stroke); /* TODO: Make gradient */
+
+    --background-linear-gradient: linear-gradient(var(--color-background), var(--color-background));
   } 
 }
 
