@@ -46,7 +46,7 @@
     flex-direction: row;
     justify-content: center;
     align-items: center;
-    gap: 5px;
+    gap: 8px;
 }
 
 .s-left {
@@ -80,10 +80,15 @@
 }
 
 .filter-option {
-    border: var(--filter-border);
-    opacity: var(--filter-opacity);
-    min-height: var(--button-max-height);
     gap: 8px;
+    padding: 24px 22px;
+    margin-bottom: 0px;
+    background: var(--gradient-glass-stroke);
+    border-radius: 16px;
+}
+
+.filter-disabled {
+    background: transparent;
 }
 
 .close-filter {

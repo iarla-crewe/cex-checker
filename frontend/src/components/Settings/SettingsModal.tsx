@@ -33,7 +33,7 @@ export default function SettingsModal(props: SettingsModalProps) {
         <>
             {enabled && (
             <div className={styles["modal-container"]}>
-                <Dialog static open={true} onClose={onClose} initialFocus={overlayRef} className={styles["settings-modal"]}>
+                <Dialog static open={true} onClose={onClose} initialFocus={overlayRef} className={`main-panel ${styles["settings-modal"]}`}>
                     <h2 className={styles["settings-header"]}>Settings</h2>
 
                     <label className={styles["toggle-setting"]}>
@@ -41,8 +41,8 @@ export default function SettingsModal(props: SettingsModalProps) {
                         <ReactSwitch 
                             checked={arbitrageView} 
                             onChange={setArbitrageView} 
-                            offColor="#ccc"
-                            onColor="#2780A6"
+                            offColor="#343946"
+                            onColor="#206C92"
                             checkedIcon={false}
                             uncheckedIcon={false}   
                             height={25}
@@ -54,8 +54,8 @@ export default function SettingsModal(props: SettingsModalProps) {
                         <ReactSwitch 
                             checked={arbitrageView || includeWithdrawFees} 
                             onChange={setIncludeWithdrawFees} 
-                            offColor="#ccc"
-                            onColor="#2780A6"
+                            offColor="#343946"
+                            onColor="#206C92"
                             checkedIcon={false}
                             uncheckedIcon={false}
                             height={25}
@@ -80,7 +80,7 @@ export default function SettingsModal(props: SettingsModalProps) {
                         />
                     </div>
                     
-                    <button className={styles["button-close"]} onClick={onClose}>Close</button>
+                    <button className={`main-panel ${styles["button-close"]}`} onClick={onClose}>Close</button>
                 </Dialog>
             </div>
             )}

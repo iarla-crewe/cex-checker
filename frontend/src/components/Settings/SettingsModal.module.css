@@ -23,10 +23,6 @@
     z-index: 101;
     width: 500px;
 
-    border: var(--card-border);
-    background-color: var(--background);
-    border-radius: var(--button-border-radius);
-
     padding: 50px;
     display: flex;
     flex-direction: column;
@@ -84,6 +80,10 @@
 
 .button-close {
     align-self: flex-end;
-    height: 46px;
     margin-top: 10px;
+    gap: 8px;
+    padding: 24px 22px;
+    margin-bottom: 0px;
+    background: transparent;
+    border-radius: 16px;
 }

@@ -1,45 +1,15 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<svg
-   width="24"
-   height="24"
-   viewBox="0 0 24 24"
-   fill="none"
-   stroke="currentColor"
-   stroke-width="2"
-   stroke-linecap="round"
-   stroke-linejoin="round"
-   class="feather feather-filter"
-   version="1.1"
-   id="svg4"
-   sodipodi:docname="filter_icon.svg"
-   inkscape:version="1.2.2 (732a01da63, 2022-12-09)"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:svg="http://www.w3.org/2000/svg">
-  <defs
-     id="defs8" />
-  <sodipodi:namedview
-     id="namedview6"
-     pagecolor="#505050"
-     bordercolor="#ffffff"
-     borderopacity="1"
-     inkscape:showpageshadow="0"
-     inkscape:pageopacity="0"
-     inkscape:pagecheckerboard="1"
-     inkscape:deskcolor="#505050"
-     showgrid="false"
-     inkscape:zoom="39.333333"
-     inkscape:cx="16.805085"
-     inkscape:cy="9.0254238"
-     inkscape:window-width="2560"
-     inkscape:window-height="1494"
-     inkscape:window-x="-11"
-     inkscape:window-y="-11"
-     inkscape:window-maximized="1"
-     inkscape:current-layer="svg4" />
-  <polygon
-     points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"
-     id="polygon2"
-     style="stroke:#009af7;stroke-opacity:1" />
+<svg width="39" height="35" viewBox="0 0 39 35" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M36.4444 2H2L15.7778 18.2922V29.5556L22.6667 33V18.2922L36.4444 2Z" stroke="#2987C8" stroke-opacity="0.33" stroke-width="3.44444" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M36.4444 2H2L15.7778 18.2922V29.5556L22.6667 33V18.2922L36.4444 2Z" stroke="url(#paint0_linear_594_3308)" stroke-width="3.44444" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M36.4444 2H2L15.7778 18.2922V29.5556L22.6667 33V18.2922L36.4444 2Z" stroke="url(#paint1_linear_594_3308)" stroke-width="3.44444" stroke-linecap="round" stroke-linejoin="round"/>
+<defs>
+<linearGradient id="paint0_linear_594_3308" x1="31.3684" y1="2" x2="9.72062" y2="20.5933" gradientUnits="userSpaceOnUse">
+<stop stop-color="#EBEBEB" stop-opacity="0.25"/>
+<stop offset="1" stop-color="#BCBCBC" stop-opacity="0.12"/>
+</linearGradient>
+<linearGradient id="paint1_linear_594_3308" x1="34.1136" y1="2" x2="3.20233" y2="24.5771" gradientUnits="userSpaceOnUse">
+<stop stop-color="#2987C8" stop-opacity="0.22"/>
+<stop offset="1" stop-color="#2987C8" stop-opacity="0.02"/>
+</linearGradient>
+</defs>
 </svg>

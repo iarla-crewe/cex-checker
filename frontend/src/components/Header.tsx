@@ -9,7 +9,7 @@ export default function Header({short}: HeaderProps) {
     const mainSiteLink = "https://www.quartzpay.io/";
     const logoSrc = "/quartz.jpg";
 
-    const marginBottom = short ? {"--header-margin-bottom": "20px"} : {"--header-margin-bottom": "30px"}
+    const marginBottom = short ? {"--header-margin-bottom": "15px"} : {"--header-margin-bottom": "22.5px"}
 
     return (
         <div className={styles["header-container"]} style={marginBottom as React.CSSProperties}>

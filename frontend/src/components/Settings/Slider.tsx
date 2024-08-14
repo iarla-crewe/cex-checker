@@ -25,9 +25,9 @@ export default function Slider({step, min, max, value, setDisplayValue, updateVa
                 {...props}
                 style={{
                 ...props.style,
-                height: '16px',
-                width: '5px',
-                backgroundColor: index * step < value ? 'var(--primary)' : 'var(--color-disabled)'
+                height: '0px',
+                width: '4px',
+                backgroundColor: index * step < value ? 'var(--color-primary-shade)' : 'var(--color-disabled)'
                 }}
             />
             )}
@@ -45,12 +45,12 @@ export default function Slider({step, min, max, value, setDisplayValue, updateVa
                 <div
                 ref={props.ref}
                 style={{
-                    height: '8px',
+                    height: '5px',
                     width: '100%',
                     borderRadius: '4px',
                     background: getTrackBackground({
                     values: [value],
-                    colors: ['var(--primary)', '#ccc'],
+                    colors: ['var(--color-primary-shade)', '#ccc'],
                     min: min,
                     max: max
                     }),
@@ -69,12 +69,12 @@ export default function Slider({step, min, max, value, setDisplayValue, updateVa
                 height: '25px',
                 width: '25px',
                 borderRadius: '100%',
-                border: "5px solid var(--primary)",
-                backgroundColor: isDragged ? "var(--secondary-hover)" : 'var(--background)',
+                border: "var(--glass-border)",
+                backgroundColor: isDragged ? "var(--color-primary-shade)" : 'var(--background)',
                 display: 'flex',
                 justifyContent: 'center',
                 alignItems: 'center',
-                boxShadow: '0px 0px 6px var(--primary)',
+                boxShadow: '0px 0px 6px #334658',
                 }}
             />
             )}

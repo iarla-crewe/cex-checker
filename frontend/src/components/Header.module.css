@@ -4,6 +4,7 @@
     justify-content: center;
     align-items: center;
     margin-bottom: var(--header-margin-bottom);
+    margin-top: 15px;
 }
 
 .quartz-logo {
