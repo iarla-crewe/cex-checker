@@ -80,7 +80,6 @@
 }
 
 .filter-option {
-    gap: 8px;
     padding: 24px 22px;
     margin-bottom: 0px;
     background: var(--gradient-glass-stroke);
@@ -106,6 +105,10 @@
         height: 22px;
         width: auto;
     }
+
+    .filters-content {
+        gap: 6px;
+    }
 }
 
 @media screen and (max-width: 420px) {
@@ -128,5 +131,9 @@
 
     .s-right {
         display: none;
+    }
+
+    .filters-content {
+        gap: 4px;
     }
 }

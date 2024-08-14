@@ -69,7 +69,7 @@ export default function TradeInfo(props: TradeInfoProps) {
     const text = (isSelling) ? "for" : "with";
 
     return (
-        <div className={"main-panel"}>
+        <div className={`main-panel ${styles["trade-info-panel"]}`}>
             <div className={styles["buy-sell-select"]}>
                 <button 
                     onClick={() => handleIsSelling(false)}

@@ -101,6 +101,10 @@
     --size-price-subheading: 11px !important;
     --size-p: 19.8px !important;
     --size-small: 15.8px !important;
+
+    --size-panel-buttons: 21.7px;
+    --size-panel-text: 26.12px;
+    --min-width-panel-buttons: 140px;
   }
 }
 
@@ -108,7 +112,7 @@
   :root {
     --button-max-height: 48px !important;
 
-    --size-input: 39px !important;
+    --size-input: 27.9px !important;
     --size-price: 28.5px !important;
     --size-price-heading: 16.6px !important;
     --size-price-withdrawal: 12px !important;
@@ -119,12 +123,18 @@
 
     --size-settings-heading: 25.5px !important;
     --size-label-heading: 18.7px !important;
+
+    --button-height: 55px;
+
+    --size-panel-buttons: 19.53px;
+    --size-panel-text: 23.5px;
+    --min-width-panel-buttons: 130px;
   }
 }
 
 @media screen and (max-width: 420px) {
   :root {
-    --size-input: 31px !important;
+    --size-input: 25.11px !important;
     --size-price: 25px !important;
     --size-price-heading: 15.7px !important;
     --size-price-withdrawal: 11.4px !important;
@@ -135,6 +145,8 @@
 
     --size-settings-heading: 21.7px !important;
     --size-label-heading: 15.9px !important;
+
+    --button-height: 50px;
   }
 }
 
@@ -257,4 +269,10 @@ button:active {
   height: 100%;
   
   border-radius: inherit;
+}
+
+@media screen and (max-width: 1020px) {
+  .main-panel {
+      padding: 20px;
+  }
 }

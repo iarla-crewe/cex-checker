@@ -57,6 +57,48 @@
     min-width: 335px;
 }
 
+@media screen and (max-width: 1020px) {
+  .currencies {
+    min-width: unset;
+    gap: 10px;
+  }
+}
+
+@media screen and (max-width: 845px) {
+  .currencies {
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .currencies p {
+    margin: 0px;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .buy-sell-select{
+    display: flex;
+  }
+
+  .trade-info-panel {
+    flex-direction: column;
+    padding: 30px 25px;
+  }
+
+  .currencies {
+    flex-direction: row !important;
+    gap: 10px !important;
+  }
+
+  .input-field {
+    width: 90% !important;
+  }
+
+  .input-amount {
+    text-align: center !important;
+  }
+}
+
 .select-currency{
     min-width: 120px;
     height: var(--button-height);
@@ -179,6 +221,8 @@
   border-radius: 24px;
   border: 1px solid var(--placeholder-glass-stroke);
   height: var(--button-height);
+  width: 100%;
+  flex-grow: 1;
 }
 
 .input-field:hover {
@@ -190,6 +234,13 @@
 .input-amount {
   background: transparent;
 }
+
+@media screen and (max-width: 620px) {
+  .input-field {
+    padding: 5px 15px 5px 5px;
+  }
+}
+
 
 @keyframes slideUpAndFade {
   from {
@@ -254,10 +305,6 @@
         flex-direction: column;
         justify-content: center;
         margin-bottom: 30px;
-    }
-
-    .input-amount {
-        text-align: center;
     }
 }
 
