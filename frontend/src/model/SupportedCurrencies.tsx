@@ -10,4 +10,7 @@ export const currencies = [
     "ada", 
     "avax", 
     "shib",
+    "jto",
+    "sui",
+    "apt"
 ]
