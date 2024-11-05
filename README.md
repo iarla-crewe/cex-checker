@@ -1,1 +1,3 @@
 # cex-checker
+
+[deprecated]
